@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -17,8 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import model.User;
-import sql.LoginDatabase;
+import Controller.AuthCtrl;
+import Model.User;
+
 
 public class Login {
     GridBagConstraints gbc;
@@ -27,7 +28,7 @@ public class Login {
     JFrame loginFrame;
     JLabel label1, label2, label3, label4;
     JPanel panel1, panel2, panel3;
-    JTextField textField1, textField2;
+    JTextField username, password;
 
     public Login() {
         UIManager.put("Label.font", new Font("SegoeUI", Font.PLAIN, 14));
@@ -54,7 +55,7 @@ public class Login {
             }
         });
 
-        label1 = new JLabel(new ImageIcon(System.getProperty("user.dir") + "\\src\\image\\login.png"));
+        label1 = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/Image/login.png"));
 
         label2 = new JLabel("Đăng nhập");
         label2.setFont(new Font("SegoeUI", Font.BOLD, 20));
@@ -62,19 +63,19 @@ public class Login {
         label3 = new JLabel("Tài khoản");
         label4 = new JLabel("Mật khẩu");
 
-        textField1 = new JTextField();
-        textField1.setSize(400, 50);
+        username = new JTextField();
+        username.setSize(400, 50);
 
-        textField2 = new JTextField();
-        textField2.setSize(400, 50);
+        password = new JTextField();
+        password.setSize(400, 50);
 
         panel1 = new JPanel(new BorderLayout(10, 0));
         panel1.add(label3, BorderLayout.WEST);
-        panel1.add(textField1, BorderLayout.CENTER);
+        panel1.add(username, BorderLayout.CENTER);
 
         panel2 = new JPanel(new BorderLayout(10, 0));
         panel2.add(label4, BorderLayout.WEST);
-        panel2.add(textField2, BorderLayout.CENTER);
+        panel2.add(password, BorderLayout.CENTER);
 
         panel3 = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         panel3.add(button1);
@@ -98,7 +99,7 @@ public class Login {
     }
 
     public void verify() {
-        User myUser = (new LoginDatabase()).getUser(textField1.getText(), textField2.getText());
+        User myUser = (AuthCtrl.Login(username.getText(), password.getText()));
         String message;
         if (myUser == null) {message = "Đăng nhập thất bại";} else message = "Đăng nhập thành công";
 
