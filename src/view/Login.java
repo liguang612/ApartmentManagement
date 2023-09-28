@@ -16,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 
 import model.User;
 import sql.Connecting_SQLServer;
@@ -95,7 +94,7 @@ public class Login {
     }
 
     public void cancel() {
-        getLoginFrame().setVisible(false);
+        System.exit(0);
     }
 
     public void verify() {
@@ -105,7 +104,7 @@ public class Login {
 
         JFrame frame = new JFrame("Thông báo");
         frame.add(new JLabel(message));
-        frame.setSize(100, 100);
+        frame.setSize(200, 100);
         frame.setVisible(true);
     }
 
