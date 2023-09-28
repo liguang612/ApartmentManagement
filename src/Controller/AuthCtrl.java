@@ -1,7 +1,7 @@
 package Controller;
 
-import model.User;
-import sql.DBQuery;
+import Model.User;
+import SQL.DBQuery;
 
 public class AuthCtrl {
     public static User Login(String username, String password) {

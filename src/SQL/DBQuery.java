@@ -1,10 +1,10 @@
-package sql;
+package SQL;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import model.User;
+import Model.User;
 
 public class DBQuery {
 

@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import Controller.AuthCtrl;
-import model.User;
+import Model.User;
 
 
 public class Login {
@@ -55,7 +55,7 @@ public class Login {
             }
         });
 
-        label1 = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/image/login.png"));
+        label1 = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/Image/login.png"));
 
         label2 = new JLabel("Đăng nhập");
         label2.setFont(new Font("SegoeUI", Font.BOLD, 20));
