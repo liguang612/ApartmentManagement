@@ -54,7 +54,7 @@ public class Login {
             }
         });
 
-        label1 = new JLabel(new ImageIcon(System.getProperty("user.dir") + "\\src\\image\\login.png"));
+        label1 = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/image/login.png"));
 
         label2 = new JLabel("Đăng nhập");
         label2.setFont(new Font("SegoeUI", Font.BOLD, 20));

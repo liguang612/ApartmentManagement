@@ -21,6 +21,6 @@ public class User {
 
     public void setId(int id) {this.id = id;}
     public void setName(String name) {this.name = name;}
-    public void setirthday(String birthday) {this.birthday = birthday;}
+    public void setBirthday(String birthday) {this.birthday = birthday;}
     public void setPhoneNumber(int phoneNumber) {this.phoneNumber = phoneNumber;}
 }
