@@ -1,6 +1,6 @@
-CREATE DATABASE ApartmentManagement
-USE ApartmentManagement
-GO
+-- CREATE DATABASE ApartmentManagement
+-- USE ApartmentManagement
+-- GO
 
 CREATE TABLE Account (
     userId INT NOT NULL,

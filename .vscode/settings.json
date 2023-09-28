@@ -3,5 +3,26 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/**/*.jar"
+    ],
+    "sqltools.connections": [
+        {
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 1433,
+            "driver": "MSSQL",
+            "name": "Project I",
+            "group": "Hust",
+            "username": "sa",
+            "database": "ApartmentManagement",
+            "password": "P@ssword1"
+        }
+    ],
+    "cSpell.words": [
+        "sqlserver"
     ]
 }

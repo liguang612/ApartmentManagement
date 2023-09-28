@@ -6,19 +6,26 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-    private Connection database;
-    private Boolean status;
-    private String host, username, password;
-    
-    DBConnection(String host, String username, String password) {
-        status = false;
-        this.host = host;
-        this.username = username;
-        this.password = password;
-    }
+    public static Connection database = null;
 
-    Boolean Connect() {
+    private static String host = "jdbc:sqlserver://localhost:1433";
+    private static String databaseName = "ApartmentManagement";
+    private static String username = "sa";
+    private static String password = "P@ssword1";
 
-        return true;
+    public static Connection connect() {
+        try {
+            String connectionUrl = host + ";"
+                    + "database=" + databaseName + ";"
+                    + "user=" + username + ";"
+                    + "password=" + password + ";"
+                    + "encrypt=true;"
+                    + "trustServerCertificate=true;"
+                    + "loginTimeout=30;";
+            database = DriverManager.getConnection(connectionUrl);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return database;
     }
 }
