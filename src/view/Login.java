@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import model.User;
-import sql.Connecting_SQLServer;
+import sql.LoginDatabase;
 
 public class Login {
     GridBagConstraints gbc;
@@ -98,7 +98,7 @@ public class Login {
     }
 
     public void verify() {
-        User myUser = (new Connecting_SQLServer()).getUser(textField1.getText(), textField2.getText());
+        User myUser = (new LoginDatabase()).getUser(textField1.getText(), textField2.getText());
         String message;
         if (myUser == null) {message = "Đăng nhập thất bại";} else message = "Đăng nhập thành công";
 

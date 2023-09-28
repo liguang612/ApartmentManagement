@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 import model.User;
 
-public class Connecting_SQLServer {
+public class LoginDatabase {
     public User getUser(String username, String password) {
         String connectionUrl = "jdbc:sqlserver://localhost:1433;" + "database=ApartmentManagement;" + "user=sa;" + "password=Alfie_2110;" + "encrypt=true;" + "trustServerCertificate=true;" + "loginTimeout=30;";
         ResultSet resultSet = null;
