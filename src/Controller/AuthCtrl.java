@@ -11,8 +11,4 @@ public class AuthCtrl {
     public static String Register(String username, String password) {
         return "Register Successful";
     }
-
-    public static void AA () {
-        
-    }
 }
