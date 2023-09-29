@@ -100,13 +100,20 @@ public class Login {
 
     public void verify() {
         User myUser = (AuthCtrl.Login(username.getText(), password.getText()));
-        String message;
-        if (myUser == null) message = "Đăng nhập thất bại"; else message = "Đăng nhập thành công";
+        if (myUser == null) {
+            JFrame frame = new JFrame("Thông báo");
+            JLabel label = new JLabel("Đăng nhập thất bại");
 
-        JFrame frame = new JFrame("Thông báo");
-        frame.add(new JLabel(message));
-        frame.setSize(200, 100);
-        frame.setVisible(true);
+            label.setFont(label.getFont().deriveFont(Font.BOLD, (float)18.0));
+
+            frame.add(label);
+            frame.setLocationRelativeTo(loginFrame);
+            frame.setSize(200, 100);
+            frame.setVisible(true);
+        } else {
+            loginFrame.setVisible(false);
+            new Home(myUser);
+        }
     }
 
     public JFrame getLoginFrame() {

@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-09-29T00:38:27.869Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.43" etag="wDWWixd3ZHddWi5a8ZeC" version="21.8.2" type="device">
+<mxfile host="app.diagrams.net" modified="2023-09-29T08:42:59.045Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.43" etag="pH4ccOpk_9z56YA3QCI2" version="22.0.0" type="device">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="983" dy="541" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1426" dy="785" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -153,7 +153,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ube41KZ-pM_Staa1vVAt-49" value="Fee" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="250" y="500" width="140" height="210" as="geometry" />
+          <mxGeometry x="250" y="500" width="140" height="240" as="geometry" />
         </mxCell>
         <mxCell id="ube41KZ-pM_Staa1vVAt-50" value="- id: int" style="text;strokeColor=#d6b656;fillColor=#fff2cc;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="ube41KZ-pM_Staa1vVAt-49" vertex="1">
           <mxGeometry y="30" width="140" height="30" as="geometry" />
@@ -167,11 +167,14 @@
         <mxCell id="ube41KZ-pM_Staa1vVAt-54" value="- mandatory: bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="ube41KZ-pM_Staa1vVAt-49" vertex="1">
           <mxGeometry y="120" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ube41KZ-pM_Staa1vVAt-59" value="- expiration: Date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="ube41KZ-pM_Staa1vVAt-49" vertex="1">
+        <mxCell id="5binQxm3et3sKFDDVR1z-0" value="- cycle: int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="ube41KZ-pM_Staa1vVAt-49">
           <mxGeometry y="150" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ube41KZ-pM_Staa1vVAt-80" value="" style="swimlane;startSize=0;" parent="ube41KZ-pM_Staa1vVAt-49" vertex="1">
+        <mxCell id="ube41KZ-pM_Staa1vVAt-59" value="- expiration: Date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="ube41KZ-pM_Staa1vVAt-49" vertex="1">
           <mxGeometry y="180" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ube41KZ-pM_Staa1vVAt-80" value="" style="swimlane;startSize=0;" parent="ube41KZ-pM_Staa1vVAt-49" vertex="1">
+          <mxGeometry y="210" width="140" height="30" as="geometry" />
         </mxCell>
         <mxCell id="ube41KZ-pM_Staa1vVAt-81" value="+ getters(), setters()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="ube41KZ-pM_Staa1vVAt-80" vertex="1">
           <mxGeometry width="140" height="30" as="geometry" />
@@ -233,7 +236,7 @@
         <mxCell id="mqN2YdfESW6i_3MWsa1V-3" value="- type: int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="mqN2YdfESW6i_3MWsa1V-0" vertex="1">
           <mxGeometry y="120" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="zt0PeNUm9Ij2onlLmIkz-0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="mqN2YdfESW6i_3MWsa1V-2" target="ube41KZ-pM_Staa1vVAt-11">
+        <mxCell id="zt0PeNUm9Ij2onlLmIkz-0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="mqN2YdfESW6i_3MWsa1V-2" target="ube41KZ-pM_Staa1vVAt-11" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="210" y="265" />
@@ -241,7 +244,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="zt0PeNUm9Ij2onlLmIkz-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="mqN2YdfESW6i_3MWsa1V-4" target="ube41KZ-pM_Staa1vVAt-12">
+        <mxCell id="zt0PeNUm9Ij2onlLmIkz-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="mqN2YdfESW6i_3MWsa1V-4" target="ube41KZ-pM_Staa1vVAt-12" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="210" y="295" />
