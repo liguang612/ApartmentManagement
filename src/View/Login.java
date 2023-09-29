@@ -101,7 +101,7 @@ public class Login {
     public void verify() {
         User myUser = (AuthCtrl.Login(username.getText(), password.getText()));
         String message;
-        if (myUser == null) {message = "Đăng nhập thất bại";} else message = "Đăng nhập thành công";
+        if (myUser == null) message = "Đăng nhập thất bại"; else message = "Đăng nhập thành công";
 
         JFrame frame = new JFrame("Thông báo");
         frame.add(new JLabel(message));
