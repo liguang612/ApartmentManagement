@@ -1,13 +1,14 @@
 import Model.Apartment;
-import Model.User;
 import SQL.DBConnection;
 import SQL.DBQuery;
-import View.Login;
 
 public class App {
     public static void main(String[] args) {
-        DBConnection.connect();
-        //new Login();
+        DBConnection.connect(
+            "jdbc:mysql://localhost/",
+            "meadow",
+            "25062003"
+        );
         DBQuery.getFeeList(new Apartment());
     }
 }

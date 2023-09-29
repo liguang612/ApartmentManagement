@@ -27,4 +27,12 @@ public class DBConnection {
             e.printStackTrace();
         }
     }
+
+    public static void connect(String host, String user, String password) {
+        try {
+            database = DriverManager.getConnection(host, user, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
