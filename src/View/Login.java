@@ -55,7 +55,7 @@ public class Login {
             }
         });
 
-        label1 = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/Image/login.png"));
+        label1 = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/Resources/Image/login.png"));
 
         label2 = new JLabel("Đăng nhập");
         label2.setFont(new Font("SegoeUI", Font.BOLD, 20));
@@ -101,7 +101,7 @@ public class Login {
     public void verify() {
         User myUser = (AuthCtrl.Login(username.getText(), password.getText()));
         String message;
-        if (myUser == null) {message = "Đăng nhập thất bại";} else message = "Đăng nhập thành công";
+        if (myUser == null) message = "Đăng nhập thất bại"; else message = "Đăng nhập thành công";
 
         JFrame frame = new JFrame("Thông báo");
         frame.add(new JLabel(message));
