@@ -13,7 +13,7 @@ public class DBConnection {
     private static String username = "sa";
     private static String password = "P@ssword1";
 
-    public static Connection connect() {
+    public static void connect() {
         try {
             String connectionUrl = host + ";"
                     + "database=" + databaseName + ";"
@@ -26,6 +26,5 @@ public class DBConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return database;
     }
 }
