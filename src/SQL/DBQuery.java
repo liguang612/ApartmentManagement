@@ -23,7 +23,7 @@ public class DBQuery {
 
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-                    // return new User(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(5));
+                    return new User(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
