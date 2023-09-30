@@ -9,7 +9,7 @@ public class Fee {
     private int cycle;
 
     public Fee() {}
-    public Fee(int id, String name, int cost, boolean mandatory, long expiration, int cycle) {
+    public Fee(int id, String name, int cost, boolean mandatory, int cycle, long expiration) {
         this.id = id;
         this.name = name;
         this.cost = cost;
@@ -18,13 +18,7 @@ public class Fee {
         this.cycle = cycle;
     }
 
-    public int getCycle() {
-        return cycle;
-    }
-    public void setCycle(int cycle) {
-        this.cycle = cycle;
-    }
-
+    public int getCycle() {return cycle;}
     public int getId() {return id;}
     public String getName() {return name;}
     public int getCost() {return cost;}
@@ -36,4 +30,5 @@ public class Fee {
     public void setCost(int cost) {this.cost = cost;}
     public void setMandatory(boolean mandatory) {this.mandatory = mandatory;}
     public void setDate(long expiration) {this.expiration = expiration;}
+    public void setCycle(int cycle) {this.cycle = cycle;}
 }

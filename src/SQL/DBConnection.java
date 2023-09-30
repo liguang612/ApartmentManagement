@@ -28,9 +28,9 @@ public class DBConnection {
         }
     }
 
-    public static void connect(String host, String user, String password) {
+    public static void connect(String host, String databaseName, String user, String password) {
         try {
-            database = DriverManager.getConnection(host, user, password);
+            database = DriverManager.getConnection(host + databaseName, user, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }

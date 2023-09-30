@@ -17,15 +17,13 @@ public class DBQuery {
     public static User findUser(String username, String password) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement(
-                        "SELECT * FROM Account WHERE userId = (SELECT userId FROM [Login] WHERE username = ? AND [password] = ?)");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM users WHERE username=? AND password=?");
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-                    return new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
-                            resultSet.getInt(4));
+                    // return new User(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(5));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -42,10 +40,8 @@ public class DBQuery {
 
         if(DBConnection.database != null) {
             try {
-
                 long currentTime = System.currentTimeMillis();
-
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Fee WHERE (cycle <> 0) OR (cycle=0 AND expiration > ?)");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM fees WHERE (cycle <> 0) OR (cycle=0 AND expiration > ?)");
                 preparedStatement.setLong(1, currentTime);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while(resultSet.next()) {
@@ -54,18 +50,13 @@ public class DBQuery {
                         resultSet.getString(2), 
                         resultSet.getInt(3), 
                         resultSet.getBoolean(4),
-                        resultSet.getLong(5),
-                        resultSet.getInt(6)
+                        resultSet.getInt(5),
+                        resultSet.getLong(6)
                     ));
                 }
-
             } catch(SQLException e) {
                 e.printStackTrace();
             }
-        }
-
-        for(Fee fee: feeList) {
-            System.out.println(fee.getName());
         }
         return null;
     }
