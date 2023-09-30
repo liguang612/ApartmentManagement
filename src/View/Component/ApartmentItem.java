@@ -24,14 +24,14 @@ public class ApartmentItem extends JPanel {
 
         paint();
     }
-    public ApartmentItem(Double area, Integer floor, String ownerName, Integer ownerPhone, Integer room) {
+    public ApartmentItem(Float area, Integer floor, Integer room, String ownerName, String ownerPhone) {
         UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 14));
         setLayout(new GridBagLayout());
 
         this.area.setText(area.toString());
         this.floor.setText(floor.toString());
         this.ownerName.setText(ownerName);
-        this.ownerPhone.setText('0' + ownerPhone.toString());
+        this.ownerPhone.setText(ownerPhone);
         this.room.setText(room.toString());
 
         paint();

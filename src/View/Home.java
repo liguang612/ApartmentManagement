@@ -22,7 +22,7 @@ import Model.User;
 import View.Component.ApartmentDisplay;
 
 public class Home {
-    ApartmentDisplay apartmentDisplay = new ApartmentDisplay();
+    ApartmentDisplay apartmentDisplay;
     GridBagConstraints gbc = new GridBagConstraints();
     GridBagLayout gb = new GridBagLayout();
     JButton addApartment = new JButton("Thêm chủ hộ"), deleteApartment = new JButton("Xóa chủ hộ"), editApartment = new JButton("Sửa chủ hộ");
@@ -34,6 +34,9 @@ public class Home {
     JTabbedPane contentTabbedPane = new JTabbedPane(), functionTabbedPane = new JTabbedPane();
 
     public Home(User user) {
+
+        apartmentDisplay = new ApartmentDisplay(user);
+
         UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 14));
 
         gbc.anchor = GridBagConstraints.CENTER;

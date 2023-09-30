@@ -32,6 +32,33 @@ public class DBQuery {
         return null;
     }
 
+    // Apartment api
+
+    public static ArrayList<Apartment> getApartmentList(int aBId) {
+        ArrayList<Apartment> apartmentList = new ArrayList<Apartment>();
+        if(DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database
+                    .prepareStatement("SELECT apartments.apartmentId, apartments.floor, apartments.room, apartments.area, apartments.aBId, members.name, members.phone FROM apartments LEFT JOIN members ON members.role = 'leader' AND apartments.apartmentId = members.apartmentId WHERE aBId = ?");
+                preparedStatement.setInt(1, aBId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while(resultSet.next()) {
+                    apartmentList.add(new Apartment(
+                        resultSet.getInt("apartmentId"),
+                        resultSet.getInt("floor"),
+                        resultSet.getInt("room"),
+                        resultSet.getFloat("area"),
+                        resultSet.getString("name"),
+                        resultSet.getString("phone")
+                    ));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return apartmentList;
+    }
+
     // fee api
 
     public static Fee[] getFeeList(Apartment apartment) {
