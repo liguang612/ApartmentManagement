@@ -18,6 +18,7 @@ public class ApartmentDisplay extends JPanel {
 
         apartmentViewport.setLayout(new BoxLayout(apartmentViewport, BoxLayout.Y_AXIS));
         apartmentViewport.add(new ApartmentItem(70.0, 33, "Phạm Hoàng Thành", 966322513, 06));
+        apartmentViewport.add(new ApartmentItem(70.0, 33, "Phạm Hoàng Thành", 966322513, 06));
 
         apartmentScroll.setViewportView(apartmentViewport);
     }
