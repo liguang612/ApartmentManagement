@@ -8,18 +8,19 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
+import Controller.AuthCtrl;
 import Model.User;
 import Resources.Constant.Constant;
 import View.Component.ApartmentDisplay;
@@ -28,7 +29,8 @@ public class Home {
     ApartmentDisplay apartmentDisplay = new ApartmentDisplay();
     GridBagConstraints gbc = new GridBagConstraints();
     GridBagLayout gb = new GridBagLayout();
-    JButton addApartment, deleteApartment, editApartment;
+    JButton addApartment, deleteApartment, editApartment,
+            editAccount, signOut;
     JFrame homeFrame;
     JPanel contentPanel, functionPanel,
             accountManagePanel = new JPanel(), feeManagePanel = new JPanel(), residentManagePanel = new JPanel(),
@@ -57,6 +59,21 @@ public class Home {
 
     private void accountManage() {
         accountManagePanel.setBackground(Color.WHITE);
+        accountManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
+        editAccount = new JButton(Constant.verticalImageTitle("editAccount.png", "Sửa thông tin tài khoản"));
+        editAccount.setBackground(Color.WHITE);
+        signOut = new JButton(Constant.verticalImageTitle("signOut.png", "Đăng xuất"));
+        signOut.setBackground(Color.WHITE);
+        signOut.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                signOut();
+            }
+        });
+
+        accountManagePanel.add(editAccount);
+        accountManagePanel.add(signOut);
+
     }
     private void feeManage() {
         feeManagePanel.setBackground(Color.WHITE);
@@ -66,8 +83,11 @@ public class Home {
         residentManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
 
         addApartment = new JButton(Constant.verticalImageTitle("addOwner.png", "Thêm chủ căn hộ"));
+        addApartment.setBackground(Color.WHITE);
         deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
+        deleteApartment.setBackground(Color.WHITE);
         editApartment = new JButton(Constant.verticalImageTitle("editOwner.png", "Sửa chủ căn hộ"));
+        editApartment.setBackground(Color.WHITE);
         
         residentManagePanel.add(addApartment);
         residentManagePanel.add(editApartment);
@@ -124,4 +144,8 @@ public class Home {
 
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 100; homeFrame.add(functionPanel, gbc);
     }
+
+    public JFrame getFrame() {return homeFrame;}
+
+    private void signOut() {AuthCtrl.signOut(this);}
 }
