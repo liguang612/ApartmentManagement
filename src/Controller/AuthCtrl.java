@@ -2,6 +2,8 @@ package Controller;
 
 import Model.User;
 import SQL.DBQuery;
+import View.Home;
+import View.Login;
 
 public class AuthCtrl {
     public static User Login(int id) {
@@ -14,5 +16,10 @@ public class AuthCtrl {
 
     public static String Register(String username, String password) {
         return "Register Successful";
+    }
+
+    public static void signOut(Home home) {
+        home.getFrame().setVisible(false);
+        new Login();
     }
 }

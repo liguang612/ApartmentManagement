@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,14 +20,17 @@ import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
+import Controller.AuthCtrl;
 import Model.User;
+import Resources.Constant.Constant;
 import View.Component.ApartmentDisplay;
 
 public class Home {
     ApartmentDisplay apartmentDisplay = new ApartmentDisplay();
     GridBagConstraints gbc = new GridBagConstraints();
     GridBagLayout gb = new GridBagLayout();
-    JButton addApartment = new JButton("Thêm chủ hộ"), deleteApartment = new JButton("Xóa chủ hộ"), editApartment = new JButton("Sửa chủ hộ");
+    JButton addApartment, deleteApartment, editApartment,
+            editAccount, signOut;
     JFrame homeFrame;
     JPanel contentPanel, functionPanel,
             accountManagePanel = new JPanel(), feeManagePanel = new JPanel(), residentManagePanel = new JPanel(),
@@ -52,8 +57,38 @@ public class Home {
         homeFrame.setVisible(true);
     };
 
+    private void accountManage() {
+        accountManagePanel.setBackground(Color.WHITE);
+        accountManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
+        editAccount = new JButton(Constant.verticalImageTitle("editAccount.png", "Sửa thông tin tài khoản"));
+        editAccount.setBackground(Color.WHITE);
+        signOut = new JButton(Constant.verticalImageTitle("signOut.png", "Đăng xuất"));
+        signOut.setBackground(Color.WHITE);
+        signOut.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                signOut();
+            }
+        });
+
+        accountManagePanel.add(editAccount);
+        accountManagePanel.add(signOut);
+
+    }
+    private void feeManage() {
+        feeManagePanel.setBackground(Color.WHITE);
+    }
     private void residentManage() {
+        residentManagePanel.setBackground(Color.WHITE);
         residentManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
+        addApartment = new JButton(Constant.verticalImageTitle("addOwner.png", "Thêm chủ căn hộ"));
+        addApartment.setBackground(Color.WHITE);
+        deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
+        deleteApartment.setBackground(Color.WHITE);
+        editApartment = new JButton(Constant.verticalImageTitle("editOwner.png", "Sửa chủ căn hộ"));
+        editApartment.setBackground(Color.WHITE);
+        
         residentManagePanel.add(addApartment);
         residentManagePanel.add(editApartment);
         residentManagePanel.add(deleteApartment);
@@ -70,7 +105,7 @@ public class Home {
         contentPanel.add(contentTabbedPane, BorderLayout.CENTER);
 
         gbc.anchor = GridBagConstraints.NORTH; gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1; gbc.weighty = 880; gbc.insets = new Insets(10, 10, 10, 10); homeFrame.add(contentPanel, gbc);
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1; gbc.weighty = 1000; gbc.insets = new Insets(10, 10, 10, 10); homeFrame.add(contentPanel, gbc);
     }
 
     private void function() {
@@ -94,6 +129,8 @@ public class Home {
         functionPanel = new JPanel(new BorderLayout());
         functionPanel.setBackground(new Color(237, 237, 237, 200));
 
+        accountManage();
+        feeManage();
         residentManage();
 
         functionTabbedPane.addTab("Cài đặt", accountManagePanel);
@@ -105,6 +142,10 @@ public class Home {
 
         functionPanel.add(functionTabbedPane, BorderLayout.CENTER);
 
-        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 200; homeFrame.add(functionPanel, gbc);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 100; homeFrame.add(functionPanel, gbc);
     }
+
+    public JFrame getFrame() {return homeFrame;}
+
+    private void signOut() {AuthCtrl.signOut(this);}
 }
