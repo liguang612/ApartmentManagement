@@ -9,6 +9,7 @@ public class App {
             "meadow",
             "25062003"
         );
+        // DBConnection.connect(); use for My SQL Server
         new Login();
     }
 }
