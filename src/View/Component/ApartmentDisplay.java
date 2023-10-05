@@ -22,8 +22,8 @@ public class ApartmentDisplay extends JPanel {
         add(apartmentScroll, BorderLayout.CENTER);
 
         apartmentViewport.setLayout(new BoxLayout(apartmentViewport, BoxLayout.Y_AXIS));
-        apartmentViewport.add(new ApartmentItem(70.0, 33, 06, "Phạm Hoàng Thành", "966322513"));
-        apartmentViewport.add(new ApartmentItem(70.0, 33, 06, "Phạm Hoàng Thành", "966322513"));
+        apartmentViewport.add(new ApartmentItem((float)70.0, 33, 06, "Phạm Hoàng Thành", "966322513"));
+        apartmentViewport.add(new ApartmentItem((float)70.0, 33, 06, "Phạm Hoàng Thành", "966322513"));
 
         ArrayList<Apartment> apartmentList = DBQuery.getApartmentList(user.getId());
 
