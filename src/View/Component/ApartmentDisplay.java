@@ -9,7 +9,6 @@ import javax.swing.JScrollPane;
 
 import Model.Apartment;
 import Model.User;
-import SQL.DBConnection;
 import SQL.DBQuery;
 
 public class ApartmentDisplay extends JPanel {
