@@ -50,12 +50,14 @@ public class Home {
     public Home(User user) {
         this.user = user;
 
+        apartmentDisplay = new ApartmentDisplay(user);
+
         UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 14));
 
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;
 
-        homeFrame = new JFrame("BlueMoon Mangager");
+        homeFrame = new JFrame(user.getAbName());
         homeFrame.setBackground(Color.WHITE);
         homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         homeFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
