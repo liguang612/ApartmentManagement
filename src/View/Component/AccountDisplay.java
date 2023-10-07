@@ -16,7 +16,7 @@ import Resources.Constant.Tool;
 
 public class AccountDisplay extends JPanel {
     private JLabel avatarLabel;
-    private JPanel panel = new JPanel(new GridLayout(3,3));
+    private JPanel panel = new JPanel(new GridLayout(2,4));
     private Tool tool = new Tool();
     
     public AccountDisplay(User user) {
@@ -35,10 +35,11 @@ public class AccountDisplay extends JPanel {
     }
 
     private void detail(User user) {
-        panel.add(new JLabel()); panel.add(new JLabel()); panel.add(new JLabel());
-        panel.add(new JLabel("Ngày sinh")); panel.add(new JLabel()); panel.add(new JLabel(user.getBirthday()));
-        panel.add(new JLabel("Số điện thoại")); panel.add(new JLabel()); panel.add(new JLabel('0' + String.valueOf(user.getPhoneNumber())));
+        JPanel subPanel = new JPanel(new BorderLayout());
+        panel.add(new JLabel()); panel.add(new JLabel()); panel.add(new JLabel("Ngày sinh")); panel.add(new JLabel()); panel.add(new JLabel(user.getBirthday()));
+        panel.add(new JLabel()); panel.add(new JLabel()); panel.add(new JLabel("Số điện thoại")); panel.add(new JLabel()); panel.add(new JLabel('0' + String.valueOf(user.getPhoneNumber())));
 
-        this.add(panel, BorderLayout.CENTER);
+        subPanel.add(panel, BorderLayout.NORTH);
+        this.add(subPanel, BorderLayout.CENTER);
     }
 }

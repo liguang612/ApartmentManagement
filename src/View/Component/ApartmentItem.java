@@ -24,7 +24,7 @@ public class ApartmentItem extends JPanel {
 
         paint();
     }
-    public ApartmentItem(float area, Integer floor, Integer room, String ownerName, String ownerPhone) {
+    public ApartmentItem(Float area, Integer floor, Integer room, String ownerName, String ownerPhone) {
         UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 14));
         setLayout(new GridBagLayout());
 

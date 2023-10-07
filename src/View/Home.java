@@ -33,7 +33,7 @@ import View.Component.ApartmentDisplay;
 
 public class Home {
     AccountDisplay accountDisplay;
-    ApartmentDisplay apartmentDisplay = new ApartmentDisplay();
+    ApartmentDisplay apartmentDisplay;
     GridBagConstraints gbc = new GridBagConstraints();
     GridBagLayout gb = new GridBagLayout();
     JButton addApartment, deleteApartment, editApartment,
