@@ -3,8 +3,8 @@ package Controller;
 import Model.Fee;
 
 public class FeeCtrl {
-    public static Boolean addNewFee(Fee fee) {
-        
+    public static Boolean addNewFee() {
+
 
         return true;
     }

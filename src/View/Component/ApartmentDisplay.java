@@ -25,17 +25,17 @@ public class ApartmentDisplay extends JPanel {
         apartmentViewport.add(new ApartmentItem((float)70.0, 33, 06, "Phạm Hoàng Thành", "966322513"));
         apartmentViewport.add(new ApartmentItem((float)70.0, 33, 06, "Phạm Hoàng Thành", "966322513"));
 
-        ArrayList<Apartment> apartmentList = DBQuery.getApartmentList(user.getId());
+        // ArrayList<Apartment> apartmentList = DBQuery.getApartmentList(user.getId());
 
-        for(Apartment apartment: apartmentList) {
-            apartmentViewport.add(new ApartmentItem(
-                apartment.getArea(),
-                apartment.getFloor(),
-                apartment.getRoom(),
-                apartment.getOwnerName(),
-                apartment.getOwnerPhone()
-            ));
-        }
+        // for(Apartment apartment: apartmentList) {
+        //     apartmentViewport.add(new ApartmentItem(
+        //         apartment.getArea(),
+        //         apartment.getFloor(),
+        //         apartment.getRoom(),
+        //         apartment.getOwnerName(),
+        //         apartment.getOwnerPhone()
+        //     ));
+        // }
 
         apartmentScroll.setViewportView(apartmentViewport);
     }

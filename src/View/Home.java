@@ -5,14 +5,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,28 +30,39 @@ import Model.User;
 import Resources.Constant.Constant;
 import View.Component.AccountDisplay;
 import View.Component.ApartmentDisplay;
+import View.Component.FeeDisplay;
 
 public class Home {
     AccountDisplay accountDisplay;
     ApartmentDisplay apartmentDisplay;
+    FeeDisplay annualFeeDisplay, monthlyFeeDisplay, oneTimeFeeDisplay;
     GridBagConstraints gbc = new GridBagConstraints();
     GridBagLayout gb = new GridBagLayout();
     JButton addApartment, deleteApartment, editApartment,
-            changePassword, editAccount, signOut;
+            addFee, deleteFee, editFee, addPayment,
+            changePassword, editAccount, signOut,
+            pay, payList;
     JFrame homeFrame;
     JPanel contentPanel, functionPanel,
-           accountManagePanel = new JPanel(), feeManagePanel = new JPanel(), residentManagePanel = new JPanel(),
-           accountContentPanel = new JPanel(), feeContentPanel = new JPanel(), residentContentPanel = new JPanel(),
+           accountManagePanel = new JPanel(), feeManagePanel = new JPanel(), paymentManagePanel = new JPanel(), residentManagePanel = new JPanel(),
+           accountContentPanel = new JPanel(), feeContentPanel = new JPanel(), paymentContentPanel = new JPanel(), residentContentPanel = new JPanel(),
            residentDisplay = new JPanel();
     JScrollPane residentScroll = new JScrollPane();
-    JTabbedPane residentTabbedPane = new JTabbedPane(), functionTabbedPane = new JTabbedPane();
+    JTabbedPane functionTabbedPane = new JTabbedPane(), feeTabbedPane = new JTabbedPane(), residentTabbedPane = new JTabbedPane();
     User user;
 
     public Home(User user) {
         this.user = user;
 
+        annualFeeDisplay = new FeeDisplay();
         apartmentDisplay = new ApartmentDisplay(user);
+        monthlyFeeDisplay = new FeeDisplay();
+        oneTimeFeeDisplay = new FeeDisplay();
 
+        try {
+            Font font = Font.createFont(Font.TRUETYPE_FONT, new File(Constant.customFont + "/Roboto-Regular.ttf"));
+            UIManager.put("Button.font", new Font("Tahoma", Font.PLAIN, 13));
+        } catch (FontFormatException e) {e.printStackTrace();} catch (IOException e) {e.printStackTrace();}
         UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 14));
 
         gbc.anchor = GridBagConstraints.CENTER;
@@ -93,6 +104,35 @@ public class Home {
     }
     private void feeManage() {
         feeManagePanel.setBackground(Color.WHITE);
+        feeManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
+        addFee = new JButton(Constant.verticalImageTitle("addFee.png", "Thêm loại phí"));
+        addFee.setBackground(Color.WHITE);
+        addFee.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                addFee();
+            }
+        });
+        deleteFee = new JButton(Constant.verticalImageTitle("deleteFee.png", "Xóa loại phí"));
+        deleteFee.setBackground(Color.WHITE);
+        editFee = new JButton(Constant.verticalImageTitle("editFee.png", "Sửa loại phí"));
+        editFee.setBackground(Color.WHITE);
+
+        feeManagePanel.add(addFee);
+        feeManagePanel.add(editFee);
+        feeManagePanel.add(deleteFee);
+    }
+    private void paymentManage() {
+        paymentManagePanel.setBackground(Color.WHITE);
+        paymentManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
+        pay = new JButton(Constant.verticalImageTitle("pay.png", "Nộp phí"));
+        pay.setBackground(Color.WHITE);
+        payList = new JButton(Constant.verticalImageTitle("payList.png", "Danh sách đã nộp phí"));
+        payList.setBackground(Color.WHITE);
+
+        paymentManagePanel.add(pay);
+        paymentManagePanel.add(payList);
     }
     private void residentManage() {
         residentManagePanel.setBackground(Color.WHITE);
@@ -115,14 +155,27 @@ public class Home {
 
         contentPanel.add(accountDisplay);
     }
-    private void feeContent() {}
+    private void feeContent() {
+        feeTabbedPane.addTab("Phí", oneTimeFeeDisplay);
+        feeTabbedPane.addTab("Phí hàng tháng", monthlyFeeDisplay);
+        feeTabbedPane.addTab("Phí thường niên", annualFeeDisplay);
+
+        feeContentPanel.setBackground(Color.WHITE);
+        feeContentPanel.setLayout(new GridBagLayout());
+        gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.BOTH; gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0;
+        feeContentPanel.add(feeTabbedPane, gbc);
+    }
+    private void paymentContent() {
+        paymentContentPanel.setBackground(Color.WHITE);
+    }
     private void residentContent() {
         residentTabbedPane.addTab("Danh sách căn hộ", apartmentDisplay);
         residentTabbedPane.addTab("Danh sách cư dân", residentDisplay);
 
         residentContentPanel.setBackground(Color.WHITE);
-        residentContentPanel.setLayout(new BorderLayout());
-        residentContentPanel.add(residentTabbedPane, BorderLayout.NORTH);
+        residentContentPanel.setLayout(new GridBagLayout());
+        gbc.fill = GridBagConstraints.BOTH; gbc.anchor = GridBagConstraints.CENTER; gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0;
+        residentContentPanel.add(residentTabbedPane, gbc);
     }
 
     private void content() {
@@ -132,6 +185,7 @@ public class Home {
 
         accountContent();
         feeContent();
+        paymentContent();
         residentContent();
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -141,7 +195,7 @@ public class Home {
     }
 
     private void function() {
-        JLabel label1, label2, label3;
+        JLabel label1, label2, label3, label4;
 
         label1 = new JLabel("Tài khoản", JLabel.CENTER);
         label1.setBackground(Color.WHITE);
@@ -150,47 +204,69 @@ public class Home {
 
         label2 = new JLabel("Quản lý cư dân", JLabel.CENTER);
         label2.setBackground(Color.WHITE);
-        label2.setFont(label1.getFont().deriveFont((float)12.0));
+        label2.setFont(label1.getFont());
         label2.setPreferredSize(new Dimension(100, 25));
 
-        label3 = new JLabel("Quản lý thu phí", JLabel.CENTER);
+        label3 = new JLabel("Quản lý phí thu", JLabel.CENTER);
         label3.setBackground(Color.WHITE);
-        label3.setFont(label1.getFont().deriveFont((float)12.0));
+        label3.setFont(label1.getFont());
         label3.setPreferredSize(new Dimension(100, 25));
+
+        label4 = new JLabel("Nộp phí", JLabel.CENTER);
+        label4.setBackground(Color.WHITE);
+        label4.setFont(label1.getFont());
+        label4.setPreferredSize(new Dimension(100, 25));        
 
         functionPanel = new JPanel(new BorderLayout());
         functionPanel.setBackground(new Color(237, 237, 237, 200));
 
         accountManage();
         feeManage();
+        paymentManage();
         residentManage();
 
         functionTabbedPane.addTab("Tài khoản", accountManagePanel);
         functionTabbedPane.addTab("Quản lý cư dân", residentManagePanel);
-        functionTabbedPane.addTab("Quản lý thu phí", feeManagePanel);
+        functionTabbedPane.addTab("Quản lý phí thu", feeManagePanel);
+        functionTabbedPane.addTab("Nộp phí", paymentManagePanel);
         functionTabbedPane.setTabComponentAt(0, label1);
         functionTabbedPane.setTabComponentAt(1, label2);
         functionTabbedPane.setTabComponentAt(2, label3);
+        functionTabbedPane.setTabComponentAt(3, label4);
 
         functionTabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 if (functionTabbedPane.getSelectedIndex() == 0) {
                     contentPanel.removeAll();
+                    
                     accountContent();
-                    contentPanel.add(accountContentPanel);
+                    gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL;
+                    contentPanel.add(accountContentPanel, gbc);
 
                     contentPanel.revalidate();
                     contentPanel.repaint();
                 } else if (functionTabbedPane.getSelectedIndex() == 1) {
                     contentPanel.removeAll();
-                    contentPanel.add(residentContentPanel);
+
+                    gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL;
+                    contentPanel.add(residentContentPanel, gbc);
+                    
+                    contentPanel.revalidate();
+                    contentPanel.repaint();
+                } else if (functionTabbedPane.getSelectedIndex() == 2) {
+                    contentPanel.removeAll();
+
+                    gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL;
+                    contentPanel.add(feeContentPanel, gbc);
                     
                     contentPanel.revalidate();
                     contentPanel.repaint();
                 } else {
                     contentPanel.removeAll();
-                    contentPanel.add(feeContentPanel);
-                    
+
+                    gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL;
+                    contentPanel.add(paymentContentPanel, gbc);
+
                     contentPanel.revalidate();
                     contentPanel.repaint();
                 }
@@ -203,5 +279,9 @@ public class Home {
 
     public JFrame getFrame() {return homeFrame;}
 
+    private void addFee() {
+        homeFrame.setEnabled(false);
+        new AddFee(homeFrame);
+    }
     private void signOut() {AuthCtrl.signOut(this);}
 }

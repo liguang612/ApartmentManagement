@@ -1,6 +1,5 @@
 package SQL;
 
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,13 +16,14 @@ public class DBQuery {
     public static User findUser(String username, String password) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM users WHERE username=? AND password=?");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM [User] WHERE username = ? AND [password] = ?");
+                
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-                    return new User(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+                    return new User(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(6), resultSet.getString(5));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
