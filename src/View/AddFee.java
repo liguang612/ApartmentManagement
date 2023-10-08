@@ -2,12 +2,14 @@ package View;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -23,18 +25,21 @@ import Resources.Constant.Constant;
 public class AddFee {
     String[] cycleType = {"Một lần", "Hàng tháng", "Hàng năm"};
 
-    JButton cancelButton = new JButton("Hủy"), verifyButton = new JButton("Thêm");
+    JButton cancelButton, verifyButton;
     JCheckBox mandatoryField = new JCheckBox();
     JComboBox<String> cycleField;
     JFrame addFeeFrame, prevFrame;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
-    JTextField costField = new JTextField(), expirationField = new JTextField(), nameField = new JTextField();
+    JTextField costField, expirationField, nameField;
 
     public AddFee(JFrame prev) {
         this.prevFrame = prev;
 
+        UIManager.put("Button.background", Color.WHITE);
         UIManager.put("Label.font", Constant.contentFont);
+        UIManager.put("TextField.font", Constant.contentFont);
 
+        GridBagConstraints gbc = new GridBagConstraints();
         JLabel label = new JLabel("Thêm loại phí mới", JLabel.CENTER);
 
         addFeeFrame = new JFrame("Thêm loại phí mới");
@@ -45,16 +50,17 @@ public class AddFee {
         });
         addFeeFrame.setBackground(Color.WHITE);
         addFeeFrame.setLayout(new BorderLayout());
+        addFeeFrame.setLocationRelativeTo(prevFrame);
         addFeeFrame.setSize(800, 400);
 
-        cancelButton.setBackground(Color.WHITE);
+        cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 cancel();
             }
         });
-        verifyButton.setBackground(Color.WHITE);
+        verifyButton = new JButton("Thêm");
         verifyButton.setFont(Constant.buttonFont);
         verifyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -62,13 +68,32 @@ public class AddFee {
             }
         });
 
-        cycleField = new JComboBox<>(cycleType);
+        costField = new JTextField();
+        costField.setFont(Constant.digitFont);
 
-        contentPanel.setLayout(new GridLayout(5, 2, 15, 20));
-        contentPanel.add(new JLabel("Tên khoản phí", JLabel.RIGHT)); contentPanel.add(nameField);
-        contentPanel.add(new JLabel("Số tiền", JLabel.RIGHT)); contentPanel.add(costField);
-        contentPanel.add(new JLabel("Bắt buộc", JLabel.RIGHT)); contentPanel.add(mandatoryField);
-        contentPanel.add(new JLabel("Chu kỳ đóng phí", JLabel.RIGHT)); contentPanel.add(cycleField);
+        cycleField = new JComboBox<>(cycleType);
+        cycleField.setBackground(Color.WHITE);
+        cycleField.setFont(Constant.contentFont);
+        
+        expirationField = new JTextField();
+        
+        nameField = new JTextField();
+
+        contentPanel.setLayout(new GridBagLayout());
+        gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.insets = new Insets(0, 5, 0, 15);
+        gbc.gridx = 0; gbc.weightx = 2; gbc.weighty = 1;
+        gbc.gridy = 0; contentPanel.add(new JLabel("Tên khoản phí", JLabel.RIGHT), gbc);
+        gbc.gridy = 1; contentPanel.add(new JLabel("Số tiền", JLabel.RIGHT), gbc);
+        gbc.gridy = 2; contentPanel.add(new JLabel("Bắt buộc", JLabel.RIGHT), gbc);
+        gbc.gridy = 3; contentPanel.add(new JLabel("Chu kỳ đóng phí", JLabel.RIGHT), gbc);
+        gbc.gridy = 4; contentPanel.add(new JLabel("Hạn nộp", JLabel.RIGHT), gbc);
+        gbc.gridx = 1; gbc.weightx = 5; gbc.weighty = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy = 0; contentPanel.add(nameField, gbc);
+        gbc.gridy = 1; contentPanel.add(costField, gbc);
+        gbc.gridy = 2; contentPanel.add(mandatoryField, gbc);
+        gbc.gridy = 4; contentPanel.add(expirationField, gbc);
+        gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy = 3; contentPanel.add(cycleField, gbc);
 
         functionPanel.setLayout(new GridLayout(2, 5));
         functionPanel.add(new JLabel());

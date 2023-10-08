@@ -12,13 +12,11 @@ import javax.swing.UIManager;
 
 import Model.User;
 import Resources.Constant.Constant;
-import Resources.Constant.Tool;
 
 
 public class AccountDisplay extends JPanel {
     private JLabel avatarLabel;
     private JPanel panel = new JPanel(new GridLayout(5, 3));
-    private Tool tool = new Tool();
     
     public AccountDisplay(User user) {
         UIManager.put("Label.font", Constant.contentFont);
