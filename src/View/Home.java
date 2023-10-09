@@ -63,6 +63,7 @@ public class Home {
             Font font = Font.createFont(Font.TRUETYPE_FONT, new File(Constant.customFont + "/Roboto-Regular.ttf"));
             UIManager.put("Button.font", new Font("Tahoma", Font.PLAIN, 13));
         } catch (FontFormatException e) {e.printStackTrace();} catch (IOException e) {e.printStackTrace();}
+
         UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 14));
 
         gbc.anchor = GridBagConstraints.CENTER;
