@@ -3,18 +3,12 @@ package Resources.Constant;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import java.sql.Blob;
-import java.sql.SQLException;
 
 public class Tool {
     public static ImageIcon resize(ImageIcon img, int height, int width) {

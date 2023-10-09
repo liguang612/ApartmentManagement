@@ -1,9 +1,6 @@
 package SQL;
 
-import java.awt.Image;
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
