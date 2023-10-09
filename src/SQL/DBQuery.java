@@ -12,25 +12,25 @@ import Resources.Constant.Tool;
 
 public class DBQuery {
 
-    // user api
+    // User api
 
     public static User findUser(String username, String password) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
-                
+                PreparedStatement preparedStatement = DBConnection.database
+                        .prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
+
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
                     return new User(
-                        resultSet.getInt(1),
-                        resultSet.getString(4),
-                        resultSet.getString(5),
-                        Tool.MillisToDate(resultSet.getLong(6)),
-                        resultSet.getString(7)
-                    );
+                            resultSet.getInt(1),
+                            resultSet.getString(4),
+                            resultSet.getString(5),
+                            Tool.MillisToDate(resultSet.getLong(6)),
+                            resultSet.getString(7));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -43,21 +43,21 @@ public class DBQuery {
 
     public static ArrayList<Apartment> getApartmentList(int aBId) {
         ArrayList<Apartment> apartmentList = new ArrayList<Apartment>();
-        if(DBConnection.database != null) {
+        if (DBConnection.database != null) {
             try {
                 PreparedStatement preparedStatement = DBConnection.database
-                    .prepareStatement("SELECT apartments.apartmentId, apartments.floor, apartments.room, apartments.area, apartments.aBId, members.name, members.phone FROM apartments LEFT JOIN members ON members.role = 'leader' AND apartments.apartmentId = members.apartmentId WHERE aBId = ?");
+                        .prepareStatement(
+                                "SELECT apartments.apartmentId, apartments.floor, apartments.room, apartments.area, apartments.aBId, members.name, members.phone FROM apartments LEFT JOIN members ON members.role = 'leader' AND apartments.apartmentId = members.apartmentId WHERE aBId = ?");
                 preparedStatement.setInt(1, aBId);
                 ResultSet resultSet = preparedStatement.executeQuery();
-                while(resultSet.next()) {
+                while (resultSet.next()) {
                     apartmentList.add(new Apartment(
-                        resultSet.getInt("apartmentId"),
-                        resultSet.getInt("floor"),
-                        resultSet.getInt("room"),
-                        resultSet.getFloat("area"),
-                        resultSet.getString("name"),
-                        resultSet.getString("phone")
-                    ));
+                            resultSet.getInt("apartmentId"),
+                            resultSet.getInt("floor"),
+                            resultSet.getInt("room"),
+                            resultSet.getFloat("area"),
+                            resultSet.getString("name"),
+                            resultSet.getString("phone")));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -66,32 +66,59 @@ public class DBQuery {
         return apartmentList;
     }
 
-    // fee api
+    // Fee api
 
-    public static Fee[] getFeeList(Apartment apartment) {
+    public static ArrayList<Fee> getFeeList(int abId) {
 
         ArrayList<Fee> feeList = new ArrayList<Fee>();
 
-        if(DBConnection.database != null) {
+        if (DBConnection.database != null) {
             try {
-                long currentTime = System.currentTimeMillis();
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM fees WHERE (cycle <> 0) OR (cycle=0 AND expiration > ?)");
-                preparedStatement.setLong(1, currentTime);
+                PreparedStatement preparedStatement = DBConnection.database
+                        .prepareStatement("SELECT * FROM fees WHERE aBId = ?");
+                preparedStatement.setInt(1, abId);
                 ResultSet resultSet = preparedStatement.executeQuery();
-                while(resultSet.next()) {
+                while (resultSet.next()) {
                     feeList.add(new Fee(
-                        resultSet.getInt(1),
-                        resultSet.getString(2), 
-                        resultSet.getInt(3), 
-                        resultSet.getBoolean(4),
-                        resultSet.getInt(5),
-                        resultSet.getLong(6)
-                    ));
+                            resultSet.getInt(1),
+                            resultSet.getString(3),
+                            resultSet.getInt(4),
+                            resultSet.getBoolean(5),
+                            resultSet.getInt(6),
+                            Tool.MillisToDate(resultSet.getLong(7))));
                 }
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return feeList;
+    }
+
+    public static Boolean addNewFee(int abId, String name, int cost, int mandatory, int cycle, String expirationDate) {
+
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement(
+                        "INSERT INTO fees (aBId, name, cost, mandatory, cycle, expiration) VALUES (?, ?, ?, ?, ?, ?)");
+                preparedStatement.setInt(1, abId);
+                preparedStatement.setString(2, name);
+                preparedStatement.setInt(3, cost);
+                preparedStatement.setInt(4, mandatory);
+                preparedStatement.setInt(5, cycle);
+                if (cycle == 0) {
+                    preparedStatement.setLong(6, Tool.DateToMillis(expirationDate));
+                } else {
+                    preparedStatement.setLong(6, 0);
+                }
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return true;
+        }
+
+        return true;
     }
 }

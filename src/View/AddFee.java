@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import Controller.FeeCtrl;
+import Model.User;
 import Resources.Constant.Constant;
 
 public class AddFee {
@@ -33,9 +35,11 @@ public class AddFee {
     JFrame addFeeFrame, prevFrame;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
     JTextField costField, expirationField, nameField;
+    User user;
 
-    public AddFee(JFrame prev) {
+    public AddFee(JFrame prev, User user) {
         this.prevFrame = prev;
+        this.user = user;
 
         UIManager.put("Button.background", Color.WHITE);
         UIManager.put("Label.font", Constant.contentFont);
@@ -134,5 +138,13 @@ public class AddFee {
     private void verify() {
         addFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
+
+        String feeName = nameField.getText();
+        int feeCost = Integer.parseInt(costField.getText());
+        int feeMandatory = mandatoryField.isSelected() ? 1 : 0;
+        int feeCycle = java.util.Arrays.asList(cycleType).indexOf(cycleField.getSelectedItem().toString());
+        String expirationDate = expirationField.getText();
+
+        FeeCtrl.addNewFee(user.getId(), feeName, feeCost, feeMandatory, feeCycle, expirationDate);
     }
 }

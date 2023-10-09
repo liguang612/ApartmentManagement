@@ -5,11 +5,11 @@ public class Fee {
     private String name;
     private int cost;
     private boolean mandatory;
-    private long expiration;
+    private String expiration;
     private int cycle;
 
     public Fee() {}
-    public Fee(int id, String name, int cost, boolean mandatory, int cycle, long expiration) {
+    public Fee(int id, String name, int cost, boolean mandatory, int cycle, String expiration) {
         this.id = id;
         this.name = name;
         this.cost = cost;
@@ -23,12 +23,12 @@ public class Fee {
     public String getName() {return name;}
     public int getCost() {return cost;}
     public boolean getMandatory() {return mandatory;}
-    public long getDate() {return expiration;}
+    public String getExpirationDate() {return expiration;}
 
     public void setId(int id) {this.id = id;}
     public void setName(String name) {this.name = name;}
     public void setCost(int cost) {this.cost = cost;}
     public void setMandatory(boolean mandatory) {this.mandatory = mandatory;}
-    public void setDate(long expiration) {this.expiration = expiration;}
-    public void setCycle(int cycle) {this.cycle = cycle;}
+    public void setDate(String expiration) {this.expiration = expiration;}
+    public void setExpirationDate(int cycle) {this.cycle = cycle;}
 }

@@ -54,10 +54,10 @@ public class Home {
     public Home(User user) {
         this.user = user;
 
-        annualFeeDisplay = new FeeDisplay();
+        annualFeeDisplay = new FeeDisplay(user);
         apartmentDisplay = new ApartmentDisplay(user);
-        monthlyFeeDisplay = new FeeDisplay();
-        oneTimeFeeDisplay = new FeeDisplay();
+        monthlyFeeDisplay = new FeeDisplay(user);
+        oneTimeFeeDisplay = new FeeDisplay(user);
 
         try {
             Font font = Font.createFont(Font.TRUETYPE_FONT, new File(Constant.customFont + "/Roboto-Regular.ttf"));
@@ -281,7 +281,7 @@ public class Home {
 
     private void addFee() {
         homeFrame.setEnabled(false);
-        new AddFee(homeFrame);
+        new AddFee(homeFrame, user);
     }
     private void signOut() {AuthCtrl.signOut(this);}
 }

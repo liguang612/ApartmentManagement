@@ -33,7 +33,7 @@ public class ApartmentItem extends JPanel {
         this.ownerName.setFont(Constant.contentFont);
         this.ownerName.setText(ownerName);
         this.ownerPhone.setFont(Constant.contentFont);
-        this.ownerPhone.setText('0' + ownerPhone);
+        this.ownerPhone.setText(ownerPhone);
         this.room.setFont(Constant.contentFont);
         this.room.setText(room.toString());
 
