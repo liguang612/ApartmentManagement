@@ -13,6 +13,8 @@ import javax.swing.UIManager;
 import Model.User;
 import Resources.Constant.Constant;
 
+import Resources.Constant.Tool;
+
 
 public class AccountDisplay extends JPanel {
     private JLabel avatarLabel;
@@ -23,12 +25,12 @@ public class AccountDisplay extends JPanel {
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
 
-        avatar(user.getImg(), user.getName());
+        avatar(user.getImg());
         detail(user);
     }
 
-    private void avatar(String img, String name) {
-        avatarLabel = new JLabel(new ImageIcon(Constant.image + "/avatar.jpg"), JLabel.CENTER);
+    private void avatar(ImageIcon img) {
+        avatarLabel = new JLabel(Tool.resize(new ImageIcon(Constant.image + "/avatar.jpg"), 500, 500), JLabel.CENTER);
 
         this.add(avatarLabel, BorderLayout.WEST);
     }

@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 
 public class Tool {
-    public ImageIcon resize(ImageIcon img, int height, int width) {
+    public static ImageIcon resize(ImageIcon img, int height, int width) {
         BufferedImage resizeImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics g = resizeImage.getGraphics();
         Image image = img.getImage();
