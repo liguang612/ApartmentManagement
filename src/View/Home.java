@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -52,6 +53,19 @@ public class Home {
     User user;
 
     public Home(User user) {
+        try {
+            if(!System.getProperty("os.name").startsWith("Linux")) {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         this.user = user;
 
         annualFeeDisplay = new FeeDisplay(user);
@@ -90,6 +104,11 @@ public class Home {
         changePassword.setBackground(Color.WHITE);
         editAccount = new JButton(Constant.verticalImageTitle("editAccount.png", "Sửa thông tin tài khoản"));
         editAccount.setBackground(Color.WHITE);
+        editAccount.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                editAccount();
+            }
+        });
         signOut = new JButton(Constant.verticalImageTitle("signOut.png", "Đăng xuất"));
         signOut.setBackground(Color.WHITE);
         signOut.addActionListener(new ActionListener() {
@@ -283,6 +302,10 @@ public class Home {
     private void addFee() {
         homeFrame.setEnabled(false);
         new AddFee(homeFrame, user);
+    }
+
+    private void editAccount() {
+        accountDisplay.turnEditModeOn();
     }
     private void signOut() {AuthCtrl.signOut(this);}
 }

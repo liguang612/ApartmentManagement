@@ -6,7 +6,7 @@ public class Constant {
     public static final String image = System.getProperty("user.dir") + "/src/Resources/Image/";
     
     public static final String customFont = System.getProperty("user.dir") + "/src/Resources/Font";
-    public static final Font buttonFont = new Font("Tahoma", Font.PLAIN, 13);
+    public static final Font buttonFont = new Font("Segoe UI", Font.PLAIN, 13);
     public static final Font contentFont = new Font("Segoe UI", Font.PLAIN, 14);
     public static final Font digitFont = new Font("Consolas", Font.PLAIN, 14);
     public static final Font titleFont = new Font("Segoe UI", Font.BOLD, 14);

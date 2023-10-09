@@ -1,5 +1,7 @@
 package Controller;
 
+import java.io.InputStream;
+
 import Model.User;
 import SQL.DBQuery;
 import View.Home;
@@ -18,5 +20,9 @@ public class AuthCtrl {
     public static void signOut(Home home) {
         home.getFrame().setVisible(false);
         new Login();
+    }
+
+    public static Boolean ChangeAvatar(int userId, InputStream inputStream) {
+        return DBQuery.ChangeAvatar(userId, inputStream);
     }
 }

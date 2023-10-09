@@ -11,11 +11,12 @@ public class User {
     private String abName;
 
     public User() {}
-    public User(int id, String name, String phoneNumber, String birthday, String abName) {
+    public User(int id, String name, String phoneNumber, String birthday, ImageIcon img, String abName) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.birthday = birthday;
+        this.img = img;
         this.abName = abName;
     }
 

@@ -1,18 +1,42 @@
 package SQL;
 
+import java.awt.Image;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 import Model.Apartment;
 import Model.Fee;
 import Model.User;
+import Resources.Constant.Constant;
 import Resources.Constant.Tool;
 
 public class DBQuery {
 
     // User api
+
+    public static Boolean ChangeAvatar(int userId, InputStream inputStream) {
+        if(DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.
+                        prepareStatement("UPDATE users SET avatar=? WHERE userId=?");
+                preparedStatement.setBlob(1, inputStream);
+                preparedStatement.setInt(2, userId);
+
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
 
     public static User findUser(String username, String password) {
         if (DBConnection.database != null) {
@@ -25,11 +49,21 @@ public class DBQuery {
 
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
+
+                    byte[] bytes = resultSet.getBytes(8);
+                    ImageIcon avatar = null;
+                    if(bytes == null) {
+                        avatar = Tool.resize(new ImageIcon(Constant.image + "/avatar.png"), 512, 512);
+                    } else {
+                        avatar = Tool.BytesToImage(bytes);
+                    }
+
                     return new User(
                             resultSet.getInt(1),
                             resultSet.getString(4),
                             resultSet.getString(5),
                             Tool.MillisToDate(resultSet.getLong(6)),
+                            avatar,
                             resultSet.getString(7));
                 }
             } catch (SQLException e) {
