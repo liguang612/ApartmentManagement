@@ -36,7 +36,7 @@ public class AccountDisplay extends JPanel {
     }
 
     private void detail(User user) {
-        JLabel label = new JLabel("Chung cư BlueMoon");
+        JLabel label = new JLabel(user.getAbName());
         JPanel subPanel = new JPanel(new BorderLayout());
 
         label.setFont(new Font("Verdana", Font.BOLD, 26));

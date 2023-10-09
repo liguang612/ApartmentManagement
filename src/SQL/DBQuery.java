@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import Model.Apartment;
 import Model.Fee;
 import Model.User;
+import Resources.Constant.Tool;
 
 public class DBQuery {
 
@@ -23,7 +24,13 @@ public class DBQuery {
 
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-                    return new User(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(6), resultSet.getString(5));
+                    return new User(
+                        resultSet.getInt(1),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        Tool.MillisToDate(resultSet.getLong(6)),
+                        resultSet.getString(7)
+                    );
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
