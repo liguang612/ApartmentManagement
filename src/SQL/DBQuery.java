@@ -16,7 +16,7 @@ public class DBQuery {
     public static User findUser(String username, String password) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM [User] WHERE username = ? AND [password] = ?");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM users WHERE username = ? AND [password] = ?");
                 
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);

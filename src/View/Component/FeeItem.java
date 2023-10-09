@@ -41,7 +41,7 @@ public class FeeItem extends JPanel {
         this.name.setFont(Constant.contentFont);
         this.name.setText(name);
 
-        mandatoryCheckBox.setForeground(Color.BLACK);
+        mandatoryCheckBox.setForeground(Color.BLUE);
         mandatoryCheckBox.setEnabled(false);
         mandatoryCheckBox.setSelected(mandatory);
 

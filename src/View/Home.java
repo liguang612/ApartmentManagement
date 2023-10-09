@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -52,6 +53,21 @@ public class Home {
     User user;
 
     public Home(User user) {
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Lêu lêu cái đồ không dùng Windows");
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            System.out.println("Lêu lêu cái đồ không dùng Windows");
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            System.out.println("Lêu lêu cái đồ không dùng Windows");
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            System.out.println("Lêu lêu cái đồ không dùng Windows");
+            e.printStackTrace();
+        }
         this.user = user;
 
         annualFeeDisplay = new FeeDisplay();
@@ -89,6 +105,11 @@ public class Home {
         changePassword.setBackground(Color.WHITE);
         editAccount = new JButton(Constant.verticalImageTitle("editAccount.png", "Sửa thông tin tài khoản"));
         editAccount.setBackground(Color.WHITE);
+        editAccount.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                editAccount();
+            }
+        });
         signOut = new JButton(Constant.verticalImageTitle("signOut.png", "Đăng xuất"));
         signOut.setBackground(Color.WHITE);
         signOut.addActionListener(new ActionListener() {
@@ -282,6 +303,10 @@ public class Home {
     private void addFee() {
         homeFrame.setEnabled(false);
         new AddFee(homeFrame);
+    }
+
+    private void editAccount() {
+        accountDisplay.turnEditModeOn();
     }
     private void signOut() {AuthCtrl.signOut(this);}
 }
