@@ -24,6 +24,7 @@ import Resources.Constant.Constant;
 import Resources.Constant.Tool;
 
 public class AccountDisplay extends JPanel {
+    private ImageIcon updatedImg;
     private JButton cancelButton, verifyButton;
     private JLabel avatarLabel;
     private JPanel panel = new JPanel(new GridLayout(6, 3));
@@ -38,7 +39,7 @@ public class AccountDisplay extends JPanel {
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
 
-        avatarLabel = new JLabel(tool.resize(new ImageIcon(Constant.image + "/avatar.jpg"), 616, 616), JLabel.CENTER);
+        avatarLabel = new JLabel(user.getImg(), JLabel.CENTER);
         this.add(avatarLabel, BorderLayout.WEST);
 
         detail(user);
@@ -53,13 +54,18 @@ public class AccountDisplay extends JPanel {
         cancelButton.setVisible(false);
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                turnEditModeOff();
+                turnEditModeOff(false);
             }
         });
 
         verifyButton = new JButton("Xác nhận");
         verifyButton.setBackground(Color.WHITE);
         verifyButton.setVisible(false);
+        verifyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                verifyEdit();
+            }
+        });
 
         editPanel.setBackground(Color.WHITE);
         editPanel.add(cancelButton);
@@ -89,14 +95,15 @@ public class AccountDisplay extends JPanel {
         fileChooser.setFileFilter(filter);
 
         if (result == JFileChooser.APPROVE_OPTION) {
-            avatarLabel.setIcon(tool.resize(new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()), 616, 616));
+            updatedImg = tool.resize(new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()), 616, 616);
+            avatarLabel.setIcon(updatedImg);
         }
     }
 
-    public void turnEditModeOff() {
+    public void turnEditModeOff(boolean accepted) {
         avatarLabel.removeMouseListener(avatarLabel.getMouseListeners()[0]);
         avatarLabel.removeAll();
-        avatarLabel.setIcon(tool.resize(new ImageIcon(Constant.image + "/avatar.jpg"), 616, 616));
+        if (!accepted) avatarLabel.setIcon(tool.resize(new ImageIcon(Constant.image + "/avatar.jpg"), 616, 616));
         avatarLabel.revalidate();
         avatarLabel.repaint();
         cancelButton.setVisible(false);
@@ -113,5 +120,9 @@ public class AccountDisplay extends JPanel {
 
         cancelButton.setVisible(true);
         verifyButton.setVisible(true);
+    }
+    public void verifyEdit() {
+        user.setImg(updatedImg);
+        turnEditModeOff(true);
     }
 }
