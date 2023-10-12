@@ -8,13 +8,10 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,33 +19,32 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import Controller.FeeCtrl;
 import Model.User;
 import Resources.Constant.Constant;
 
-public class AddFee {
-    String[] cycleType = {"Một lần", "Hàng tháng", "Hàng năm"};
-
+public class AddResident {
     JButton cancelButton, verifyButton;
-    JCheckBox mandatoryField = new JCheckBox();
-    JComboBox<String> cycleField;
+    JComboBox<Integer> floorField, roomField;
+    JComboBox<String> countryField;
     JFrame addFeeFrame, prevFrame;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
-    JTextField costField, expirationField, nameField;
+    JTextField birthdayField, nameField, phoneField, relationshipField;
     User user;
 
-    public AddFee(JFrame prev, User user) {
+    public AddResident(JFrame prev, User user) {
         this.prevFrame = prev;
         this.user = user;
 
         UIManager.put("Button.background", Color.WHITE);
+        UIManager.put("ComboBox.font", Constant.contentFont);
         UIManager.put("Label.font", Constant.contentFont);
         UIManager.put("TextField.font", Constant.contentFont);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        JLabel label = new JLabel("Thêm loại phí mới", JLabel.CENTER);
+        JLabel label = new JLabel("Chào mừng cư dân mới tới BlueMoon", JLabel.CENTER);
+        JPanel frPanel = new JPanel(new GridLayout(1, 3));
 
-        addFeeFrame = new JFrame("Thêm loại phí mới");
+        addFeeFrame = new JFrame("Thêm cư dân mới");
         addFeeFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
@@ -58,6 +54,8 @@ public class AddFee {
         addFeeFrame.setLayout(new BorderLayout());
         addFeeFrame.setLocation((int)prevFrame.getLocation().getX() + (int)prevFrame.getSize().getWidth() / 2 - 400, (int)prevFrame.getLocation().getY() + (int)prevFrame.getSize().getHeight() / 2 - 200);
         addFeeFrame.setSize(800, 400);
+
+        birthdayField = new JTextField();
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -74,42 +72,40 @@ public class AddFee {
             }
         });
 
-        costField = new JTextField();
-        costField.setFont(Constant.digitFont);
+        phoneField = new JTextField();
+        phoneField.setFont(Constant.digitFont);
 
-        cycleField = new JComboBox<>(cycleType);
-        cycleField.setBackground(Color.WHITE);
-        cycleField.setFont(Constant.contentFont);
-        cycleField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                if (cycleField.getSelectedIndex() != 0) {
-                    expirationField.setEnabled(false);
-                    expirationField.setText(null);
-                } else {
-                    expirationField.setEnabled(true);
-                }
-            }
-        });
+        countryField = new JComboBox<String>(Constant.country);
+        countryField.setBackground(Color.WHITE);
+
+        floorField = new JComboBox<Integer>(Constant.floor);
+        roomField = new JComboBox<Integer>(Constant.room);
+        frPanel.add(floorField);
+        frPanel.add(new JLabel("     Phòng     "));
+        frPanel.add(roomField);
         
-        expirationField = new JTextField();
-
         nameField = new JTextField();
+
+        relationshipField = new JTextField();
 
         contentPanel.setLayout(new GridBagLayout());
         gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.insets = new Insets(0, 5, 0, 15);
         gbc.gridx = 0; gbc.weightx = 2; gbc.weighty = 1;
-        gbc.gridy = 0; contentPanel.add(new JLabel("Tên khoản phí", JLabel.RIGHT), gbc);
-        gbc.gridy = 1; contentPanel.add(new JLabel("Số tiền", JLabel.RIGHT), gbc);
-        gbc.gridy = 2; contentPanel.add(new JLabel("Bắt buộc", JLabel.RIGHT), gbc);
-        gbc.gridy = 3; contentPanel.add(new JLabel("Chu kỳ đóng phí", JLabel.RIGHT), gbc);
-        gbc.gridy = 4; contentPanel.add(new JLabel("Hạn nộp", JLabel.RIGHT), gbc);
+        gbc.gridy = 0; contentPanel.add(new JLabel("Họ và tên", JLabel.RIGHT), gbc);
+        gbc.gridy = 1; contentPanel.add(new JLabel("Số điện thoại", JLabel.RIGHT), gbc);
+        gbc.gridy = 2; contentPanel.add(new JLabel("Ngày sinh", JLabel.RIGHT), gbc);
+        gbc.gridy = 3; contentPanel.add(new JLabel("Quốc tịch", JLabel.RIGHT), gbc);
+        gbc.gridy = 4; contentPanel.add(new JLabel("Tầng", JLabel.RIGHT), gbc);
+        gbc.gridy = 5; contentPanel.add(new JLabel("Mối quan hệ với chủ hộ", JLabel.RIGHT), gbc);
         gbc.gridx = 1; gbc.weightx = 5; gbc.weighty = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy = 0; contentPanel.add(nameField, gbc);
-        gbc.gridy = 1; contentPanel.add(costField, gbc);
-        gbc.gridy = 2; contentPanel.add(mandatoryField, gbc);
-        gbc.gridy = 4; contentPanel.add(expirationField, gbc);
+        gbc.gridy = 1; contentPanel.add(phoneField, gbc);
+        gbc.gridy = 2; contentPanel.add(birthdayField, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
-        gbc.gridy = 3; contentPanel.add(cycleField, gbc);
+        gbc.gridy = 3; contentPanel.add(countryField, gbc);
+        gbc.gridy = 4; contentPanel.add(frPanel, gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy = 5; contentPanel.add(relationshipField, gbc);
 
         functionPanel.setLayout(new GridLayout(2, 5));
         functionPanel.add(new JLabel());
@@ -139,13 +135,5 @@ public class AddFee {
     private void verify() {
         addFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
-
-        String feeName = nameField.getText();
-        int feeCost = Integer.parseInt(costField.getText());
-        int feeMandatory = mandatoryField.isSelected() ? 1 : 0;
-        int feeCycle = java.util.Arrays.asList(cycleType).indexOf(cycleField.getSelectedItem().toString());
-        String expirationDate = expirationField.getText();
-
-        FeeCtrl.addNewFee(user.getId(), feeName, feeCost, feeMandatory, feeCycle, expirationDate);
     }
 }

@@ -14,11 +14,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import Controller.AuthCtrl;
 import Model.User;
+import Resources.Constant.Constant;
 
 
 public class Login {
@@ -28,10 +31,25 @@ public class Login {
     JFrame loginFrame;
     JLabel label1, label2, label3, label4;
     JPanel panel1, panel2, panel3;
-    JTextField username, password;
+    JTextField username;
+    JPasswordField password;
 
     public Login() {
-        UIManager.put("Label.font", new Font("SegoeUI", Font.PLAIN, 14));
+        try {
+            if(!System.getProperty("os.name").startsWith("Linux")) {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        UIManager.put("Button.font", Constant.buttonFont.deriveFont((float)12.0));
+        UIManager.put("Label.font", Constant.contentFont);
 
         gb = new GridBagLayout();
         gbc = new GridBagConstraints();
@@ -66,7 +84,7 @@ public class Login {
         username = new JTextField();
         username.setSize(400, 50);
 
-        password = new JTextField();
+        password = new JPasswordField();
         password.setSize(400, 50);
 
         panel1 = new JPanel(new BorderLayout(10, 0));

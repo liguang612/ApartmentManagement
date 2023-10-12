@@ -39,10 +39,10 @@ public class Home {
     FeeDisplay annualFeeDisplay, monthlyFeeDisplay, oneTimeFeeDisplay;
     GridBagConstraints gbc = new GridBagConstraints();
     GridBagLayout gb = new GridBagLayout();
-    JButton addApartment, deleteApartment, editApartment,
-            addFee, deleteFee, editFee, addPayment,
-            changePassword, editAccount, signOut,
-            pay, payList;
+    Integer mode = 0;
+    JButton addApartment, deleteApartment, editApartment, addResident, deleteResident, editResident, changeStatus,
+            addFee, deleteFee, editFee, pay, payList,
+            changePassword, editAccount, signOut;
     JFrame homeFrame;
     JPanel contentPanel, functionPanel,
            accountManagePanel = new JPanel(), feeManagePanel = new JPanel(), paymentManagePanel = new JPanel(), residentManagePanel = new JPanel(),
@@ -74,11 +74,75 @@ public class Home {
         oneTimeFeeDisplay = new FeeDisplay(user);
 
         try {
-            Font font = Font.createFont(Font.TRUETYPE_FONT, new File(Constant.customFont + "/Roboto-Regular.ttf"));
-            UIManager.put("Button.font", new Font("Tahoma", Font.PLAIN, 13));
+            Font font = Font.createFont(Font.TRUETYPE_FONT, new File(Constant.customFont + "/tahoma.ttf"));
+            UIManager.put("Button.font", font.deriveFont((float)13.0));
         } catch (FontFormatException e) {e.printStackTrace();} catch (IOException e) {e.printStackTrace();}
 
         UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 14));
+
+        changePassword = new JButton(Constant.verticalImageTitle("changePassword.png", "Đổi mật khẩu"));
+        changePassword.setBackground(Color.WHITE);
+        changePassword.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                changePassword();
+            }
+        });
+        editAccount = new JButton(Constant.verticalImageTitle("editAccount.png", "Sửa thông tin tài khoản"));
+        editAccount.setBackground(Color.WHITE);
+        editAccount.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                editAccount();
+            }
+        });
+        signOut = new JButton(Constant.verticalImageTitle("signOut.png", "Đăng xuất"));
+        signOut.setBackground(Color.WHITE);
+        signOut.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                signOut();
+            }
+        });
+
+        addApartment = new JButton(Constant.verticalImageTitle("addOwner.png", "Thêm chủ căn hộ"));
+        addApartment.setBackground(Color.WHITE);
+        deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
+        deleteApartment.setBackground(Color.WHITE);
+        editApartment = new JButton(Constant.verticalImageTitle("editOwner.png", "Sửa chủ căn hộ"));
+        editApartment.setBackground(Color.WHITE);
+        addResident = new JButton(Constant.verticalImageTitle("addResident.png", "Thêm cư dân"));
+        addResident.setBackground(Color.WHITE);
+        addResident.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                addResident();
+            }
+        });
+        deleteResident = new JButton(Constant.verticalImageTitle("deleteResident.png", "Xóa cư dân"));
+        deleteResident.setBackground(Color.WHITE);
+        editResident = new JButton(Constant.verticalImageTitle("editResident.png", "Sửa thông tin cư dân"));
+        editResident.setBackground(Color.WHITE);
+        changeStatus = new JButton(Constant.verticalImageTitle("changeStatus.png", "Thay đổi nhân khẩu"));
+        changeStatus.setBackground(Color.WHITE);
+
+        addFee = new JButton(Constant.verticalImageTitle("addFee.png", "Thêm loại phí"));
+        addFee.setBackground(Color.WHITE);
+        addFee.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                addFee();
+            }
+        });
+        deleteFee = new JButton(Constant.verticalImageTitle("deleteFee.png", "Xóa loại phí"));
+        deleteFee.setBackground(Color.WHITE);
+        editFee = new JButton(Constant.verticalImageTitle("editFee.png", "Sửa loại phí"));
+        editFee.setBackground(Color.WHITE);
+
+        pay = new JButton(Constant.verticalImageTitle("pay.png", "Nộp phí"));
+        pay.setBackground(Color.WHITE);
+        pay.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                addPayment();
+            }
+        });
+        payList = new JButton(Constant.verticalImageTitle("payList.png", "Danh sách đã nộp phí"));
+        payList.setBackground(Color.WHITE);
 
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;
@@ -100,44 +164,14 @@ public class Home {
         accountManagePanel.setBackground(Color.WHITE);
         accountManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
 
-        changePassword = new JButton(Constant.verticalImageTitle("changePassword.png", "Đổi mật khẩu"));
-        changePassword.setBackground(Color.WHITE);
-        editAccount = new JButton(Constant.verticalImageTitle("editAccount.png", "Sửa thông tin tài khoản"));
-        editAccount.setBackground(Color.WHITE);
-        editAccount.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                editAccount();
-            }
-        });
-        signOut = new JButton(Constant.verticalImageTitle("signOut.png", "Đăng xuất"));
-        signOut.setBackground(Color.WHITE);
-        signOut.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                signOut();
-            }
-        });
-
         accountManagePanel.add(editAccount);
         accountManagePanel.add(changePassword);
         accountManagePanel.add(signOut);
-
     }
     private void feeManage() {
         feeManagePanel.setBackground(Color.WHITE);
         feeManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-
-        addFee = new JButton(Constant.verticalImageTitle("addFee.png", "Thêm loại phí"));
-        addFee.setBackground(Color.WHITE);
-        addFee.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                addFee();
-            }
-        });
-        deleteFee = new JButton(Constant.verticalImageTitle("deleteFee.png", "Xóa loại phí"));
-        deleteFee.setBackground(Color.WHITE);
-        editFee = new JButton(Constant.verticalImageTitle("editFee.png", "Sửa loại phí"));
-        editFee.setBackground(Color.WHITE);
-
+        
         feeManagePanel.add(addFee);
         feeManagePanel.add(editFee);
         feeManagePanel.add(deleteFee);
@@ -146,28 +180,24 @@ public class Home {
         paymentManagePanel.setBackground(Color.WHITE);
         paymentManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
 
-        pay = new JButton(Constant.verticalImageTitle("pay.png", "Nộp phí"));
-        pay.setBackground(Color.WHITE);
-        payList = new JButton(Constant.verticalImageTitle("payList.png", "Danh sách đã nộp phí"));
-        payList.setBackground(Color.WHITE);
-
         paymentManagePanel.add(pay);
         paymentManagePanel.add(payList);
     }
     private void residentManage() {
         residentManagePanel.setBackground(Color.WHITE);
         residentManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-
-        addApartment = new JButton(Constant.verticalImageTitle("addOwner.png", "Thêm chủ căn hộ"));
-        addApartment.setBackground(Color.WHITE);
-        deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
-        deleteApartment.setBackground(Color.WHITE);
-        editApartment = new JButton(Constant.verticalImageTitle("editOwner.png", "Sửa chủ căn hộ"));
-        editApartment.setBackground(Color.WHITE);
         
-        residentManagePanel.add(addApartment);
-        residentManagePanel.add(editApartment);
-        residentManagePanel.add(deleteApartment);
+        residentManagePanel.removeAll();
+        if (mode == 0) {
+            residentManagePanel.add(addApartment);
+            residentManagePanel.add(editApartment);
+            residentManagePanel.add(deleteApartment);
+        } else {
+            residentManagePanel.add(addResident);
+            residentManagePanel.add(editResident);
+            residentManagePanel.add(deleteResident);
+            residentManagePanel.add(changeStatus);
+        }
     }
 
     private void accountContent() {
@@ -207,6 +237,13 @@ public class Home {
         feeContent();
         paymentContent();
         residentContent();
+
+        residentTabbedPane.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent ce) {
+                mode = residentTabbedPane.getSelectedIndex();
+                residentManage();
+            }
+        });
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1; gbc.weighty = 1000; gbc.insets = new Insets(10, 10, 10, 10);
@@ -304,6 +341,20 @@ public class Home {
         new AddFee(homeFrame, user);
     }
 
+    private void addPayment() {
+        homeFrame.setEnabled(false);
+        new AddPayment(homeFrame, user);
+    }
+
+    private void addResident() {
+        homeFrame.setEnabled(false);
+        new AddResident(homeFrame, user);
+    }
+
+    private void changePassword() {
+        homeFrame.setEnabled(false);
+        new ChangePassword(homeFrame, user);
+    }
     private void editAccount() {
         accountDisplay.turnEditModeOn();
     }

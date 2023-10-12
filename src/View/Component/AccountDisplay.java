@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -30,8 +31,9 @@ import Resources.Constant.Tool;
 public class AccountDisplay extends JPanel {
     private ImageIcon updatedImg;
     private JButton cancelButton, verifyButton;
-    private JLabel avatarLabel;
-    private JPanel panel = new JPanel(new GridLayout(6, 3));
+    private JLabel avatarLabel, birthdayLabel, nameLabel, phoneLabel;
+    private JPanel panel = new JPanel(new GridLayout(6, 3, 0, 15));
+    private JTextField birthdayField, nameField, phoneField;
     private User user;
     private String imagePath = null;
     
@@ -40,17 +42,26 @@ public class AccountDisplay extends JPanel {
 
         UIManager.put("Button.font", Constant.buttonFont);
         UIManager.put("Label.font", Constant.contentFont);
+        UIManager.put("TextField.font", Constant.contentFont);
+
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
 
-        avatarLabel = new JLabel(user.getImg(), JLabel.CENTER);
+        avatarLabel = new JLabel(Tool.resize(user.getImg(), 616, 616), JLabel.CENTER);
         this.add(avatarLabel, BorderLayout.WEST);
+        birthdayLabel = new JLabel(user.getName());
+        nameLabel = new JLabel(user.getBirthday());
+        phoneLabel = new JLabel(user.getPhoneNumber());
+
+        birthdayField = new JTextField(user.getName());
+        nameField = new JTextField(user.getBirthday());
+        phoneField = new JTextField(user.getPhoneNumber());
 
         detail();
     }
 
     private void detail() {
-        JLabel label = new JLabel(user.getAbName());
+        JLabel label = new JLabel("Chung cư " + user.getAbName());
         JPanel editPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0)), subPanel = new JPanel(new BorderLayout());
 
         cancelButton = new JButton("Hủy");
@@ -81,9 +92,9 @@ public class AccountDisplay extends JPanel {
         panel.setBackground(Color.WHITE);        
         panel.add(new JLabel());                                     panel.add(label);        panel.add(new JLabel());
         panel.add(new JLabel());                                     panel.add(new JLabel()); panel.add(new JLabel());
-        panel.add(new JLabel("Tên: ", JLabel.RIGHT));           panel.add(new JLabel()); panel.add(new JLabel(user.getName()));
-        panel.add(new JLabel("Ngày sinh: ", JLabel.RIGHT));     panel.add(new JLabel()); panel.add(new JLabel(user.getBirthday()));
-        panel.add(new JLabel("Số điện thoại: ", JLabel.RIGHT)); panel.add(new JLabel()); panel.add(new JLabel('0' + String.valueOf(user.getPhoneNumber())));
+        panel.add(new JLabel("Tên: ", JLabel.RIGHT));           panel.add(new JLabel()); panel.add(nameLabel);
+        panel.add(new JLabel("Ngày sinh: ", JLabel.RIGHT));     panel.add(new JLabel()); panel.add(birthdayLabel);
+        panel.add(new JLabel("Số điện thoại: ", JLabel.RIGHT)); panel.add(new JLabel()); panel.add(phoneLabel);
         panel.add(new JLabel());                                     panel.add(editPanel);    panel.add(new JLabel());
 
         subPanel.setBackground(Color.WHITE);
@@ -109,13 +120,21 @@ public class AccountDisplay extends JPanel {
         avatarLabel.removeMouseListener(avatarLabel.getMouseListeners()[0]);
         avatarLabel.removeAll();
         if (!accepted) {
-            avatarLabel.setIcon(Tool.resize(user.getImg(), 512, 512));
+            avatarLabel.setIcon(Tool.resize(user.getImg(), 616, 616));
             imagePath = null;
             updatedImg = null;
         }
         avatarLabel.revalidate();
         avatarLabel.repaint();
+
         cancelButton.setVisible(false);
+
+        panel.remove(8); panel.add(nameLabel, 8);
+        panel.remove(11); panel.add(birthdayLabel, 11);
+        panel.remove(14); panel.add(phoneLabel, 14);
+        panel.revalidate();
+        panel.repaint();
+
         verifyButton.setVisible(false);
     }
     public void turnEditModeOn() {
@@ -128,6 +147,13 @@ public class AccountDisplay extends JPanel {
         });
 
         cancelButton.setVisible(true);
+
+        panel.remove(8); panel.add(nameField, 8);
+        panel.remove(11); panel.add(birthdayField, 11);
+        panel.remove(14); panel.add(phoneField, 14);
+        panel.revalidate();
+        panel.repaint();
+
         verifyButton.setVisible(true);
     }
     public void verifyEdit() {
