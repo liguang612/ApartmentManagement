@@ -48,7 +48,8 @@ public class AccountDisplay extends JPanel {
         setLayout(new BorderLayout());
 
         avatarLabel = new JLabel(Tool.resize(user.getImg(), 616, 616), JLabel.CENTER);
-        this.add(avatarLabel, BorderLayout.WEST);
+        avatarLabel.setLayout(new BorderLayout());
+        
         birthdayLabel = new JLabel(user.getName());
         nameLabel = new JLabel(user.getBirthday());
         phoneLabel = new JLabel(user.getPhoneNumber());
@@ -56,6 +57,8 @@ public class AccountDisplay extends JPanel {
         birthdayField = new JTextField(user.getName());
         nameField = new JTextField(user.getBirthday());
         phoneField = new JTextField(user.getPhoneNumber());
+
+        this.add(avatarLabel, BorderLayout.WEST);
 
         detail();
     }
@@ -138,13 +141,14 @@ public class AccountDisplay extends JPanel {
         verifyButton.setVisible(false);
     }
     public void turnEditModeOn() {
-        avatarLabel.setLayout(new BorderLayout());
-        avatarLabel.add(new JLabel(new ImageIcon(Constant.image + "/pickImage.png")), BorderLayout.CENTER);
-        avatarLabel.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent me) {
-                pickImage();
-            }
-        });
+        if (avatarLabel.getComponentCount() == 0) avatarLabel.add(new JLabel(new ImageIcon(Constant.image + "/pickImage.png")), BorderLayout.CENTER);
+
+        if (avatarLabel.getMouseListeners().length == 0)
+            avatarLabel.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent me) {
+                    pickImage();
+                }
+            });
 
         cancelButton.setVisible(true);
 
