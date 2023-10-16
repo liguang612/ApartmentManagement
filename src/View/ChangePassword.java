@@ -24,6 +24,7 @@ import Resources.Constant.Constant;
 public class ChangePassword {
     JButton cancelButton, verifyButton;
     JFrame changePasswordFrame, prevFrame;
+    JLabel notifyLabel;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
     JPasswordField oldPasswordField, newPasswordField, confirmPasswordField;
     User user;
@@ -57,6 +58,11 @@ public class ChangePassword {
                 cancel();
             }
         });
+
+        notifyLabel = new JLabel();
+        notifyLabel.setForeground(Color.RED);
+        notifyLabel.setHorizontalAlignment(JLabel.LEFT);
+
         verifyButton = new JButton("Thêm");
         verifyButton.setFont(Constant.buttonFont);
         verifyButton.addActionListener(new ActionListener() {
@@ -79,6 +85,7 @@ public class ChangePassword {
         gbc.gridy = 0; contentPanel.add(oldPasswordField, gbc);
         gbc.gridy = 1; contentPanel.add(newPasswordField, gbc);
         gbc.gridy = 2; contentPanel.add(confirmPasswordField, gbc);
+        gbc.gridy = 3; contentPanel.add(notifyLabel, gbc);
 
         functionPanel.setLayout(new GridLayout(2, 5));
         functionPanel.add(new JLabel());
@@ -105,7 +112,19 @@ public class ChangePassword {
         prevFrame.setEnabled(true);
     }
 
+    private boolean checkOldPassword() {
+        return true;
+    }
+
     private void verify() {
+        if (newPasswordField.getPassword().toString() != confirmPasswordField.getPassword().toString()) {
+            notifyLabel.setText("Mật khẩu xác nhận không khớp");
+
+            return ;
+        }
+
+        if (checkOldPassword()) {}
+
         changePasswordFrame.setVisible(false);
         prevFrame.setEnabled(true);
 

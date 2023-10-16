@@ -41,10 +41,10 @@ public class AddPayment {
         UIManager.put("TextField.font", Constant.contentFont);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        JLabel label = new JLabel("Chào mừng cư dân mới tới BlueMoon", JLabel.CENTER);
+        JLabel label = new JLabel("Nộp phí", JLabel.CENTER);
         JPanel frPanel = new JPanel(new GridLayout(1, 3));
 
-        addFeeFrame = new JFrame("Thêm cư dân mới");
+        addFeeFrame = new JFrame("Nộp phí");
         addFeeFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
@@ -91,14 +91,15 @@ public class AddPayment {
         contentPanel.setLayout(new GridBagLayout());
         gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.insets = new Insets(0, 5, 0, 15);
         gbc.gridx = 0; gbc.weightx = 2; gbc.weighty = 1;
-        gbc.gridy = 0; contentPanel.add(new JLabel("Họ và tên", JLabel.RIGHT), gbc);
-        gbc.gridy = 1; contentPanel.add(new JLabel("Số điện thoại", JLabel.RIGHT), gbc);
-        gbc.gridy = 2; contentPanel.add(new JLabel("Ngày sinh", JLabel.RIGHT), gbc);
-        gbc.gridy = 3; contentPanel.add(new JLabel("Quốc tịch", JLabel.RIGHT), gbc);
-        gbc.gridy = 4; contentPanel.add(new JLabel("Tầng", JLabel.RIGHT), gbc);
+        gbc.gridy = 0; contentPanel.add(new JLabel("Tầng", JLabel.RIGHT), gbc);
+        gbc.gridy = 1; contentPanel.add(new JLabel("Tên chủ hộ", JLabel.RIGHT), gbc);
+        gbc.gridy = 2; contentPanel.add(new JLabel("Số tiền đã nộp", JLabel.RIGHT), gbc);
+        gbc.gridy = 3; contentPanel.add(new JLabel("Người nộp", JLabel.RIGHT), gbc);
+        gbc.gridy = 4; contentPanel.add(new JLabel("Quốc tịch", JLabel.RIGHT), gbc);
         gbc.gridy = 5; contentPanel.add(new JLabel("Mối quan hệ với chủ hộ", JLabel.RIGHT), gbc);
+
         gbc.gridx = 1; gbc.weightx = 5; gbc.weighty = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridy = 0; contentPanel.add(nameField, gbc);
+        gbc.gridy = 0; contentPanel.add(frPanel, gbc);
         gbc.gridy = 1; contentPanel.add(phoneField, gbc);
         gbc.gridy = 2; contentPanel.add(birthdayField, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;

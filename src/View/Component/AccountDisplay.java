@@ -164,6 +164,9 @@ public class AccountDisplay extends JPanel {
         if(updatedImg != null) {
             user.setImg(updatedImg);
         }
+        nameLabel.setText(nameField.getText());
+        birthdayLabel.setText(birthdayField.getText());
+        phoneLabel.setText(phoneField.getText());
         turnEditModeOff(true);
 
         // update image to database

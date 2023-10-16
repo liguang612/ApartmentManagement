@@ -27,7 +27,7 @@ import Model.User;
 import Resources.Constant.Constant;
 
 public class AddFee {
-    String[] cycleType = {"Một lần", "Hàng tháng", "Hàng năm"};
+    String[] cycleType = {"Một lần", "Hàng tháng", "6 tháng/lần", "Hàng năm"};
 
     JButton cancelButton, verifyButton;
     JCheckBox mandatoryField = new JCheckBox();
