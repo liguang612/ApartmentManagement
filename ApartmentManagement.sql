@@ -41,6 +41,7 @@ CREATE TABLE Resident (
 )
 ALTER TABLE Resident ADD CONSTRAINT pk_Resident PRIMARY KEY (id)
 ALTER TABLE Resident ADD CONSTRAINT fk_Resident_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)
+ALTER TABLE Resident ADD CONSTRAINT unique_Resident_phoneNumber UNIQUE (phoneNumber)
 
 CREATE TABLE Activity (
     id INT NOT NULL,
@@ -50,6 +51,8 @@ CREATE TABLE Activity (
     [timeOut] DATE,
     note NVARCHAR(4000),
 )
+ALTER TABLE Activity ADD CONSTRAINT pk_Activity PRIMARY KEY (id)
+ALTER TABLE Activity ADD CONSTRAINT fk_Activity_Resident FOREIGN KEY (residentId) REFERENCES Resident(residentId)
 
 CREATE TABLE Fee (
     id INT NOT NULL,
@@ -59,20 +62,26 @@ CREATE TABLE Fee (
     cycle INT,
     expiration DATE,
 )
+ALTER TABLE Fee ADD CONSTRAINT pk_id PRIMARY KEY (id)
 
 CREATE TABLE Payment (
     apartmentId INT NOT NULL,
-    feeId INT,
+    feeId INT NOT NULL,
     [number] INT,
     timeValidate DATE,
 )
+ALTER TABLE Payment ADD CONSTRAINT pk_Payment PRIMARY KEY (apartmentId, feeId)
+ALTER TABLE Payment ADD CONSTRAINT fk_Payment_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)
+ALTER TABLE Payment ADD CONSTRAINT fk_Payment_Fee FOREIGN KEY (feeId) REFERENCES Fee(id)
 
 CREATE TABLE Vehicle (
     license_plates VARCHAR(9) NOT NULL,
     apartmentId INT,
     [type] INT,
 )
+ALTER TABLE Vehicle ADD CONSTRAINT pk_Vehicle PRIMARY KEY (license_plates)
+ALTER TABLE Vehicle ADD CONSTRAINT fk_Vehicle_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)
 
-USE master
-GO
-DROP DATABASE ApartmentManagement
+-- USE master
+-- GO
+-- DROP DATABASE ApartmentManagement
