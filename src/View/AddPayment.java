@@ -41,7 +41,7 @@ public class AddPayment {
         UIManager.put("TextField.font", Constant.contentFont);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        JLabel label = new JLabel("Chào mừng cư dân mới tới BlueMoon", JLabel.CENTER);
+        JLabel label = new JLabel("Chào mừng cư dân mới tới " + user.getAbName(), JLabel.CENTER);
         JPanel frPanel = new JPanel(new GridLayout(1, 3));
 
         addFeeFrame = new JFrame("Thêm cư dân mới");

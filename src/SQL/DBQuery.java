@@ -18,6 +18,48 @@ public class DBQuery {
 
     // User api
 
+    public static Boolean ChangePassword(int userId, String oldPassword, String newPassword) {
+        if(DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database
+                            .prepareStatement("SELECT * FROM users WHERE userId=?");
+                preparedStatement.setInt(1, userId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if(resultSet.next()) {
+                    if(!resultSet.getString(3).equals(oldPassword)) return false;
+                    preparedStatement = DBConnection.database
+                                .prepareStatement("UPDATE users SET password=? WHERE userId=?");
+                    preparedStatement.setString(1, newPassword);
+                    preparedStatement.setInt(2, userId);
+                    preparedStatement.executeUpdate();
+
+                    return true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    public static Boolean ChangeInformation(User user) {
+        if(DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database
+                        .prepareStatement("UPDATE users SET name=?, phone=?, birthday=? WHERE userId=?");
+                preparedStatement.setString(1, user.getName());
+                preparedStatement.setString(2, user.getPhoneNumber());
+                preparedStatement.setLong(3, Tool.DateToMillis(user.getBirthday()));
+                preparedStatement.setInt(4, user.getId());
+
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
     public static Boolean ChangeAvatar(int userId, InputStream inputStream) {
         if(DBConnection.database != null) {
             try {

@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.UIManager;
 
+import Controller.AuthCtrl;
 import Model.User;
 import Resources.Constant.Constant;
 
@@ -108,6 +109,12 @@ public class ChangePassword {
     private void verify() {
         changePasswordFrame.setVisible(false);
         prevFrame.setEnabled(true);
+
+        if(AuthCtrl.ChangePassword(user.getId(), oldPasswordField.getText(), newPasswordField.getText())) {
+            // Thông báo đổi mật khẩu thành công
+        } else {
+            // Thông báo mật khẩu cũ nhập sai
+        }
 
         // String feeName = confirmPasswordField.getText();
         // int feeCost = Integer.parseInt(oldPasswordField.getText());

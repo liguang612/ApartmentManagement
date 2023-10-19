@@ -8,6 +8,10 @@ import View.Home;
 import View.Login;
 
 public class AuthCtrl {
+
+    public static Boolean ChangePassword(int userId, String oldPassword, String newPassword) {
+        return DBQuery.ChangePassword(userId, oldPassword, newPassword);
+    }
     
     public static User Login(String username, String password) {
         return DBQuery.findUser(username, password);
@@ -24,5 +28,9 @@ public class AuthCtrl {
 
     public static Boolean ChangeAvatar(int userId, InputStream inputStream) {
         return DBQuery.ChangeAvatar(userId, inputStream);
+    }
+
+    public static Boolean ChangeInformation(User user) {
+        return DBQuery.ChangeInformation(user);
     }
 }

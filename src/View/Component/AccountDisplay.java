@@ -50,12 +50,12 @@ public class AccountDisplay extends JPanel {
         avatarLabel = new JLabel(Tool.resize(user.getImg(), 616, 616), JLabel.CENTER);
         avatarLabel.setLayout(new BorderLayout());
         
-        birthdayLabel = new JLabel(user.getName());
-        nameLabel = new JLabel(user.getBirthday());
+        birthdayLabel = new JLabel(user.getBirthday());
+        nameLabel = new JLabel(user.getName());
         phoneLabel = new JLabel(user.getPhoneNumber());
 
-        birthdayField = new JTextField(user.getName());
-        nameField = new JTextField(user.getBirthday());
+        birthdayField = new JTextField(user.getBirthday());
+        nameField = new JTextField(user.getName());
         phoneField = new JTextField(user.getPhoneNumber());
 
         this.add(avatarLabel, BorderLayout.WEST);
@@ -165,6 +165,12 @@ public class AccountDisplay extends JPanel {
             user.setImg(updatedImg);
         }
         turnEditModeOff(true);
+
+        user.setName(nameField.getText());
+        user.setBirthday(birthdayField.getText());
+        user.setPhoneNumber(phoneField.getText());
+
+        AuthCtrl.ChangeInformation(user);
 
         // update image to database
 
