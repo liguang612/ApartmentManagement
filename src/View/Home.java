@@ -4,15 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -32,6 +28,8 @@ import Resources.Constant.Constant;
 import View.Component.AccountDisplay;
 import View.Component.ApartmentDisplay;
 import View.Component.FeeDisplay;
+import View.Component.ResidentDisplay;
+import View.Component.ResidentItem;
 
 public class Home {
     AccountDisplay accountDisplay;
@@ -46,10 +44,10 @@ public class Home {
     JFrame homeFrame;
     JPanel contentPanel, functionPanel,
            accountManagePanel = new JPanel(), feeManagePanel = new JPanel(), paymentManagePanel = new JPanel(), residentManagePanel = new JPanel(),
-           accountContentPanel = new JPanel(), feeContentPanel = new JPanel(), paymentContentPanel = new JPanel(), residentContentPanel = new JPanel(),
-           residentDisplay = new JPanel();
+           accountContentPanel = new JPanel(), feeContentPanel = new JPanel(), paymentContentPanel = new JPanel(), residentContentPanel = new JPanel();
     JScrollPane residentScroll = new JScrollPane();
     JTabbedPane functionTabbedPane = new JTabbedPane(), feeTabbedPane = new JTabbedPane(), residentTabbedPane = new JTabbedPane();
+    ResidentDisplay residentDisplay;
     User user;
 
     public Home(User user) {
@@ -68,17 +66,15 @@ public class Home {
         }
         this.user = user;
 
-        annualFeeDisplay = new FeeDisplay(user);
+        annualFeeDisplay = new FeeDisplay(user, 2);
         apartmentDisplay = new ApartmentDisplay(user);
-        monthlyFeeDisplay = new FeeDisplay(user);
-        oneTimeFeeDisplay = new FeeDisplay(user);
+        monthlyFeeDisplay = new FeeDisplay(user, 1);
+        oneTimeFeeDisplay = new FeeDisplay(user, 0);
+        residentDisplay = new ResidentDisplay(user);
 
-        try {
-            Font font = Font.createFont(Font.TRUETYPE_FONT, new File(Constant.customFont + "/tahoma.ttf"));
-            UIManager.put("Button.font", font.deriveFont((float)13.0));
-        } catch (FontFormatException e) {e.printStackTrace();} catch (IOException e) {e.printStackTrace();}
-
-        UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 14));
+        UIManager.put("Button.font", Constant.buttonFont.deriveFont((float)13.0));
+        UIManager.put("ComboBox.font", Constant.contentFont);
+        UIManager.put("Label.font", Constant.contentFont);
 
         changePassword = new JButton(Constant.verticalImageTitle("changePassword.png", "Đổi mật khẩu"));
         changePassword.setBackground(Color.WHITE);
@@ -104,6 +100,11 @@ public class Home {
 
         addApartment = new JButton(Constant.verticalImageTitle("addOwner.png", "Thêm chủ căn hộ"));
         addApartment.setBackground(Color.WHITE);
+        addApartment.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                addApartment();
+            }
+        });
         deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
         deleteApartment.setBackground(Color.WHITE);
         editApartment = new JButton(Constant.verticalImageTitle("editOwner.png", "Sửa chủ căn hộ"));
@@ -147,7 +148,7 @@ public class Home {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;
 
-        homeFrame = new JFrame(user.getAbName());
+        homeFrame = new JFrame("Quản lý chung chư BlueMoon");
         homeFrame.setBackground(Color.WHITE);
         homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         homeFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -335,6 +336,11 @@ public class Home {
     }
 
     public JFrame getFrame() {return homeFrame;}
+
+    private void addApartment() {
+        homeFrame.setEnabled(false);
+        new AddApartment(homeFrame, user);
+    }
 
     private void addFee() {
         homeFrame.setEnabled(false);

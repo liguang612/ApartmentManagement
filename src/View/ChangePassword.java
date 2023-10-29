@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.UIManager;
 
+import Controller.AuthCtrl;
 import Model.User;
 import Resources.Constant.Constant;
 
@@ -33,10 +33,6 @@ public class ChangePassword {
         this.prevFrame = prev;
         this.user = user;
 
-        UIManager.put("Button.background", Color.WHITE);
-        UIManager.put("Label.font", Constant.contentFont);
-        UIManager.put("TextField.font", Constant.contentFont);
-
         GridBagConstraints gbc = new GridBagConstraints();
         JLabel label = new JLabel("Đổi mật khẩu", JLabel.CENTER);
 
@@ -48,8 +44,8 @@ public class ChangePassword {
         });
         changePasswordFrame.setBackground(Color.WHITE);
         changePasswordFrame.setLayout(new BorderLayout());
-        changePasswordFrame.setLocation((int)prevFrame.getLocation().getX() + (int)prevFrame.getSize().getWidth() / 2 - 400, (int)prevFrame.getLocation().getY() + (int)prevFrame.getSize().getHeight() / 2 - 200);
-        changePasswordFrame.setSize(800, 400);
+        changePasswordFrame.setLocation((int)prevFrame.getLocation().getX() + (int)prevFrame.getSize().getWidth() / 2 - 400, (int)prevFrame.getLocation().getY() + (int)prevFrame.getSize().getHeight() / 2 - 150);
+        changePasswordFrame.setSize(800, 300);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -63,7 +59,7 @@ public class ChangePassword {
         notifyLabel.setForeground(Color.RED);
         notifyLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        verifyButton = new JButton("Thêm");
+        verifyButton = new JButton("Xác nhận");
         verifyButton.setFont(Constant.buttonFont);
         verifyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -110,28 +106,28 @@ public class ChangePassword {
     private void cancel() {
         changePasswordFrame.setVisible(false);
         prevFrame.setEnabled(true);
-    }
-
-    private boolean checkOldPassword() {
-        return true;
+        prevFrame.toFront();
     }
 
     private void verify() {
-        if (newPasswordField.getPassword().toString() != confirmPasswordField.getPassword().toString()) {
-            notifyLabel.setText("Mật khẩu xác nhận không khớp");
+        String confirmPassword = new String(confirmPasswordField.getPassword()), newPassword = new String(newPasswordField.getPassword()), oldPassword = new String(oldPasswordField.getPassword());
 
+        if (!newPassword.equals(confirmPassword)) {
+            notifyLabel.setText("Mật khẩu xác nhận không khớp!");
             return ;
         }
 
-        if (checkOldPassword()) {}
+        if (!AuthCtrl.checkOldPassword(user.getId(), oldPassword)) {
+            notifyLabel.setText("Mật khẩu cũ không khớp!");
+            return ;
+        }
+
+        if (!AuthCtrl.changePassword(user.getId(), confirmPassword)) {
+            notifyLabel.setText("Thay đổi mật khẩu không thành công!");
+        }
 
         changePasswordFrame.setVisible(false);
         prevFrame.setEnabled(true);
-
-        // String feeName = confirmPasswordField.getText();
-        // int feeCost = Integer.parseInt(oldPasswordField.getText());
-        // String expirationDate = newPasswordField.getText();
-
-        // FeeCtrl.addNewFee(user.getId(), feeName, feeCost, feeMandatory, feeCycle, expirationDate);
+        prevFrame.toFront();
     }
 }

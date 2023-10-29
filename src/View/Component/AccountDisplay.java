@@ -9,9 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -64,7 +61,7 @@ public class AccountDisplay extends JPanel {
     }
 
     private void detail() {
-        JLabel label = new JLabel("Chung cư " + user.getAbName());
+        JLabel label = new JLabel("Chung cư BlueMoon");
         JPanel editPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0)), subPanel = new JPanel(new BorderLayout());
 
         cancelButton = new JButton("Hủy");
@@ -173,10 +170,15 @@ public class AccountDisplay extends JPanel {
 
         if(imagePath == null) return;
 
-        try(final InputStream inputStream = Files.newInputStream(Paths.get(imagePath))) {
-            AuthCtrl.ChangeAvatar(user.getId(), inputStream);
-            imagePath = null;
-            updatedImg = null;
+        // try(final InputStream inputStream = Files.newInputStream(Paths.get(imagePath))) {
+        //     AuthCtrl.ChangeAvatar(user.getId(), inputStream);
+        //     imagePath = null;
+        //     updatedImg = null;
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
+        try {
+            AuthCtrl.ChangeAvatar(user.getId(), updatedImg);
         } catch (Exception e) {
             e.printStackTrace();
         }

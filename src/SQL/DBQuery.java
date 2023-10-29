@@ -18,7 +18,7 @@ public class DBQuery {
 
     // User api
 
-    public static Boolean ChangeAvatar(int userId, InputStream inputStream) {
+    public static boolean changeAvatar(int userId, InputStream inputStream) {
         if(DBConnection.database != null) {
             try {
                 PreparedStatement preparedStatement = DBConnection.database.
@@ -60,8 +60,7 @@ public class DBQuery {
                             resultSet.getString(4),
                             resultSet.getString(5),
                             Tool.MillisToDate(resultSet.getLong(6)),
-                            avatar,
-                            resultSet.getString(7));
+                            avatar);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

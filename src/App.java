@@ -2,7 +2,7 @@ import javax.swing.ImageIcon;
 
 import Model.User;
 import Resources.Constant.Constant;
-import SQL.DBConnection;
+import SQLServer.DBConnection; // Use for SQLServer
 import View.Home;
 import View.Login;
 
@@ -14,8 +14,8 @@ public class App {
         //     "ragnie",
         //     "Alfie_2110"
         // );
-        // DBConnection.connect(); // use for My SQL Server
-        // new Login();
-        new Home(new User(1, "Phạm Hoàng Thành", "966322513", "15/06/2023", new ImageIcon(Constant.image + "avatar.png"), "BlueMoon"));
+        DBConnection.connect();
+        new Login();
+        // new Home(new User(1, "Phạm Hoàng Thành", "966322513", "15/06/2023", new ImageIcon(Constant.image + "avatar.png"), "BlueMoon"));
     }
 }

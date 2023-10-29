@@ -15,7 +15,7 @@ public class FeeDisplay extends JPanel {
     JPanel feeViewport = new JPanel();
     JScrollPane feeScroll = new JScrollPane();
 
-    public FeeDisplay(User user) {
+    public FeeDisplay(User user, int cycle) {
         setLayout(new BorderLayout());
 
         add(new FeeItem(), BorderLayout.NORTH);
@@ -23,7 +23,7 @@ public class FeeDisplay extends JPanel {
 
         feeViewport.setLayout(new BoxLayout(feeViewport, BoxLayout.Y_AXIS));
 
-        ArrayList<Fee> feeList = FeeCtrl.getFeeList(user.getId());
+        ArrayList<Fee> feeList = FeeCtrl.getFeeList(cycle);
         for(Fee fee: feeList) {
             feeViewport.add(new FeeItem(
                 fee.getCost(),

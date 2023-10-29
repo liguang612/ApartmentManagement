@@ -3,14 +3,14 @@ package Controller;
 import java.util.ArrayList;
 
 import Model.Fee;
-import SQL.DBQuery;
+import SQLServer.DBQuery;
 
 public class FeeCtrl {
-    public static Boolean addNewFee(int abId, String name, int cost, int mandatory, int cycle, String expirationDate) {
-        return DBQuery.addNewFee(abId, name, cost, mandatory, cycle, expirationDate);
+    public static Boolean addNewFee(String name, int cost, boolean mandatory, int cycle, String expirationDate) {
+        return DBQuery.addNewFee(name, cost, mandatory, cycle, expirationDate);
     }
 
-    public static ArrayList<Fee> getFeeList(int abId) {
-        return DBQuery.getFeeList(abId);
+    public static ArrayList<Fee> getFeeList(int cycle) {
+        return DBQuery.getFeeList(cycle);
     }
 }

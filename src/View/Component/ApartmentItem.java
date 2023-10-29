@@ -1,5 +1,6 @@
 package View.Component;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -40,6 +41,17 @@ public class ApartmentItem extends JPanel {
         paint();
     }
     public void paint() {
+        area.setHorizontalAlignment(JLabel.CENTER);
+        area.setPreferredSize(new Dimension(100, 20));
+        floor.setHorizontalAlignment(JLabel.CENTER);
+        floor.setPreferredSize(new Dimension(100, 20));
+        ownerName.setHorizontalAlignment(JLabel.CENTER);
+        ownerName.setPreferredSize(new Dimension(100, 20));
+        ownerPhone.setHorizontalAlignment(JLabel.CENTER);
+        ownerPhone.setPreferredSize(new Dimension(100, 20));
+        room.setHorizontalAlignment(JLabel.CENTER);
+        room.setPreferredSize(new Dimension(100, 20));
+
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(floor, gbc);

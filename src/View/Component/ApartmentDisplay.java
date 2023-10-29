@@ -31,7 +31,7 @@ public class ApartmentDisplay extends JPanel {
                 apartment.getFloor(),
                 apartment.getRoom(),
                 apartment.getOwnerName(),
-                apartment.getOwnerPhone()
+                '0' + apartment.getOwnerPhone()
             ));
         }
 

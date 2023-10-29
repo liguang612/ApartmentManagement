@@ -25,10 +25,10 @@ import Resources.Constant.Constant;
 public class AddPayment {
     JButton cancelButton, verifyButton;
     JComboBox<Integer> floorField, roomField;
-    JComboBox<String> countryField;
+    JComboBox<String> feeField, nationalityField;
     JFrame addFeeFrame, prevFrame;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
-    JTextField birthdayField, nameField, phoneField, relationshipField;
+    JTextField birthdayField, moneyField, payeeField;
     User user;
 
     public AddPayment(JFrame prev, User user) {
@@ -55,8 +55,6 @@ public class AddPayment {
         addFeeFrame.setLocation((int)prevFrame.getLocation().getX() + (int)prevFrame.getSize().getWidth() / 2 - 400, (int)prevFrame.getLocation().getY() + (int)prevFrame.getSize().getHeight() / 2 - 200);
         addFeeFrame.setSize(800, 400);
 
-        birthdayField = new JTextField();
-
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
         cancelButton.addActionListener(new ActionListener() {
@@ -64,6 +62,23 @@ public class AddPayment {
                 cancel();
             }
         });
+
+        feeField = new JComboBox<String>();
+
+        floorField = new JComboBox<Integer>(Constant.floor);
+        roomField = new JComboBox<Integer>(Constant.room);
+        frPanel.add(floorField);
+        frPanel.add(new JLabel("     Phòng     "));
+        frPanel.add(roomField);
+
+        moneyField = new JTextField();
+        moneyField.setFont(Constant.digitFont);
+
+        nationalityField = new JComboBox<String>(Constant.country);
+        nationalityField.setBackground(Color.WHITE);
+
+        payeeField = new JTextField();
+
         verifyButton = new JButton("Thêm");
         verifyButton.setFont(Constant.buttonFont);
         verifyButton.addActionListener(new ActionListener() {
@@ -72,41 +87,23 @@ public class AddPayment {
             }
         });
 
-        phoneField = new JTextField();
-        phoneField.setFont(Constant.digitFont);
-
-        countryField = new JComboBox<String>(Constant.country);
-        countryField.setBackground(Color.WHITE);
-
-        floorField = new JComboBox<Integer>(Constant.floor);
-        roomField = new JComboBox<Integer>(Constant.room);
-        frPanel.add(floorField);
-        frPanel.add(new JLabel("     Phòng     "));
-        frPanel.add(roomField);
-        
-        nameField = new JTextField();
-
-        relationshipField = new JTextField();
-
         contentPanel.setLayout(new GridBagLayout());
         gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.insets = new Insets(0, 5, 0, 15);
         gbc.gridx = 0; gbc.weightx = 2; gbc.weighty = 1;
         gbc.gridy = 0; contentPanel.add(new JLabel("Tầng", JLabel.RIGHT), gbc);
-        gbc.gridy = 1; contentPanel.add(new JLabel("Tên chủ hộ", JLabel.RIGHT), gbc);
+        gbc.gridy = 1; contentPanel.add(new JLabel("Người nộp", JLabel.RIGHT), gbc);
         gbc.gridy = 2; contentPanel.add(new JLabel("Số tiền đã nộp", JLabel.RIGHT), gbc);
-        gbc.gridy = 3; contentPanel.add(new JLabel("Người nộp", JLabel.RIGHT), gbc);
-        gbc.gridy = 4; contentPanel.add(new JLabel("Quốc tịch", JLabel.RIGHT), gbc);
-        gbc.gridy = 5; contentPanel.add(new JLabel("Mối quan hệ với chủ hộ", JLabel.RIGHT), gbc);
+        gbc.gridy = 3; contentPanel.add(new JLabel("Quốc tịch", JLabel.RIGHT), gbc);
+        gbc.gridy = 4; contentPanel.add(new JLabel("Loại phí", JLabel.RIGHT), gbc);
 
         gbc.gridx = 1; gbc.weightx = 5; gbc.weighty = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy = 0; contentPanel.add(frPanel, gbc);
-        gbc.gridy = 1; contentPanel.add(phoneField, gbc);
-        gbc.gridy = 2; contentPanel.add(birthdayField, gbc);
+        gbc.gridy = 1; contentPanel.add(payeeField, gbc);
+        gbc.gridy = 2; contentPanel.add(moneyField, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
-        gbc.gridy = 3; contentPanel.add(countryField, gbc);
-        gbc.gridy = 4; contentPanel.add(frPanel, gbc);
+        gbc.gridy = 3; contentPanel.add(nationalityField, gbc);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridy = 5; contentPanel.add(relationshipField, gbc);
+        gbc.gridy = 4; contentPanel.add(feeField, gbc);
 
         functionPanel.setLayout(new GridLayout(2, 5));
         functionPanel.add(new JLabel());
@@ -131,10 +128,12 @@ public class AddPayment {
     private void cancel() {
         addFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
+        prevFrame.toFront();
     }
 
     private void verify() {
         addFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
+        prevFrame.toFront();
     }
 }

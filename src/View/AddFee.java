@@ -20,7 +20,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
 import Controller.FeeCtrl;
 import Model.User;
@@ -41,10 +40,6 @@ public class AddFee {
         this.prevFrame = prev;
         this.user = user;
 
-        UIManager.put("Button.background", Color.WHITE);
-        UIManager.put("Label.font", Constant.contentFont);
-        UIManager.put("TextField.font", Constant.contentFont);
-
         GridBagConstraints gbc = new GridBagConstraints();
         JLabel label = new JLabel("Thêm loại phí mới", JLabel.CENTER);
 
@@ -64,13 +59,6 @@ public class AddFee {
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 cancel();
-            }
-        });
-        verifyButton = new JButton("Thêm");
-        verifyButton.setFont(Constant.buttonFont);
-        verifyButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                verify();
             }
         });
 
@@ -94,6 +82,14 @@ public class AddFee {
         expirationField = new JTextField();
 
         nameField = new JTextField();
+
+        verifyButton = new JButton("Thêm");
+        verifyButton.setFont(Constant.buttonFont);
+        verifyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                verify();
+            }
+        });
 
         contentPanel.setLayout(new GridBagLayout());
         gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.insets = new Insets(0, 5, 0, 15);
@@ -134,18 +130,20 @@ public class AddFee {
     private void cancel() {
         addFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
+        prevFrame.toFront();
     }
 
     private void verify() {
         addFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
+        prevFrame.toFront();
 
         String feeName = nameField.getText();
         int feeCost = Integer.parseInt(costField.getText());
-        int feeMandatory = mandatoryField.isSelected() ? 1 : 0;
+        boolean feeMandatory = mandatoryField.isSelected() ? true : false;
         int feeCycle = java.util.Arrays.asList(cycleType).indexOf(cycleField.getSelectedItem().toString());
         String expirationDate = expirationField.getText();
 
-        FeeCtrl.addNewFee(user.getId(), feeName, feeCost, feeMandatory, feeCycle, expirationDate);
+        FeeCtrl.addNewFee(feeName, feeCost, feeMandatory, feeCycle, expirationDate);
     }
 }

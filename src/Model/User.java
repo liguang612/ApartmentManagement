@@ -6,18 +6,16 @@ public class User {
     private int id;
     private String name;
     private String birthday;
-    private ImageIcon img;
     private String phoneNumber;
-    private String abName;
+    private ImageIcon img;
 
     public User() {}
-    public User(int id, String name, String phoneNumber, String birthday, ImageIcon img, String abName) {
+    public User(int id, String name, String birthday, String phoneNumber, ImageIcon img) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.birthday = birthday;
         this.img = img;
-        this.abName = abName;
     }
 
     public int getId() {return id;}
@@ -25,7 +23,6 @@ public class User {
     public String getBirthday() {return birthday;}
     public ImageIcon getImg() {return img;}
     public String getPhoneNumber() {return phoneNumber;}
-    public String getAbName() {return abName;}
 
 
     public void setId(int id) {this.id = id;}
@@ -33,5 +30,4 @@ public class User {
     public void setBirthday(String birthday) {this.birthday = birthday;}
     public void setImg(ImageIcon img) {this.img = img;}
     public void setPhoneNumber(String phoneNumber) {this.phoneNumber = phoneNumber;}
-    public void setAbName(String abName) {this.abName = abName;}
 }

@@ -7,9 +7,7 @@ public class Apartment {
     private float area;
     private String ownerName, ownerPhone;
 
-    public Apartment() {
-        
-    }
+    public Apartment() {}
 
     public Apartment(int id, int floor, int room, float area, String ownerName, String ownerPhone) {
         this.id = id;

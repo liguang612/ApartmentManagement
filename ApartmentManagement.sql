@@ -3,19 +3,17 @@ USE ApartmentManagement
 GO
 
 CREATE TABLE [User] (
-    userId INT NOT NULL,
+    userId NUMERIC IDENTITY(1,1) NOT NULL,
     [name] NVARCHAR(50),
     birthday DATE,
     phoneNumber INT,
-    [image] VARBINARY,
-    activateDay DATE,
-    abName NVARCHAR(100),
+    [image] VARBINARY(MAX),
 )
 ALTER TABLE [User] ADD CONSTRAINT pk_User PRIMARY KEY (userId)
 ALTER TABLE [User] ADD CONSTRAINT unique_User_phoneNumber UNIQUE (phoneNumber)
 
 CREATE TABLE [Login] (
-    userId INT NOT NULL,
+    userId NUMERIC NOT NULL,
     username VARCHAR(100),
     [password] VARCHAR(100),
 )
@@ -25,7 +23,7 @@ ALTER TABLE [Login] ADD CONSTRAINT fk_Login_User FOREIGN KEY (userId) REFERENCES
 
 CREATE TABLE Apartment (
     apartmentId INT NOT NULL,
-    ownerId INT,
+    ownerId BIGINT,
     area FLOAT,
 )
 ALTER TABLE Apartment ADD CONSTRAINT pk_Apartment PRIMARY KEY (apartmentId)
@@ -44,7 +42,7 @@ ALTER TABLE Resident ADD CONSTRAINT fk_Resident_Apartment FOREIGN KEY (apartment
 ALTER TABLE Resident ADD CONSTRAINT unique_Resident_phoneNumber UNIQUE (phoneNumber)
 
 CREATE TABLE Activity (
-    id INT NOT NULL,
+    id NUMERIC IDENTITY(1, 1) NOT NULL,
     residentId BIGINT,
     [status] INT,
     timeIn DATE,
@@ -55,7 +53,7 @@ ALTER TABLE Activity ADD CONSTRAINT pk_Activity PRIMARY KEY (id)
 ALTER TABLE Activity ADD CONSTRAINT fk_Activity_Resident FOREIGN KEY (residentId) REFERENCES Resident(id)
 
 CREATE TABLE Fee (
-    id INT NOT NULL,
+    id NUMERIC IDENTITY(1, 1) NOT NULL,
     [name] NVARCHAR(50),
     cost INT,
     mandatory BIT,
@@ -66,7 +64,7 @@ ALTER TABLE Fee ADD CONSTRAINT pk_id PRIMARY KEY (id)
 
 CREATE TABLE Payment (
     apartmentId INT NOT NULL,
-    feeId INT NOT NULL,
+    feeId NUMERIC NOT NULL,
     [number] INT,
     timeValidate DATE,
 )
@@ -82,38 +80,42 @@ CREATE TABLE Vehicle (
 ALTER TABLE Vehicle ADD CONSTRAINT pk_Vehicle PRIMARY KEY (license_plates)
 ALTER TABLE Vehicle ADD CONSTRAINT fk_Vehicle_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)
 
-INSERT INTO Fee(id, [name], cost, mandatory, cycle, expiration) VALUES
-(01, N'Tiền thuê nhà', 6000000, 1, 1, '10-31-2023'),
-(02, N'Phí gửi xe', 100000, 0, 1, '10-31-2023'),
-(03, N'Tiền điện', 4000, 1, 1, '10-31-2023'),
-(04, N'Tiền nước', 28000, 1, 1, '10-31-2023'),
-(05, N'Phí bảo trì nhà chung cư', 40000000, 1, 0, '10-31-2023'),
-(06, N'Phí dịch vụ (thu gom rác thải, vệ sinh, ...)', 100000, 1, 1, '10-31-2023'),
-(07, N'Phí quản lý', 300000, 1, 1, '10-31-2023'),
-(08, N'Phí Internet', 200000, 0, 1, '10-31-2023')
+INSERT INTO [User]([name], birthday, phoneNumber, [image]) VALUES (N'Phạm Hoàng Thành', '2023-06-15', 966322513, null)
+
+INSERT INTO [Login](userId, username, [password]) VALUES (01, 'admin', 'admin')
+
+INSERT INTO Fee([name], cost, mandatory, cycle, expiration) VALUES
+(N'Tiền thuê nhà', 6000000, 1, 1, '10-31-2023'),
+(N'Phí gửi xe', 100000, 0, 1, '10-31-2023'),
+(N'Tiền điện', 4000, 1, 1, '10-31-2023'),
+(N'Tiền nước', 28000, 1, 1, '10-31-2023'),
+(N'Phí bảo trì nhà chung cư', 40000000, 1, 0, '10-31-2023'),
+(N'Phí dịch vụ (thu gom rác thải, vệ sinh, ...)', 100000, 1, 1, '10-31-2023'),
+(N'Phí quản lý', 300000, 1, 1, '10-31-2023'),
+(N'Phí Internet', 200000, 0, 1, '10-31-2023')
 
 INSERT INTO Apartment(apartmentId, ownerId, area) VALUES
-(601, 001, 80),
+(601, 2312000114, 80),
 (602, NULL, 80),
 (603, NULL, 80),
 (604, NULL, 80),
 (605, NULL, 80),
-(701, 006, 80),
+(701, 2312000100, 80),
 (702, NULL, 80),
 (703, NULL, 80),
 (704, NULL, 80),
 (705, NULL, 80),
-(801, 011, 80),
+(801, 2312000115, 80),
 (802, NULL, 80),
 (803, NULL, 80),
 (804, NULL, 80),
 (805, NULL, 80),
-(901, 016, 80),
+(901, 2312000114, 80),
 (902, NULL, 80),
 (903, NULL, 80),
 (904, NULL, 80),
 (905, NULL, 80),
-(1001, 021, 80),
+(1001, 2312000101, 80),
 (1002, NULL, 80),
 (1003, NULL, 80),
 (1004, NULL, 80),
@@ -143,7 +145,7 @@ INSERT INTO Apartment(apartmentId, ownerId, area) VALUES
 (1503, NULL, 80),
 (1504, NULL, 80),
 (1505, NULL, 80),
-(1601, NULL, 80),
+(1601, 2312000100, 80),
 (1602, NULL, 80),
 (1603, NULL, 80),
 (1604, NULL, 80),
@@ -236,27 +238,27 @@ INSERT INTO Resident(id, [name], birthday, phoneNumber, nationality, apartmentId
 (2312000118, N'Vũ Trần Hoàng', '02-01-2003 ', 0100000019, N'Việt Nam' , 1001, N'Mẹ'),
 (2312000119, N'Trịnh Công Hùng', '07-04-2003 ', 0100000020, N'Việt Nam' , 1001, N'Em')
 
-INSERT INTO Activity VALUES
-(01, 2312000100, 1, '10-01-2023', NULL, NULL),
-(02, 2312000101, 1, '10-01-2023', NULL, NULL),
-(03, 2312000102, 1, '10-01-2023', NULL, NULL),
-(04, 2312000103, 1, '10-01-2023', NULL, NULL),
-(05, 2312000104, 1, '10-01-2023', NULL, NULL),
-(06, 2312000105, 1, '10-01-2023', NULL, NULL),
-(07, 2312000106, 1, '10-01-2023', NULL, NULL),
-(08, 2312000107, 1, '10-01-2023', NULL, NULL),
-(09, 2312000108, 2, '10-01-2023', NULL, NULL),
-(10, 2312000109, 2, '10-01-2023', NULL, NULL),
-(11, 2312000110, 2, '10-01-2023', NULL, NULL),
-(12, 2312000111, 1, '10-01-2023', NULL, NULL),
-(13, 2312000112, 1, '10-01-2023', NULL, NULL),
-(14, 2312000113, 1, '10-01-2023', NULL, NULL),
-(15, 2312000114, 1, '10-01-2023', NULL, NULL),
-(16, 2312000115, 1, '10-01-2023', NULL, NULL),
-(17, 2312000116, 1, '10-01-2023', NULL, NULL),
-(18, 2312000117, 1, '10-01-2023', NULL, NULL),
-(19, 2312000118, 1, '10-01-2023', NULL, NULL),
-(20, 2312000119, 1, '10-01-2023', NULL, NULL)
+INSERT INTO Activity(residentId, [status], timeIn, [timeOut], note) VALUES
+(2312000100, 1, '10-01-2023', NULL, NULL),
+(2312000101, 1, '10-01-2023', NULL, NULL),
+(2312000102, 1, '10-01-2023', NULL, NULL),
+(2312000103, 1, '10-01-2023', NULL, NULL),
+(2312000104, 1, '10-01-2023', NULL, NULL),
+(2312000105, 1, '10-01-2023', NULL, NULL),
+(2312000106, 1, '10-01-2023', NULL, NULL),
+(2312000107, 1, '10-01-2023', NULL, NULL),
+(2312000108, 2, '10-01-2023', NULL, NULL),
+(2312000109, 2, '10-01-2023', NULL, NULL),
+(2312000110, 2, '10-01-2023', NULL, NULL),
+(2312000111, 1, '10-01-2023', NULL, NULL),
+(2312000112, 1, '10-01-2023', NULL, NULL),
+(2312000113, 1, '10-01-2023', NULL, NULL),
+(2312000114, 1, '10-01-2023', NULL, NULL),
+(2312000115, 1, '10-01-2023', NULL, NULL),
+(2312000116, 1, '10-01-2023', NULL, NULL),
+(2312000117, 1, '10-01-2023', NULL, NULL),
+(2312000118, 1, '10-01-2023', NULL, NULL),
+(2312000119, 1, '10-01-2023', NULL, NULL)
 
 INSERT INTO Payment(apartmentId, feeId, [number], timeValidate) VALUES
 (601, 01, 1, '10-30-2023'),
@@ -308,6 +310,6 @@ INSERT INTO Vehicle VALUES
 ('29H155555', 901, 1),
 ('15H144444', 1001, 2)
 
--- USE master
--- GO
--- DROP DATABASE ApartmentManagement
+USE master
+GO
+DROP DATABASE ApartmentManagement

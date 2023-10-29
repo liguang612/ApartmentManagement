@@ -1,6 +1,7 @@
 package View;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -22,7 +23,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import Controller.AuthCtrl;
 import Model.User;
 import Resources.Constant.Constant;
-
 
 public class Login {
     GridBagConstraints gbc;
@@ -50,6 +50,8 @@ public class Login {
         }
         UIManager.put("Button.font", Constant.buttonFont.deriveFont((float)12.0));
         UIManager.put("Label.font", Constant.contentFont);
+        UIManager.put("PasswordField.font", Constant.contentFont.deriveFont((float)12.0));
+        UIManager.put("TextField.font", Constant.contentFont.deriveFont((float)12.0));
 
         gb = new GridBagLayout();
         gbc = new GridBagConstraints();
@@ -60,6 +62,7 @@ public class Login {
         loginFrame.setSize(600, 400);
 
         button1 = new JButton("Hủy");
+        button1.setBackground(Color.WHITE);
         button1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 cancel();
@@ -67,6 +70,7 @@ public class Login {
         });
 
         button2 = new JButton("Xác nhận");
+        button2.setBackground(Color.WHITE);
         button2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 verify();
@@ -76,7 +80,7 @@ public class Login {
         label1 = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/Resources/Image/login.png"));
 
         label2 = new JLabel("Đăng nhập");
-        label2.setFont(new Font("SegoeUI", Font.BOLD, 20));
+        label2.setFont(Constant.titleFont.deriveFont((float)18.0));
 
         label3 = new JLabel("Tài khoản");
         label4 = new JLabel("Mật khẩu");
@@ -117,7 +121,8 @@ public class Login {
     }
 
     public void verify() {
-        User myUser = (AuthCtrl.Login(username.getText(), password.getText()));
+        User myUser = AuthCtrl.Login(username.getText(), new String(password.getPassword()));
+        
         if (myUser == null) {
             JFrame frame = new JFrame("Thông báo");
             JLabel label = new JLabel("Đăng nhập thất bại");
