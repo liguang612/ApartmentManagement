@@ -1,16 +1,21 @@
 package View.Component;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import Resources.Constant.Constant;
 
 public class ResidentItem extends JPanel {
     private GridBagConstraints gbc = new GridBagConstraints();
+    private JCheckBox checkBox = new JCheckBox();
     private JLabel birthday = new JLabel("Ngày sinh"), floor = new JLabel("Tầng"), id = new JLabel("CCCD/CMT"), name = new JLabel("Họ tên"),
                    nationality = new JLabel("Quốc tịch"), phoneNumber = new JLabel("Số điện thoại"), relationship = new JLabel("Mối quan hệ với chủ hộ"),
                    room = new JLabel("Phòng");
@@ -67,6 +72,18 @@ public class ResidentItem extends JPanel {
         this.room.setText("" + room);
 
         paint();
+
+        this.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent me) {
+                setBackground(new Color(0XFFE5FEFF));
+            }
+            public void mouseExited(MouseEvent me) {
+                setBackground(null);
+            }
+            public void mousePressed(MouseEvent me) {
+                checkBox.setSelected(!checkBox.isSelected());
+            }
+        });
     }
 
     public void paint() {
@@ -94,5 +111,9 @@ public class ResidentItem extends JPanel {
         gbc.gridx = 5; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(floor, gbc);
         gbc.gridx = 6; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(room, gbc);
         gbc.gridx = 7; gbc.gridy = 0; gbc.weightx = 4; gbc.weighty = 1; this.add(relationship, gbc);
+        gbc.gridx = 8; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(checkBox, gbc);
     }
+
+    public JCheckBox getCheckBox() {return checkBox;}
+    public Long getId() {return Long.parseLong(id.getText());}
 }

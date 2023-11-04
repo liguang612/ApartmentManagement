@@ -13,10 +13,8 @@ import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
 import Resources.Constant.Tool;
-
 public class DBQuery {
     public static boolean addNewApartment(int apartmentId, long ownerId) {
-        System.out.println(apartmentId + ", " + ownerId);
         if (DBConnection.database != null) {
             try {
                 PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Apartment SET ownerId = ? WHERE apartmentId = ?");
@@ -32,11 +30,10 @@ public class DBQuery {
         }
         return false;
     }
-
     public static boolean addResident(Resident resident) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Resident VALUES(?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Resident VALUES(?, ?, ?, ?, ?, ?, ?, 1)");
 
                 preparedStatement.setLong(1, resident.getId());
                 preparedStatement.setString(2, resident.getName());
@@ -54,11 +51,10 @@ public class DBQuery {
         }
         return false;
     }
-
     public static boolean addNewFee(String name, int cost, boolean mandatory, int cycle, String expirationDate) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Fee([name], cost, mandatory, cycle, expiration) VALUES (?, ?, ?, ?, ?)");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Fee([name], cost, mandatory, cycle, expiration, [status]) VALUES (?, ?, ?, ?, ?, 1)");
 
                 preparedStatement.setString(1, name);
                 preparedStatement.setInt(2, cost);
@@ -140,6 +136,65 @@ public class DBQuery {
                 if (resultSet.next()) {
                     return true;
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean deleteApartment(ArrayList<Integer> selections) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Apartment SET ownerId = null WHERE apartmentId = ?");
+
+                for (Integer i : selections) {
+                    preparedStatement.setInt(1, i);
+                    preparedStatement.addBatch();
+                }
+                preparedStatement.executeBatch();
+                
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    public static boolean deleteFee(ArrayList<Integer> selections) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Fee SET [status] = 0 WHERE id = ?");
+
+                for (Integer i : selections) {
+                    preparedStatement.setInt(1, i);
+                    preparedStatement.addBatch();
+                }
+                preparedStatement.executeBatch();
+
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    public static boolean deleteResident(ArrayList<Long> selections) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET [status] = 0 WHERE id = ?");
+                PreparedStatement preparedStatement2 = DBConnection.database.prepareStatement("UPDATE Apartment SET ownerId = null WHERE ownerId = ?");
+
+                for (Long i : selections) {
+                    preparedStatement.setLong(1, i);
+                    preparedStatement.addBatch();
+                    preparedStatement2.setLong(1, i);
+                    preparedStatement2.addBatch();
+                }
+                preparedStatement.executeBatch();
+                preparedStatement2.executeBatch();
+                
+                return true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -251,7 +306,7 @@ public class DBQuery {
 
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Fee WHERE cycle = ?");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Fee WHERE cycle = ? AND [status] = 1");
                 preparedStatement.setInt(1, cycle);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -277,7 +332,7 @@ public class DBQuery {
 
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE [status] = 1 ORDER BY apartmentId ASC, [name] ASC");
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {

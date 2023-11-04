@@ -48,11 +48,12 @@ public class AddPayment {
         addFeeFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
+                prevFrame.toFront();
             }
         });
         addFeeFrame.setBackground(Color.WHITE);
         addFeeFrame.setLayout(new BorderLayout());
-        addFeeFrame.setLocation((int)prevFrame.getLocation().getX() + (int)prevFrame.getSize().getWidth() / 2 - 400, (int)prevFrame.getLocation().getY() + (int)prevFrame.getSize().getHeight() / 2 - 200);
+        addFeeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
         addFeeFrame.setSize(800, 400);
 
         cancelButton = new JButton("Hủy");

@@ -24,16 +24,17 @@ import javax.swing.JTextField;
 import Controller.FeeCtrl;
 import Model.User;
 import Resources.Constant.Constant;
+import Resources.Constant.Tool;
+import View.Component.FeeDisplay;
 
 public class AddFee {
-    String[] cycleType = {"Một lần", "Hàng tháng", "6 tháng/lần", "Hàng năm"};
-
     JButton cancelButton, verifyButton;
     JCheckBox mandatoryField = new JCheckBox();
+    JComboBox<Integer> dayField, monthField, yearField;
     JComboBox<String> cycleField;
     JFrame addFeeFrame, prevFrame;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
-    JTextField costField, expirationField, nameField;
+    JTextField costField, nameField;
     User user;
 
     public AddFee(JFrame prev, User user) {
@@ -42,16 +43,18 @@ public class AddFee {
 
         GridBagConstraints gbc = new GridBagConstraints();
         JLabel label = new JLabel("Thêm loại phí mới", JLabel.CENTER);
+        JPanel datePanel = new JPanel(new GridLayout(1, 6));
 
         addFeeFrame = new JFrame("Thêm loại phí mới");
         addFeeFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
+                prevFrame.toFront();
             }
         });
         addFeeFrame.setBackground(Color.WHITE);
         addFeeFrame.setLayout(new BorderLayout());
-        addFeeFrame.setLocation((int)prevFrame.getLocation().getX() + (int)prevFrame.getSize().getWidth() / 2 - 400, (int)prevFrame.getLocation().getY() + (int)prevFrame.getSize().getHeight() / 2 - 200);
+        addFeeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
         addFeeFrame.setSize(800, 400);
 
         cancelButton = new JButton("Hủy");
@@ -65,21 +68,48 @@ public class AddFee {
         costField = new JTextField();
         costField.setFont(Constant.digitFont);
 
-        cycleField = new JComboBox<>(cycleType);
+        cycleField = new JComboBox<>(Constant.cycleType);
         cycleField.setBackground(Color.WHITE);
         cycleField.setFont(Constant.contentFont);
         cycleField.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent ie) {
                 if (cycleField.getSelectedIndex() != 0) {
-                    expirationField.setEnabled(false);
-                    expirationField.setText(null);
+                    dayField.setEnabled(false);
+                    monthField.setEnabled(false);
+                    yearField.setEnabled(false);
                 } else {
-                    expirationField.setEnabled(true);
+                    dayField.setEnabled(true);
+                    monthField.setEnabled(true);
+                    yearField.setEnabled(true);
                 }
             }
         });
-        
-        expirationField = new JTextField();
+
+        dayField = new JComboBox<Integer>(Constant.day);
+        dayField.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent ie) {
+                checkDay();
+            }
+        });
+        monthField = new JComboBox<Integer>(Constant.month);
+        monthField.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent ie) {
+                checkDay();
+            }
+        });
+        yearField = new JComboBox<Integer>(Constant.year);
+        yearField.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent ie) {
+                checkDay();
+            }
+        });
+        yearField.setSelectedItem(100);
+        datePanel.add(new JLabel("Ngày  ", JLabel.RIGHT));
+        datePanel.add(dayField);
+        datePanel.add(new JLabel("Tháng  ", JLabel.RIGHT));
+        datePanel.add(monthField);
+        datePanel.add(new JLabel("Năm  ", JLabel.RIGHT));
+        datePanel.add(yearField);
 
         nameField = new JTextField();
 
@@ -103,7 +133,7 @@ public class AddFee {
         gbc.gridy = 0; contentPanel.add(nameField, gbc);
         gbc.gridy = 1; contentPanel.add(costField, gbc);
         gbc.gridy = 2; contentPanel.add(mandatoryField, gbc);
-        gbc.gridy = 4; contentPanel.add(expirationField, gbc);
+        gbc.gridy = 4; contentPanel.add(datePanel, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
         gbc.gridy = 3; contentPanel.add(cycleField, gbc);
 
@@ -133,6 +163,14 @@ public class AddFee {
         prevFrame.toFront();
     }
 
+    private void checkDay() {
+        int days = Tool.checkDay(monthField.getSelectedIndex() + 1, (Integer)yearField.getSelectedItem());
+
+        if (dayField.getSelectedIndex() > days - 1) {
+            dayField.setSelectedIndex(days - 1);
+        }
+    }
+
     private void verify() {
         addFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
@@ -141,9 +179,13 @@ public class AddFee {
         String feeName = nameField.getText();
         int feeCost = Integer.parseInt(costField.getText());
         boolean feeMandatory = mandatoryField.isSelected() ? true : false;
-        int feeCycle = java.util.Arrays.asList(cycleType).indexOf(cycleField.getSelectedItem().toString());
-        String expirationDate = expirationField.getText();
+        int feeCycle = java.util.Arrays.asList(Constant.cycleType).indexOf(cycleField.getSelectedItem().toString());
+        String expirationDate = yearField.getSelectedItem() + "-" + monthField.getSelectedItem() + "-" + dayField.getSelectedItem();
 
         FeeCtrl.addNewFee(feeName, feeCost, feeMandatory, feeCycle, expirationDate);
+
+        ((Home)prevFrame).getFeeTabbedPane().setComponentAt(0, new FeeDisplay(user, 0));
+        ((Home)prevFrame).getFeeTabbedPane().setComponentAt(1, new FeeDisplay(user, 1));
+        ((Home)prevFrame).getFeeTabbedPane().setComponentAt(2, new FeeDisplay(user, 2));
     }
 }

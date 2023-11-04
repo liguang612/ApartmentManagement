@@ -28,6 +28,8 @@ import Model.User;
 import Resources.Constant.Constant;
 import SQLServer.DBQuery;
 
+import View.Component.ApartmentDisplay;
+
 public class AddApartment {
     ArrayList<Resident> residentList = ResidentCtrl.getResidentList();
     JButton cancelButton, verifyButton;
@@ -50,11 +52,12 @@ public class AddApartment {
         addApartmentFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
+                prevFrame.toFront();
             }
         });
         addApartmentFrame.setBackground(Color.WHITE);
         addApartmentFrame.setLayout(new BorderLayout());
-        addApartmentFrame.setLocation((int)prevFrame.getLocation().getX() + (int)prevFrame.getSize().getWidth() / 2 - 400, (int)prevFrame.getLocation().getY() + (int)prevFrame.getSize().getHeight() / 2 - 125);
+        addApartmentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + (int)prevFrame.getHeight() / 2 - 125);
         addApartmentFrame.setSize(800, 250);
 
         cancelButton = new JButton("Hủy");
@@ -163,5 +166,7 @@ public class AddApartment {
         prevFrame.toFront();
 
         DBQuery.addNewApartment((floorField.getSelectedIndex() + Constant.floor[0]) * 100 + roomField.getSelectedIndex() + 1, ((Resident)ownerField.getSelectedItem()).getId());
+
+        ((Home)prevFrame).getResidentTabbedPane().setComponentAt(0, new ApartmentDisplay(user));
     }
 }

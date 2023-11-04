@@ -5,15 +5,19 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import Resources.Constant.Constant;
 
 public class FeeItem extends JPanel {
     private GridBagConstraints gbc = new GridBagConstraints();
-    private JCheckBox mandatoryCheckBox = new JCheckBox();
+    private Integer feeId;
+    private JCheckBox checkBox = new JCheckBox(), mandatoryCheckBox = new JCheckBox();
     private JLabel cost = new JLabel("Chi phí"), expiration = new JLabel("Hạn nộp"), mandatory = new JLabel("  Bắt buộc"), name = new JLabel("Tên");
 
     public FeeItem() {
@@ -46,9 +50,23 @@ public class FeeItem extends JPanel {
         mandatoryCheckBox.setSelected(mandatory);
 
         paint(mandatoryCheckBox);
+
+        this.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent me) {
+                setBackground(new Color(0XFFE5FEFF));
+            }
+            public void mouseExited(MouseEvent me) {
+                setBackground(null);
+            }
+            public void mousePressed(MouseEvent me) {
+                checkBox.setSelected(!checkBox.isSelected());
+            }
+        });
     }
 
     public void paint(Component mandatoryCom) {
+        checkBox.setBackground(null);
+        checkBox.setHorizontalAlignment(JCheckBox.CENTER);
         cost.setHorizontalAlignment(JLabel.CENTER);
         cost.setPreferredSize(new Dimension(100, 20));
         expiration.setHorizontalAlignment(JLabel.CENTER);
@@ -62,5 +80,11 @@ public class FeeItem extends JPanel {
         gbc.gridx = 2; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(mandatoryCom, gbc);
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 3; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(expiration, gbc);
+        gbc.gridx = 4; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(checkBox, gbc);
     }
+
+    public JCheckBox getCheckBox() {return checkBox;}
+    public Integer getFeeId() {return feeId;}
+
+    public void setFeeId(Integer feeId) {this.feeId = feeId;}
 }

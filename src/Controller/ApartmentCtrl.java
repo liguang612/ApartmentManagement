@@ -10,6 +10,10 @@ public class ApartmentCtrl {
         return DBQuery.addNewApartment(apartmentId, ownerId);
     }
 
+    public static boolean deleteApartment(ArrayList<Integer> selections) {
+        return DBQuery.deleteApartment(selections);
+    }
+
     public static ArrayList<Apartment> getApartmentList(int abId) {
         return DBQuery.getApartmentList();
     }

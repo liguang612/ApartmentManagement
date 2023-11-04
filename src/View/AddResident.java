@@ -26,6 +26,7 @@ import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
 import Resources.Constant.Tool;
+import View.Component.ResidentDisplay;
 
 public class AddResident {
     JButton cancelButton, verifyButton;
@@ -49,11 +50,12 @@ public class AddResident {
         addResidentFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
+                prevFrame.toFront();
             }
         });
         addResidentFrame.setBackground(Color.WHITE);
         addResidentFrame.setLayout(new BorderLayout());
-        addResidentFrame.setLocation((int)prevFrame.getLocation().getX() + (int)prevFrame.getSize().getWidth() / 2 - 400, (int)prevFrame.getLocation().getY() + (int)prevFrame.getSize().getHeight() / 2 - 200);
+        addResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
         addResidentFrame.setSize(800, 400);
 
         cancelButton = new JButton("Hủy");
@@ -214,6 +216,8 @@ public class AddResident {
             notifyLabel.setText("Số căn cước công dân / chứng minh nhân dân, số điện thoại phải là các số");
             return;
         }
+
+        ((Home)prevFrame).getResidentTabbedPane().setComponentAt(1, new ResidentDisplay(user));
 
         addResidentFrame.setVisible(false);
         prevFrame.setEnabled(true);
