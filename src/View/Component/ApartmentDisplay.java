@@ -28,7 +28,7 @@ public class ApartmentDisplay extends JPanel {
 
         apartmentViewport.setLayout(new BoxLayout(apartmentViewport, BoxLayout.Y_AXIS));
 
-        ArrayList<Apartment> apartmentList = ApartmentCtrl.getApartmentList(user.getId());
+        ArrayList<Apartment> apartmentList = ApartmentCtrl.getApartmentList();
 
         for(Apartment apartment: apartmentList) {
             ApartmentItem temp = new ApartmentItem(
@@ -43,7 +43,7 @@ public class ApartmentDisplay extends JPanel {
             temp.getCheckBox().addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent ie) {
                     if (ie.getStateChange() == ItemEvent.SELECTED) {
-                        selections.add(temp.getApartmentId());
+                        selections.add(Integer.valueOf(temp.getApartmentId()));
                     }
                     if (ie.getStateChange() == ItemEvent.DESELECTED) {
                         selections.remove(Integer.valueOf(temp.getApartmentId()));

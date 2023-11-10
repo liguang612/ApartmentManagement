@@ -34,8 +34,8 @@ public class Dialog {
         });
         dialogFrame.setBackground(Color.WHITE);
         dialogFrame.setLayout(new GridLayout(5, 3));
-        dialogFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 150, prevFrame.getY() + prevFrame.getHeight() / 2 - 100);
-        dialogFrame.setSize(300, 200);
+        dialogFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 225, prevFrame.getY() + prevFrame.getHeight() / 2 - 100);
+        dialogFrame.setSize(450, 200);
 
         okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {

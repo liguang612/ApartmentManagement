@@ -1,7 +1,6 @@
 package Model;
 
 public class Apartment {
-
     private int id;
     private int floor, room;
     private float area;

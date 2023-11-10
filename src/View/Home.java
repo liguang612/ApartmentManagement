@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,7 +41,8 @@ public class Home extends JFrame {
     GridBagConstraints gbc = new GridBagConstraints();
     GridBagLayout gb = new GridBagLayout();
     Integer mode = 0;
-    JButton addApartment, deleteApartment, editApartment, addResident, deleteResident, editResident, changeStatus,
+    JButton addApartment, deleteApartment, editApartment, showApartment,
+            addResident, deleteResident, editResident, changeStatus,
             addFee, deleteFee, editFee, pay, payList,
             changePassword, editAccount, signOut;
     JPanel contentPanel, functionPanel,
@@ -107,7 +109,20 @@ public class Home extends JFrame {
         });
         deleteApartment.setBackground(Color.WHITE);
         editApartment = new JButton(Constant.verticalImageTitle("editOwner.png", "Sửa chủ căn hộ"));
+        editApartment.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                editApartment();
+            }
+        });
         editApartment.setBackground(Color.WHITE);
+        showApartment = new JButton(Constant.verticalImageTitle("showApartment.png", "Thống kê nhân khẩu"));
+        showApartment.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                showApartment();
+            }
+        });
+        showApartment.setBackground(Color.WHITE);
+
         addResident = new JButton(Constant.verticalImageTitle("addResident.png", "Thêm cư dân"));
         addResident.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -123,6 +138,11 @@ public class Home extends JFrame {
         });
         deleteResident.setBackground(Color.WHITE);
         editResident = new JButton(Constant.verticalImageTitle("editResident.png", "Sửa thông tin cư dân"));
+        editResident.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                editResident();
+            }
+        });
         editResident.setBackground(Color.WHITE);
         changeStatus = new JButton(Constant.verticalImageTitle("changeStatus.png", "Thay đổi nhân khẩu"));
         changeStatus.setBackground(Color.WHITE);
@@ -142,6 +162,11 @@ public class Home extends JFrame {
         });
         deleteFee.setBackground(Color.WHITE);
         editFee = new JButton(Constant.verticalImageTitle("editFee.png", "Sửa loại phí"));
+        editFee.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                editFee();
+            }
+        });
         editFee.setBackground(Color.WHITE);
 
         pay = new JButton(Constant.verticalImageTitle("pay.png", "Nộp phí"));
@@ -161,6 +186,7 @@ public class Home extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(gb);
+        // setLocation(900, 580);
         setSize(1000, 500);
         setTitle("Quản lý chung chư BlueMoon");
 
@@ -202,6 +228,7 @@ public class Home extends JFrame {
             residentManagePanel.add(addApartment);
             residentManagePanel.add(editApartment);
             residentManagePanel.add(deleteApartment);
+            residentManagePanel.add(showApartment);
         } else {
             residentManagePanel.add(addResident);
             residentManagePanel.add(editResident);
@@ -365,6 +392,24 @@ public class Home extends JFrame {
             new Dialog(this, user, 0, "Thất bại");
         }
     }
+    private void editApartment() {
+        ArrayList<Integer> selections = ((ApartmentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        if (selections.size() == 1) {
+            setEnabled(false);
+            new EditApartment(this, user, selections.get(0));
+        } else {
+            new Dialog(this, user, 0, "Chỉ được chọn 1 mục!");
+        }
+    }
+    private void showApartment() {
+        ArrayList<Integer> selections = ((ApartmentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        if (selections.size() == 1) {
+            setEnabled(false);
+            new ShowApartment(this, selections.get(0));
+        } else {
+            new Dialog(this, user, 0, "Chỉ được chọn 1 mục!");
+        }
+    }
 
     private void addFee() {
         setEnabled(false);
@@ -377,6 +422,15 @@ public class Home extends JFrame {
             feeTabbedPane.setComponentAt(selected, new FeeDisplay(user, selected));
         } else {
             new Dialog(this, user, 0, "Thất bại");
+        }
+    }
+    private void editFee() {
+        ArrayList<Integer> selections = ((FeeDisplay)feeTabbedPane.getSelectedComponent()).getSelections();
+        if (selections.size() == 1) {
+            setEnabled(false);
+            new EditFee(this, user, selections.get(0));
+        } else {
+            new Dialog(this, user, 0, "Chỉ được chọn 1 mục!");
         }
     }
 
@@ -396,6 +450,15 @@ public class Home extends JFrame {
             residentTabbedPane.setComponentAt(1, new ResidentDisplay(user));
         } else {
             new Dialog(this, user, 0, "Thất bại");
+        }
+    }
+    private void editResident() {
+        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        if (selections.size() == 1) {
+            setEnabled(false);
+            new EditResident(this, user, selections.get(0));
+        } else {
+            new Dialog(this, user, 0, "Chỉ được chọn 1 mục !");
         }
     }
 

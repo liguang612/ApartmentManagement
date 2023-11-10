@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import Model.Resident;
 import SQLServer.DBQuery;
-import View.Component.ResidentItem;
 
 public class ResidentCtrl {
     public static boolean addResident(Resident resident) {
@@ -15,6 +14,10 @@ public class ResidentCtrl {
         return DBQuery.deleteResident(selections);
     }
 
+    public static boolean editResident(Resident resident, Long oldId) {
+        return DBQuery.editResident(resident, oldId);
+    }
+
     public static boolean existsPhoneNumber(int phoneNumber) {
         return DBQuery.existsPhoneNumber(phoneNumber);
     }
@@ -22,6 +25,9 @@ public class ResidentCtrl {
         return DBQuery.existsResident(id);
     }
 
+    public static Resident getResident(Long residentId) {
+        return DBQuery.getResident(residentId);
+    }
     public static ArrayList<Resident> getResidentList() {
         return DBQuery.getResidentList();
     }

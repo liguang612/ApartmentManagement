@@ -44,6 +44,9 @@ public class FeeDisplay extends JPanel {
                     if (ie.getStateChange() == ItemEvent.SELECTED) {
                         selections.add(temp.getFeeId());
                     }
+                    if (ie.getStateChange() == ItemEvent.DESELECTED) {
+                        selections.remove(temp.getFeeId());
+                    }
                 }
             });
         }

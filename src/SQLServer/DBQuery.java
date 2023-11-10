@@ -202,6 +202,49 @@ public class DBQuery {
         return false;
     }
 
+    public static boolean editFee(Fee fee) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Fee SET [name] = ?, cost = ?, mandatory = ?, cycle = ?, expiration = ? WHERE id = ?");
+                
+                preparedStatement.setString(1, fee.getName());
+                preparedStatement.setInt(2, fee.getCost());
+                preparedStatement.setBoolean(3, fee.getMandatory());
+                preparedStatement.setInt(4, fee.getCycle());
+                preparedStatement.setString(5, fee.getExpirationDate().toString());
+                preparedStatement.setInt(6, fee.getId());
+
+                preparedStatement.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    public static boolean editResident(Resident resident, Long oldId) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET id = ?, [name] = ?, birthday = ?, phoneNumber = ?, nationality = ?, apartmentId = ?, relationship = ? WHERE id = ?");
+
+                preparedStatement.setLong(1, resident.getId());
+                preparedStatement.setString(2, resident.getName());
+                preparedStatement.setDate(3, resident.getBirthday());
+                preparedStatement.setInt(4, resident.getPhoneNumber());
+                preparedStatement.setString(5, resident.getNationality());
+                preparedStatement.setInt(6, resident.getFloor() * 100 + resident.getRoom());
+                preparedStatement.setString(7, resident.getRelationship());
+                preparedStatement.setLong(8, oldId);
+
+                preparedStatement.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     public static boolean existsPhoneNumber(int phoneNumber) {
         if (DBConnection.database != null) {
             try {
@@ -287,7 +330,7 @@ public class DBQuery {
 
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT Apartment.[apartmentId], area, [name], phoneNumber FROM Apartment INNER JOIN Resident ON ownerId = id ORDER BY apartmentId ASC");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT Apartment.apartmentId, area, [name], phoneNumber FROM Apartment INNER JOIN Resident ON ownerId = id ORDER BY apartmentId ASC");
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
@@ -301,6 +344,31 @@ public class DBQuery {
         return apartmentList;
     }
 
+    public static Fee getFee(int feeId) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Fee WHERE id = ?");
+
+                preparedStatement.setInt(1, feeId);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    return new Fee(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getInt(3),
+                        resultSet.getBoolean(4),
+                        resultSet.getInt(5),
+                        resultSet.getDate(6).toString()
+                    );
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
     public static ArrayList<Fee> getFeeList(int cycle) {
         ArrayList<Fee> feeList = new ArrayList<Fee>();
 
@@ -327,6 +395,90 @@ public class DBQuery {
         return feeList;
     }
 
+    public static ArrayList<Resident> getMembers(int id) {
+        ArrayList<Resident> members = new ArrayList<Resident>();
+
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE apartmentId = ?");
+
+                preparedStatement.setInt(1, id);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    members.add(new Resident(
+                        resultSet.getInt(1), 
+                        resultSet.getString(2), 
+                        resultSet.getDate(3), 
+                        resultSet.getInt(4), 
+                        resultSet.getString(5), 
+                        resultSet.getInt(6) / 100, 
+                        resultSet.getInt(6) % 100, 
+                        resultSet.getString(7)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return members;
+    }
+
+    public static Resident getOwner(int floor, int room) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE id = (SELECT ownerId FROM Apartment WHERE apartmentId = ?)");
+                
+                preparedStatement.setInt(1, floor * 100 + room);
+                
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    return new Resident(
+                        resultSet.getLong(1),
+                        resultSet.getString(2),
+                        resultSet.getDate(3),
+                        resultSet.getInt(4),
+                        resultSet.getString(5),
+                        resultSet.getInt(6) / 100,
+                        resultSet.getInt(6) % 100,
+                        resultSet.getString(7));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static Resident getResident(Long residentId) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE id = ?");
+
+                preparedStatement.setLong(1, residentId);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    return new Resident(
+                        resultSet.getLong(1),
+                        resultSet.getString(2),
+                        resultSet.getDate(3),
+                        resultSet.getInt(4),
+                        resultSet.getString(5),
+                        resultSet.getInt(6) / 100,
+                        resultSet.getInt(6) % 100,
+                        resultSet.getString(7)
+                    );
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
     public static ArrayList<Resident> getResidentList() {
         ArrayList<Resident> residentList = new ArrayList<Resident>();
 

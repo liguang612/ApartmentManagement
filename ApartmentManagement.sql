@@ -313,7 +313,7 @@ INSERT INTO Vehicle VALUES
 ('29H155555', 901, 1),
 ('15H144444', 1001, 2)
 
-SELECT * FROM Fee
+SELECT * FROM Resident WHERE id = (SELECT * FROM Apartment WHERE apartmentId = 601)
 
 USE master
 GO

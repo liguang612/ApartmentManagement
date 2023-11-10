@@ -14,6 +14,13 @@ public class FeeCtrl {
         return DBQuery.deleteFee(selections);
     }
 
+    public static boolean editFee(Fee fee) {
+        return DBQuery.editFee(fee);
+    }
+
+    public static Fee getFee(int feeId) {
+        return DBQuery.getFee(feeId);
+    }
     public static ArrayList<Fee> getFeeList(int cycle) {
         return DBQuery.getFeeList(cycle);
     }

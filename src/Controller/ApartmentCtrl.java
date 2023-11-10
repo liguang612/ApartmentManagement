@@ -3,6 +3,7 @@ package Controller;
 import java.util.ArrayList;
 
 import Model.Apartment;
+import Model.Resident;
 import SQLServer.DBQuery;
 
 public class ApartmentCtrl {
@@ -14,7 +15,15 @@ public class ApartmentCtrl {
         return DBQuery.deleteApartment(selections);
     }
 
-    public static ArrayList<Apartment> getApartmentList(int abId) {
+    public static ArrayList<Apartment> getApartmentList() {
         return DBQuery.getApartmentList();
+    }
+
+    public static ArrayList<Resident> getMembers(int id) {
+        return DBQuery.getMembers(id);
+    }
+
+    public static Resident getOwner(int floor, int room) {
+        return DBQuery.getOwner(floor, room);
     }
 }
