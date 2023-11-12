@@ -1,6 +1,7 @@
 package View.Component;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import Model.Fee;
 import Model.User;
 
 public class FeeDisplay extends JPanel {
+    ArrayList<Fee> feeList;
     ArrayList<Integer> selections = new ArrayList<Integer>();
     JPanel feeViewport = new JPanel();
     JScrollPane feeScroll = new JScrollPane();
@@ -28,7 +30,7 @@ public class FeeDisplay extends JPanel {
 
         feeViewport.setLayout(new BoxLayout(feeViewport, BoxLayout.Y_AXIS));
 
-        ArrayList<Fee> feeList = FeeCtrl.getFeeList(cycle);
+        feeList = FeeCtrl.getFeeList(cycle);
         for(Fee fee: feeList) {
             FeeItem temp = new FeeItem(
                 fee.getCost(),
@@ -65,6 +67,19 @@ public class FeeDisplay extends JPanel {
                 }
             }
         });
+    }
+
+    public void filter(String keyword) {
+        Component item;
+        int endBound = feeList.size();
+        for (int i = 0; i < endBound; i++) {
+            item = feeViewport.getComponent(i);
+            if (feeList.get(i).getName().toLowerCase().contains(keyword.toLowerCase())) {
+                item.setVisible(true);
+            } else {
+                item.setVisible(false);
+            }
+        }
     }
 
     public ArrayList<Integer> getSelections() {return selections;}

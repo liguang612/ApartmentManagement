@@ -1,6 +1,7 @@
 package View.Component;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import Model.Apartment;
 import Model.User;
 
 public class ApartmentDisplay extends JPanel {
+    ArrayList<Apartment> apartmentList;
     ArrayList<Integer> selections = new ArrayList<Integer>();
     JPanel apartmentViewport = new JPanel();
     JScrollPane apartmentScroll = new JScrollPane();
@@ -28,7 +30,7 @@ public class ApartmentDisplay extends JPanel {
 
         apartmentViewport.setLayout(new BoxLayout(apartmentViewport, BoxLayout.Y_AXIS));
 
-        ArrayList<Apartment> apartmentList = ApartmentCtrl.getApartmentList();
+        apartmentList = ApartmentCtrl.getApartmentList();
 
         for(Apartment apartment: apartmentList) {
             ApartmentItem temp = new ApartmentItem(
@@ -66,6 +68,19 @@ public class ApartmentDisplay extends JPanel {
                 }
             }
         });
+    }
+    
+    public void filter(String keyword) {
+        Component item;
+        int endBound = apartmentList.size();
+        for (int i = 0; i < endBound; i++) {
+            item = apartmentViewport.getComponent(i);
+            if (apartmentList.get(i).getOwnerName().toLowerCase().contains(keyword.toLowerCase())) {
+                item.setVisible(true);
+            } else {
+                item.setVisible(false);
+            }
+        }
     }
 
     public ArrayList<Integer> getSelections() {return selections;}

@@ -230,7 +230,7 @@ public class EditResident {
             return;
         }
 
-        ((Home)prevFrame).getResidentTabbedPane().setComponentAt(1, new ResidentDisplay(user));
+        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay(user));
 
         addResidentFrame.setVisible(false);
         prevFrame.setEnabled(true);

@@ -9,8 +9,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +37,7 @@ import View.Component.ApartmentDisplay;
 import View.Component.Dialog;
 import View.Component.FeeDisplay;
 import View.Component.ResidentDisplay;
+import View.Component.SearchBox;
 
 public class Home extends JFrame {
     AccountDisplay accountDisplay;
@@ -50,6 +54,8 @@ public class Home extends JFrame {
            accountContentPanel = new JPanel(), feeContentPanel = new JPanel(), paymentContentPanel = new JPanel(), residentContentPanel = new JPanel();
     JScrollPane residentScroll = new JScrollPane();
     JTabbedPane functionTabbedPane = new JTabbedPane(), feeTabbedPane = new JTabbedPane(), residentTabbedPane = new JTabbedPane();
+    SearchBox apartmentSearchBox = new SearchBox(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm"),
+              feeSearchBox = new SearchBox(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm");
     User user;
 
     public Home(User user) {
@@ -101,6 +107,17 @@ public class Home extends JFrame {
                 addApartment();
             }
         });
+        apartmentSearchBox.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent ke) {
+                if (ke.getKeyCode() == '\n') {
+                    if (residentTabbedPane.getSelectedComponent() instanceof ApartmentDisplay)
+                        ((ApartmentDisplay)residentTabbedPane.getSelectedComponent()).filter(apartmentSearchBox.getText());
+                    else
+                        ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).filter(apartmentSearchBox.getText());
+                }
+            }
+        });
+        apartmentSearchBox.setPreferredSize(new Dimension(250, 20));
         deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
         deleteApartment.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -168,6 +185,14 @@ public class Home extends JFrame {
             }
         });
         editFee.setBackground(Color.WHITE);
+        feeSearchBox.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent ke) {
+                if (ke.getKeyChar() == '\n') {
+                    ((FeeDisplay)feeTabbedPane.getSelectedComponent()).filter(feeSearchBox.getText());
+                }
+            }
+        });
+        feeSearchBox.setPreferredSize(new Dimension(200, 20));
 
         pay = new JButton(Constant.verticalImageTitle("pay.png", "Nộp phí"));
         pay.setBackground(Color.WHITE);
@@ -235,6 +260,9 @@ public class Home extends JFrame {
             residentManagePanel.add(deleteResident);
             residentManagePanel.add(changeStatus);
         }
+
+        residentManagePanel.revalidate();
+        residentManagePanel.repaint();
     }
 
     private void accountContent() {
@@ -254,8 +282,10 @@ public class Home extends JFrame {
 
         feeContentPanel.setBackground(Color.WHITE);
         feeContentPanel.setLayout(new GridBagLayout());
-        gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.BOTH; gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0;
-        feeContentPanel.add(feeTabbedPane, gbc);
+        gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0; feeContentPanel.add(feeSearchBox, gbc);
+        gbc.fill = GridBagConstraints.BOTH; gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1.0; gbc.weighty = 100.0; feeContentPanel.add(feeTabbedPane, gbc);
     }
     private void paymentContent() {
         paymentContentPanel.setBackground(Color.WHITE);
@@ -266,8 +296,10 @@ public class Home extends JFrame {
 
         residentContentPanel.setBackground(Color.WHITE);
         residentContentPanel.setLayout(new GridBagLayout());
-        gbc.fill = GridBagConstraints.BOTH; gbc.anchor = GridBagConstraints.CENTER; gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0;
-        residentContentPanel.add(residentTabbedPane, gbc);
+        gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0; residentContentPanel.add(apartmentSearchBox, gbc);
+        gbc.fill = GridBagConstraints.BOTH; gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1.0; gbc.weighty = 100.0; residentContentPanel.add(residentTabbedPane, gbc);
     }
 
     private void content() {
@@ -378,7 +410,9 @@ public class Home extends JFrame {
 
     public JFrame getFrame() {return this;}
     public JTabbedPane getFeeTabbedPane() {return feeTabbedPane;}
-    public JTabbedPane getResidentTabbedPane() {return residentTabbedPane;}
+
+    public void setApartmentDisplay(ApartmentDisplay apartmentDisplay) {residentTabbedPane.setComponentAt(0, apartmentDisplay);}
+    public void setResidentDisplay(ResidentDisplay residentDisplay) {residentTabbedPane.setComponentAt(1, residentDisplay);}
 
     private void addApartment() {
         setEnabled(false);

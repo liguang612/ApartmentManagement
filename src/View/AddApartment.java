@@ -167,6 +167,6 @@ public class AddApartment {
 
         DBQuery.addNewApartment((floorField.getSelectedIndex() + Constant.floor[0]) * 100 + roomField.getSelectedIndex() + 1, ((Resident)ownerField.getSelectedItem()).getId());
 
-        ((Home)prevFrame).getResidentTabbedPane().setComponentAt(0, new ApartmentDisplay(user));
+        ((Home)prevFrame).setApartmentDisplay(new ApartmentDisplay(user));
     }
 }

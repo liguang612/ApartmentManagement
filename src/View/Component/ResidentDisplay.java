@@ -1,6 +1,7 @@
 package View.Component;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import Model.User;
 
 public class ResidentDisplay extends JPanel {
     ArrayList<Long> selections = new ArrayList<Long>();
+    ArrayList<Resident> residentList;
     JPanel residentViewport = new JPanel();
     JScrollPane residentScroll = new JScrollPane();
 
@@ -23,12 +25,13 @@ public class ResidentDisplay extends JPanel {
 
         setLayout(new BorderLayout());
 
-        add(new ResidentItem(), BorderLayout.NORTH);
+        add(header, BorderLayout.NORTH);
         add(residentScroll, BorderLayout.CENTER);
 
         residentViewport.setLayout(new BoxLayout(residentViewport, BoxLayout.Y_AXIS));
 
-        ArrayList<Resident> residentList = ResidentCtrl.getResidentList();
+        residentList = ResidentCtrl.getResidentList();
+
         for(Resident r : residentList) {
             ResidentItem temp = new ResidentItem(
                 r.getId(),
@@ -67,6 +70,19 @@ public class ResidentDisplay extends JPanel {
                 }
             }
         });
+    }
+
+    public void filter(String keyword) {
+        Component item;
+        int endBound = residentList.size();
+        for (int i = 0; i < endBound; i++) {
+            item = residentViewport.getComponent(i);
+            if (residentList.get(i).getName().toLowerCase().contains(keyword.toLowerCase())) {
+                item.setVisible(true);
+            } else {
+                item.setVisible(false);
+            }
+        }
     }
 
     public ArrayList<Long> getSelections() {return selections;}
