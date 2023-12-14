@@ -17,52 +17,17 @@ public class Apartment {
         this.ownerPhone = ownerPhone;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() {return id;}
+    public int getFloor() {return floor;}
+    public int getRoom() {return room;}
+    public float getArea() {return area;}
+    public String getOwnerName() {return ownerName;}
+    public String getOwnerPhone() {return ownerPhone;}
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getFloor() {
-        return floor;
-    }
-
-    public void setFloor(int floor) {
-        this.floor = floor;
-    }
-
-    public int getRoom() {
-        return room;
-    }
-
-    public void setRoom(int room) {
-        this.room = room;
-    }
-
-    public float getArea() {
-        return area;
-    }
-
-    public void setArea(float area) {
-        this.area = area;
-    }
-    
-    public String getOwnerName() {
-        return ownerName;
-    }
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
-
-    public String getOwnerPhone() {
-        return ownerPhone;
-    }
-
-    public void setOwnerPhone(String ownerPhone) {
-        this.ownerPhone = ownerPhone;
-    }
-    
+    public void setId(int id) {this.id = id;}    
+    public void setFloor(int floor) {this.floor = floor;}
+    public void setRoom(int room) {this.room = room;}
+    public void setArea(float area) {this.area = area;}
+    public void setOwnerName(String ownerName) {this.ownerName = ownerName;}   
+    public void setOwnerPhone(String ownerPhone) {this.ownerPhone = ownerPhone;}    
 }

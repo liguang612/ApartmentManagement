@@ -291,8 +291,11 @@ public class Home extends JFrame {
         paymentContentPanel.setBackground(Color.WHITE);
     }
     private void residentContent() {
-        residentTabbedPane.addTab("Danh sách căn hộ", new ApartmentDisplay(user));
-        residentTabbedPane.addTab("Danh sách cư dân", new ResidentDisplay(user));
+        ApartmentDisplay apartmentDisplay = new ApartmentDisplay(user);
+        ResidentDisplay residentDisplay = new ResidentDisplay(user);
+
+        residentTabbedPane.addTab("Danh sách căn hộ", apartmentDisplay);
+        residentTabbedPane.addTab("Danh sách cư dân", residentDisplay);
 
         residentContentPanel.setBackground(Color.WHITE);
         residentContentPanel.setLayout(new GridBagLayout());
@@ -319,9 +322,9 @@ public class Home extends JFrame {
             }
         });
 
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1; gbc.weighty = 1000; gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.anchor = GridBagConstraints.CENTER; contentPanel.add(accountContentPanel, gbc);
+        gbc.anchor = GridBagConstraints.NORTH; contentPanel.add(accountContentPanel, gbc);
         gbc.anchor = GridBagConstraints.NORTH; add(contentPanel, gbc);
     }
 
@@ -371,7 +374,7 @@ public class Home extends JFrame {
                     contentPanel.removeAll();
                     
                     accountContent();
-                    gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL;
+                    gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.BOTH;
                     contentPanel.add(accountContentPanel, gbc);
 
                     contentPanel.revalidate();
@@ -379,7 +382,7 @@ public class Home extends JFrame {
                 } else if (functionTabbedPane.getSelectedIndex() == 1) {
                     contentPanel.removeAll();
 
-                    gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL;
+                    gbc.anchor = GridBagConstraints.NORTH; gbc.fill = GridBagConstraints.BOTH;
                     contentPanel.add(residentContentPanel, gbc);
                     
                     contentPanel.revalidate();

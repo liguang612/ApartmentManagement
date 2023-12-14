@@ -2,10 +2,12 @@ package View.Component;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -53,6 +55,8 @@ public class ApartmentDisplay extends JPanel {
                 }
             });
         }
+        System.out.println(apartmentViewport.getHeight());
+        apartmentViewport.add(new Box.Filler(new Dimension(0, 0), new Dimension(0, apartmentViewport.getHeight()), new Dimension(0, apartmentViewport.getHeight())));
 
         apartmentScroll.setViewportView(apartmentViewport);
 

@@ -28,6 +28,9 @@ CREATE TABLE Apartment (
 )
 ALTER TABLE Apartment ADD CONSTRAINT pk_Apartment PRIMARY KEY (apartmentId)
 
+SELECT * FROM Apartment
+SELECT * FROM Resident WHERE id = 905
+
 CREATE TABLE Resident (
     id BIGINT NOT NULL,
     [name] NVARCHAR(50),
