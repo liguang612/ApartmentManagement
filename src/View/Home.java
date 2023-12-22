@@ -32,12 +32,12 @@ import Controller.FeeCtrl;
 import Controller.ResidentCtrl;
 import Model.User;
 import Resources.Constant.Constant;
-import View.Component.AccountDisplay;
-import View.Component.ApartmentDisplay;
-import View.Component.Dialog;
-import View.Component.FeeDisplay;
-import View.Component.ResidentDisplay;
-import View.Component.SearchBox;
+import View.Component.Display.AccountDisplay;
+import View.Component.Display.ApartmentDisplay;
+import View.Component.Display.FeeDisplay;
+import View.Component.Display.ResidentDisplay;
+import View.Component.Object.Dialog;
+import View.Component.Object.SearchBox;
 
 public class Home extends JFrame {
     AccountDisplay accountDisplay;
@@ -211,7 +211,6 @@ public class Home extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(gb);
-        // setLocation(900, 580);
         setSize(1000, 500);
         setTitle("Quản lý chung chư BlueMoon");
 
@@ -277,14 +276,32 @@ public class Home extends JFrame {
         oneTimeFeeDisplay = new FeeDisplay(user, 0);
 
         feeTabbedPane.addTab("Phí", oneTimeFeeDisplay);
-        feeTabbedPane.addTab("Phí hàng tháng", monthlyFeeDisplay);
-        feeTabbedPane.addTab("Phí thường niên", annualFeeDisplay);
+        feeTabbedPane.addTab("Phí hàng tháng", null);
+        feeTabbedPane.addTab("Phí thường niên", null);
+
+        feeTabbedPane.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent ce) {
+                if (feeTabbedPane.getSelectedIndex() == 0) {
+                    feeTabbedPane.setComponentAt(0, oneTimeFeeDisplay);
+                    feeTabbedPane.setComponentAt(1, null);
+                    feeTabbedPane.setComponentAt(2, null);
+                } else if (feeTabbedPane.getSelectedIndex() == 1) {
+                    feeTabbedPane.setComponentAt(0, null);
+                    feeTabbedPane.setComponentAt(1, monthlyFeeDisplay);
+                    feeTabbedPane.setComponentAt(2, null);
+                } else {
+                    feeTabbedPane.setComponentAt(0, null);
+                    feeTabbedPane.setComponentAt(1, null);
+                    feeTabbedPane.setComponentAt(2, annualFeeDisplay);
+                }
+            }
+        });
 
         feeContentPanel.setBackground(Color.WHITE);
         feeContentPanel.setLayout(new GridBagLayout());
         gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.LINE_END;
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0; feeContentPanel.add(feeSearchBox, gbc);
-        gbc.fill = GridBagConstraints.BOTH; gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL; gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1.0; gbc.weighty = 100.0; feeContentPanel.add(feeTabbedPane, gbc);
     }
     private void paymentContent() {
@@ -295,13 +312,25 @@ public class Home extends JFrame {
         ResidentDisplay residentDisplay = new ResidentDisplay(user);
 
         residentTabbedPane.addTab("Danh sách căn hộ", apartmentDisplay);
-        residentTabbedPane.addTab("Danh sách cư dân", residentDisplay);
+        residentTabbedPane.addTab("Danh sách cư dân", null);
+
+        residentTabbedPane.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent ce) {
+                if (residentTabbedPane.getSelectedIndex() == 0) {
+                    residentTabbedPane.setComponentAt(0, apartmentDisplay);
+                    residentTabbedPane.setComponentAt(1, null);
+                } else {
+                    residentTabbedPane.setComponentAt(0, null);
+                    residentTabbedPane.setComponentAt(1, residentDisplay);
+                }
+            }
+        });
 
         residentContentPanel.setBackground(Color.WHITE);
         residentContentPanel.setLayout(new GridBagLayout());
         gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.LINE_END;
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0; residentContentPanel.add(apartmentSearchBox, gbc);
-        gbc.fill = GridBagConstraints.BOTH; gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL; gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1.0; gbc.weighty = 100.0; residentContentPanel.add(residentTabbedPane, gbc);
     }
 
@@ -390,7 +419,7 @@ public class Home extends JFrame {
                 } else if (functionTabbedPane.getSelectedIndex() == 2) {
                     contentPanel.removeAll();
 
-                    gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL;
+                    gbc.anchor = GridBagConstraints.NORTH; gbc.fill = GridBagConstraints.HORIZONTAL;
                     contentPanel.add(feeContentPanel, gbc);
                     
                     contentPanel.revalidate();

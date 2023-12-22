@@ -25,7 +25,7 @@ import Controller.FeeCtrl;
 import Model.User;
 import Resources.Constant.Constant;
 import Resources.Constant.Tool;
-import View.Component.FeeDisplay;
+import View.Component.Display.FeeDisplay;
 
 public class AddFee {
     JButton cancelButton, verifyButton;

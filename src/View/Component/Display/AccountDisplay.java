@@ -1,4 +1,4 @@
-package View.Component;
+package View.Component.Display;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

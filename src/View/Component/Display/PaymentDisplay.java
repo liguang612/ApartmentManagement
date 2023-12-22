@@ -1,4 +1,4 @@
-package View.Component;
+package View.Component.Display;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -11,16 +11,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import Controller.FeeCtrl;
-import Model.Fee;
+import Model.Payment;
 import Model.User;
+import View.Component.Item.FeeItem;
 
-public class FeeDisplay extends JPanel {
-    ArrayList<Fee> feeList;
+public class PaymentDisplay extends JPanel {
+    ArrayList<Payment> paymentList;
     ArrayList<Integer> selections = new ArrayList<Integer>();
     JPanel feeViewport = new JPanel();
     JScrollPane feeScroll = new JScrollPane();
 
-    public FeeDisplay(User user, int cycle) {
+    public PaymentDisplay(User user, int cycle) {
         FeeItem header = new FeeItem();
 
         setLayout(new BorderLayout());

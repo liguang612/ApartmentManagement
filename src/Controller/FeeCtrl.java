@@ -3,6 +3,7 @@ package Controller;
 import java.util.ArrayList;
 
 import Model.Fee;
+import Model.Payment;
 import SQLServer.DBQuery;
 
 public class FeeCtrl {
@@ -23,5 +24,9 @@ public class FeeCtrl {
     }
     public static ArrayList<Fee> getFeeList(int cycle) {
         return DBQuery.getFeeList(cycle);
+    }
+
+    public static ArrayList<Payment> getPaymentList() {
+        return DBQuery.get
     }
 }

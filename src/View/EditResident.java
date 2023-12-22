@@ -26,7 +26,7 @@ import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
 import Resources.Constant.Tool;
-import View.Component.ResidentDisplay;
+import View.Component.Display.ResidentDisplay;
 
 public class EditResident {
     JButton cancelButton, verifyButton;

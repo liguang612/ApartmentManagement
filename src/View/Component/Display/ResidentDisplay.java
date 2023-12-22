@@ -1,4 +1,4 @@
-package View.Component;
+package View.Component.Display;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -13,6 +13,7 @@ import javax.swing.JScrollPane;
 import Controller.ResidentCtrl;
 import Model.Resident;
 import Model.User;
+import View.Component.Item.ResidentItem;
 
 public class ResidentDisplay extends JPanel {
     ArrayList<Long> selections = new ArrayList<Long>();

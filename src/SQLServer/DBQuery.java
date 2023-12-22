@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 
 import Model.Apartment;
 import Model.Fee;
+import Model.Payment;
 import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
@@ -450,6 +451,25 @@ public class DBQuery {
             }
         }
         return null;
+    }
+
+    public static ArrayList<Payment> getPaymentList() {
+        ArrayList<Payment> paymentList = new ArrayList<Payment>();
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("");
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    
+                }
+
+                return paymentList;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static Resident getResident(Long residentId) {

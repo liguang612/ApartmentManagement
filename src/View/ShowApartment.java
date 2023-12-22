@@ -16,7 +16,7 @@ import javax.swing.JScrollPane;
 import Controller.ApartmentCtrl;
 import Model.Resident;
 import Resources.Constant.Constant;
-import View.Component.ResidentCard;
+import View.Component.Object.ResidentCard;
 
 public class ShowApartment extends JFrame {
     ArrayList<Resident> members;

@@ -1,4 +1,4 @@
-package View.Component;
+package View.Component.Item;
 
 import java.awt.Color;
 import java.awt.Dimension;

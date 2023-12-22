@@ -27,8 +27,7 @@ import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
 import SQLServer.DBQuery;
-
-import View.Component.ApartmentDisplay;
+import View.Component.Display.ApartmentDisplay;
 
 public class AddApartment {
     ArrayList<Resident> residentList = ResidentCtrl.getResidentList();
