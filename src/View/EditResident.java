@@ -8,33 +8,34 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SpinnerNumberModel;
 
 import Controller.ResidentCtrl;
 import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
-import Resources.Constant.Tool;
 import View.Component.Display.ResidentDisplay;
 
 public class EditResident {
     JButton cancelButton, verifyButton;
-    JComboBox<Integer> dayField, floorField, monthField, roomField, yearField;
     JComboBox<String> countryField;
     JFrame addResidentFrame, prevFrame;
     JLabel notifyLabel;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
+    JSpinner dateField, floorField, roomField;
     JTextField idField, nameField, phoneField, relationshipField;
     Long oldId;
     User user;
@@ -72,38 +73,15 @@ public class EditResident {
         countryField.setBackground(Color.WHITE);
         countryField.setSelectedItem(current.getNationality());
 
-        dayField = new JComboBox<Integer>(Constant.day);
-        dayField.setSelectedItem(current.getBirthday().toLocalDate().getDayOfMonth());
-        monthField = new JComboBox<Integer>(Constant.month);
-        monthField.setSelectedItem(current.getBirthday().toLocalDate().getMonthValue());
-        yearField = new JComboBox<Integer>(Constant.year);
-        yearField.setSelectedItem(current.getBirthday().toLocalDate().getYear());
-        dayField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        monthField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        yearField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        datePanel.add(new JLabel("Ngày  ", JLabel.RIGHT));
-        datePanel.add(dayField);
-        datePanel.add(new JLabel("Tháng  ", JLabel.RIGHT));
-        datePanel.add(monthField);
-        datePanel.add(new JLabel("Năm  ", JLabel.RIGHT));
-        datePanel.add(yearField);
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date initialDate = calendar.getTime();
+        java.util.Date starDate = calendar.getTime();
+        calendar.add(Calendar.YEAR, 10); java.util.Date endDate = calendar.getTime();
+        dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.YEAR));
+        dateField.setEditor(new JSpinner.DateEditor(dateField, "dd/MM/yyyy"));
 
-        floorField = new JComboBox<Integer>(Constant.floor);
-        floorField.setSelectedItem(current.getFloor());
-        roomField = new JComboBox<Integer>(Constant.room);
-        roomField.setSelectedItem(current.getRoom());
+        floorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
+        roomField = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
         frPanel.add(floorField);
         frPanel.add(new JLabel("     Phòng     "));
         frPanel.add(roomField);
@@ -182,14 +160,6 @@ public class EditResident {
         prevFrame.toFront();
     }
 
-    private void checkDay() {
-        int days = Tool.checkDay(monthField.getSelectedIndex() + 1, (Integer)yearField.getSelectedItem());
-
-        if (dayField.getSelectedIndex() > days - 1) {
-            dayField.setSelectedIndex(days - 1);
-        }
-    }
-
     private void verify(Resident current, Long currentId) {
         if (idField.getText().isEmpty()) {
             notifyLabel.setText("Căn cước công dân / Chứng minh nhân dân không thể bỏ trống!");
@@ -219,11 +189,11 @@ public class EditResident {
             ResidentCtrl.editResident(new Resident(
                 Long.parseLong(idField.getText()),
                 nameField.getText(),
-                Date.valueOf((Integer)yearField.getSelectedItem() + "-" + (Integer)monthField.getSelectedItem() + "-" + (Integer)dayField.getSelectedItem()),
+                (Date)dateField.getValue(),
                 Integer.parseInt(phoneField.getText()),
                 countryField.getSelectedItem().toString(),
-                (Integer)floorField.getSelectedItem(), 
-                (Integer)roomField.getSelectedItem(),
+                (Integer)floorField.getValue(), 
+                (Integer)roomField.getValue(),
                 relationshipField.getText()), currentId);
         } catch (NumberFormatException e) {
             notifyLabel.setText("Số căn cước công dân / chứng minh nhân dân, số điện thoại phải là các số");

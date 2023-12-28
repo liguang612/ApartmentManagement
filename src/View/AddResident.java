@@ -8,33 +8,35 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SpinnerNumberModel;
 
 import Controller.ResidentCtrl;
 import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
-import Resources.Constant.Tool;
 import View.Component.Display.ResidentDisplay;
 
 public class AddResident {
     JButton cancelButton, verifyButton;
-    JComboBox<Integer> dayField, floorField, monthField, roomField, yearField;
+    JComboBox<Integer> dayField, monthField, yearField;
     JComboBox<String> countryField;
     JFrame addResidentFrame, prevFrame;
     JLabel notifyLabel;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
+    JSpinner dateField, floorField, roomField;
     JTextField idField, nameField, phoneField, relationshipField;
     User user;
 
@@ -44,7 +46,7 @@ public class AddResident {
 
         GridBagConstraints gbc = new GridBagConstraints();
         JLabel label = new JLabel("Chào mừng cư dân mới tới BlueMoon", JLabel.CENTER);
-        JPanel datePanel = new JPanel(new GridLayout(1, 6)), frPanel = new JPanel(new GridLayout(1, 3));
+        JPanel frPanel = new JPanel(new GridLayout(1, 3));
 
         addResidentFrame = new JFrame("Thêm cư dân mới");
         addResidentFrame.addWindowListener(new WindowAdapter() {
@@ -69,34 +71,15 @@ public class AddResident {
         countryField = new JComboBox<String>(Constant.country);
         countryField.setBackground(Color.WHITE);
 
-        dayField = new JComboBox<Integer>(Constant.day);
-        dayField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        monthField = new JComboBox<Integer>(Constant.month);
-        monthField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        yearField = new JComboBox<Integer>(Constant.year);
-        yearField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        yearField.setSelectedIndex(100);
-        datePanel.add(new JLabel("Ngày  ", JLabel.RIGHT));
-        datePanel.add(dayField);
-        datePanel.add(new JLabel("Tháng  ", JLabel.RIGHT));
-        datePanel.add(monthField);
-        datePanel.add(new JLabel("Năm  ", JLabel.RIGHT));
-        datePanel.add(yearField);
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date initialDate = calendar.getTime();
+        java.util.Date starDate = calendar.getTime();
+        calendar.add(Calendar.YEAR, 10); java.util.Date endDate = calendar.getTime();
+        dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.YEAR));
+        dateField.setEditor(new JSpinner.DateEditor(dateField, "dd/MM/yyyy"));
 
-        floorField = new JComboBox<Integer>(Constant.floor);
-        roomField = new JComboBox<Integer>(Constant.room);
+        floorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
+        roomField = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
         frPanel.add(floorField);
         frPanel.add(new JLabel("     Phòng     "));
         frPanel.add(roomField);
@@ -137,8 +120,8 @@ public class AddResident {
         gbc.gridy = 0; contentPanel.add(idField, gbc);
         gbc.gridy = 1; contentPanel.add(nameField, gbc);
         gbc.gridy = 2; contentPanel.add(phoneField, gbc);
-        gbc.gridy = 3; contentPanel.add(datePanel, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
+        gbc.gridy = 3; contentPanel.add(dateField, gbc);
         gbc.gridy = 4; contentPanel.add(countryField, gbc);
         gbc.gridy = 5; contentPanel.add(frPanel, gbc);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -170,15 +153,6 @@ public class AddResident {
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }
-
-    private void checkDay() {
-        int days = Tool.checkDay(monthField.getSelectedIndex() + 1, (Integer)yearField.getSelectedItem());
-
-        if (dayField.getSelectedIndex() > days - 1) {
-            dayField.setSelectedIndex(days - 1);
-        }
-    }
-
     private void verify() {
         if (idField.getText().isEmpty()) {
             notifyLabel.setText("Căn cước công dân / Chứng minh nhân dân không thể bỏ trống!");
@@ -209,8 +183,8 @@ public class AddResident {
                 Date.valueOf((Integer)yearField.getSelectedItem() + "-" + (Integer)monthField.getSelectedItem() + "-" + (Integer)dayField.getSelectedItem()),
                 Integer.parseInt(phoneField.getText()),
                 countryField.getSelectedItem().toString(),
-                (Integer)floorField.getSelectedItem(), 
-                (Integer)roomField.getSelectedItem(),
+                (Integer)floorField.getValue(), 
+                (Integer)roomField.getValue(),
                 relationshipField.getText()));
         } catch (NumberFormatException e) {
             notifyLabel.setText("Số căn cước công dân / chứng minh nhân dân, số điện thoại phải là các số");

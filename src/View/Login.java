@@ -23,6 +23,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import Controller.AuthCtrl;
 import Model.User;
 import Resources.Constant.Constant;
+import Resources.Constant.Tool;
 
 public class Login {
     GridBagConstraints gbc;
@@ -77,7 +78,7 @@ public class Login {
             }
         });
 
-        label1 = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/Resources/Image/login.png"));
+        label1 = new JLabel(Tool.resize(new ImageIcon(System.getProperty("user.dir") + "/src/Resources/Image/avatar.png"), 125, 138) );
 
         label2 = new JLabel("Đăng nhập");
         label2.setFont(Constant.titleFont.deriveFont((float)18.0));

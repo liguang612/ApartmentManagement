@@ -31,6 +31,27 @@ public class DBQuery {
         }
         return false;
     }
+    public static boolean addPayment(Payment payment) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Payment VALUES(?, ?, ?, ?, ?, ?)");
+
+                preparedStatement.setInt(1, payment.getFloor() * 100 + payment.getRoom());
+                preparedStatement.setInt(2, payment.getFeeId());
+                preparedStatement.setInt(3, payment.getQuantity());
+                preparedStatement.setDate(4, payment.getTimeValidate());
+                preparedStatement.setInt(5, payment.getMonth() == 0 ? null : payment.getMonth());
+                preparedStatement.setInt(6, payment.getYear() == 0 ? null : payment.getYear());
+
+                preparedStatement.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        return false;
+    }
     public static boolean addResident(Resident resident) {
         if (DBConnection.database != null) {
             try {
@@ -106,7 +127,6 @@ public class DBQuery {
 
         return true;
     }
-
     public static boolean changePassword(int userId, String newPassword) {
         if (DBConnection.database != null) {
             try {
@@ -292,7 +312,7 @@ public class DBQuery {
 
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);
-
+                
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
                     userId = resultSet.getInt(1);
@@ -457,7 +477,7 @@ public class DBQuery {
         ArrayList<Payment> paymentList = new ArrayList<Payment>();
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM");
 
                 ResultSet resultSet = preparedStatement.executeQuery();
 

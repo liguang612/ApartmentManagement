@@ -12,6 +12,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -19,18 +21,19 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 
 import Controller.FeeCtrl;
 import Model.User;
 import Resources.Constant.Constant;
-import Resources.Constant.Tool;
 import View.Component.Display.FeeDisplay;
 
 public class AddFee {
     JButton cancelButton, verifyButton;
     JCheckBox mandatoryField = new JCheckBox();
-    JComboBox<Integer> dayField, monthField, yearField;
+    JSpinner dateField;
     JComboBox<String> cycleField;
     JFrame addFeeFrame, prevFrame;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
@@ -43,7 +46,6 @@ public class AddFee {
 
         GridBagConstraints gbc = new GridBagConstraints();
         JLabel label = new JLabel("Thêm loại phí mới", JLabel.CENTER);
-        JPanel datePanel = new JPanel(new GridLayout(1, 6));
 
         addFeeFrame = new JFrame("Thêm loại phí mới");
         addFeeFrame.addWindowListener(new WindowAdapter() {
@@ -74,42 +76,19 @@ public class AddFee {
         cycleField.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent ie) {
                 if (cycleField.getSelectedIndex() != 0) {
-                    dayField.setEnabled(false);
-                    monthField.setEnabled(false);
-                    yearField.setEnabled(false);
+                    dateField.setEnabled(false);
                 } else {
-                    dayField.setEnabled(true);
-                    monthField.setEnabled(true);
-                    yearField.setEnabled(true);
+                    dateField.setEnabled(true);
                 }
             }
         });
 
-        dayField = new JComboBox<Integer>(Constant.day);
-        dayField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        monthField = new JComboBox<Integer>(Constant.month);
-        monthField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        yearField = new JComboBox<Integer>(Constant.year);
-        yearField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        yearField.setSelectedItem(100);
-        datePanel.add(new JLabel("Ngày  ", JLabel.RIGHT));
-        datePanel.add(dayField);
-        datePanel.add(new JLabel("Tháng  ", JLabel.RIGHT));
-        datePanel.add(monthField);
-        datePanel.add(new JLabel("Năm  ", JLabel.RIGHT));
-        datePanel.add(yearField);
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date initialDate = calendar.getTime();
+        java.util.Date starDate = calendar.getTime();
+        calendar.add(Calendar.YEAR, 10); java.util.Date endDate = calendar.getTime();
+        dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.DATE));
+        dateField.setEditor(new JSpinner.DateEditor(dateField, "dd/MM/yyyy"));
 
         nameField = new JTextField();
 
@@ -133,7 +112,7 @@ public class AddFee {
         gbc.gridy = 0; contentPanel.add(nameField, gbc);
         gbc.gridy = 1; contentPanel.add(costField, gbc);
         gbc.gridy = 2; contentPanel.add(mandatoryField, gbc);
-        gbc.gridy = 4; contentPanel.add(datePanel, gbc);
+        gbc.gridy = 4; contentPanel.add(dateField, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
         gbc.gridy = 3; contentPanel.add(cycleField, gbc);
 
@@ -163,14 +142,6 @@ public class AddFee {
         prevFrame.toFront();
     }
 
-    private void checkDay() {
-        int days = Tool.checkDay(monthField.getSelectedIndex() + 1, (Integer)yearField.getSelectedItem());
-
-        if (dayField.getSelectedIndex() > days - 1) {
-            dayField.setSelectedIndex(days - 1);
-        }
-    }
-
     private void verify() {
         addFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
@@ -180,7 +151,9 @@ public class AddFee {
         int feeCost = Integer.parseInt(costField.getText());
         boolean feeMandatory = mandatoryField.isSelected() ? true : false;
         int feeCycle = java.util.Arrays.asList(Constant.cycleType).indexOf(cycleField.getSelectedItem().toString());
-        String expirationDate = yearField.getSelectedItem() + "-" + monthField.getSelectedItem() + "-" + dayField.getSelectedItem();
+        String expirationDate = (new SimpleDateFormat("yyyy-MM-dd")).format(dateField.getValue());
+
+        System.out.println(expirationDate);
 
         FeeCtrl.addNewFee(feeName, feeCost, feeMandatory, feeCycle, expirationDate);
 

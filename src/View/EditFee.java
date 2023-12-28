@@ -12,7 +12,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -20,22 +21,23 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 
 import Controller.FeeCtrl;
 import Model.Fee;
 import Model.User;
 import Resources.Constant.Constant;
-import Resources.Constant.Tool;
 import View.Component.Display.FeeDisplay;
 
 public class EditFee {
     JButton cancelButton, verifyButton;
     JCheckBox mandatoryField = new JCheckBox();
-    JComboBox<Integer> dayField, monthField, yearField;
     JComboBox<String> cycleField;
     JFrame addFeeFrame, prevFrame;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
+    JSpinner dateField;
     JTextField costField, nameField;
     User user;
 
@@ -77,49 +79,22 @@ public class EditFee {
         cycleField.setFont(Constant.contentFont);
         cycleField.setSelectedIndex(current.getCycle());
 
-        dayField = new JComboBox<Integer>(Constant.day);
-        
-        dayField.setSelectedItem(Date.valueOf(current.getExpirationDate()).toLocalDate().getDayOfMonth());
-        monthField = new JComboBox<Integer>(Constant.month);
-        monthField.setSelectedItem(Date.valueOf(current.getExpirationDate()).toLocalDate().getMonthValue());
-        yearField = new JComboBox<Integer>(Constant.year);
-        yearField.setSelectedItem(Date.valueOf(current.getExpirationDate()).toLocalDate().getYear());
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date initialDate = calendar.getTime();
+        java.util.Date starDate = calendar.getTime();
+        calendar.add(Calendar.YEAR, 10); java.util.Date endDate = calendar.getTime();
+        dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.YEAR));
+        dateField.setEditor(new JSpinner.DateEditor(dateField, "dd/MM/yyyy"));
         
         cycleField.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent ie) {
                 if (cycleField.getSelectedIndex() != 0) {
-                    dayField.setEnabled(false);
-                    monthField.setEnabled(false);
-                    yearField.setEnabled(false);
+                    dateField.setEnabled(false);
                 } else {
-                    dayField.setEnabled(true);
-                    monthField.setEnabled(true);
-                    yearField.setEnabled(true);
+                    dateField.setEnabled(true);
                 }
             }
         });
-        yearField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        dayField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        monthField.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                checkDay();
-            }
-        });
-        
-        datePanel.add(new JLabel("Ngày  ", JLabel.RIGHT));
-        datePanel.add(dayField);
-        datePanel.add(new JLabel("Tháng  ", JLabel.RIGHT));
-        datePanel.add(monthField);
-        datePanel.add(new JLabel("Năm  ", JLabel.RIGHT));
-        datePanel.add(yearField);
 
         mandatoryField.setSelected(current.getMandatory());
 
@@ -176,14 +151,6 @@ public class EditFee {
         prevFrame.toFront();
     }
 
-    private void checkDay() {
-        int days = Tool.checkDay(monthField.getSelectedIndex() + 1, (Integer)yearField.getSelectedItem());
-
-        if (dayField.getSelectedIndex() > days - 1) {
-            dayField.setSelectedIndex(days - 1);
-        }
-    }
-
     private void verify(Integer currentId) {
         addFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
@@ -193,7 +160,7 @@ public class EditFee {
         int feeCost = Integer.parseInt(costField.getText());
         boolean feeMandatory = mandatoryField.isSelected() ? true : false;
         int feeCycle = java.util.Arrays.asList(Constant.cycleType).indexOf(cycleField.getSelectedItem().toString());
-        String expirationDate = yearField.getSelectedItem() + "-" + monthField.getSelectedItem() + "-" + dayField.getSelectedItem();
+        String expirationDate = (new SimpleDateFormat("yyyy-MM-dd")).format(dateField.getValue());
 
         FeeCtrl.editFee(new Fee(currentId, feeName, feeCost, feeMandatory, feeCycle, expirationDate.toString()));
 

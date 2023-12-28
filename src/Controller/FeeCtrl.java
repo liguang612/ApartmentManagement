@@ -22,11 +22,16 @@ public class FeeCtrl {
     public static Fee getFee(int feeId) {
         return DBQuery.getFee(feeId);
     }
+    
     public static ArrayList<Fee> getFeeList(int cycle) {
         return DBQuery.getFeeList(cycle);
     }
 
-    public static ArrayList<Payment> getPaymentList() {
-        return DBQuery.get
+    // public static ArrayList<Payment> getPaymentList() {
+    //     return DBQuery.get
+    // }
+
+    public static boolean addPayment(Payment payment) {
+        return DBQuery.addPayment(payment);
     }
 }

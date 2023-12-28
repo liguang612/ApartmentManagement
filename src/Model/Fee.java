@@ -1,5 +1,7 @@
 package Model;
 
+import java.time.LocalDate;
+
 public class Fee {
     private int id;
     private String name;
@@ -31,4 +33,12 @@ public class Fee {
     public void setMandatory(boolean mandatory) {this.mandatory = mandatory;}
     public void setDate(String expiration) {this.expiration = expiration;}
     public void setExpirationDate(int cycle) {this.cycle = cycle;}
+
+    @Override
+    public String toString() {
+        return name + " (" + cost + " VND, "
+            + (mandatory ? "Bắt buộc, " : "Không bắt buộc, ")
+            + (cycle == 0 ? expiration : cycle == 1 ? ("31/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear()) : ("hạn 31/12/" + LocalDate.now().getYear()))
+            + ")";
+    }
 }

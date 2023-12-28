@@ -1,4 +1,5 @@
 CREATE DATABASE ApartmentManagement
+GO
 USE ApartmentManagement
 GO
 
@@ -68,12 +69,16 @@ CREATE TABLE Fee (
 ALTER TABLE Fee ADD CONSTRAINT pk_id PRIMARY KEY (id)
 
 CREATE TABLE Payment (
+    paymentId NUMERIC IDENTITY(1, 1) NOT NULL,
     apartmentId INT NOT NULL,
     feeId NUMERIC NOT NULL,
     [number] INT,
     timeValidate DATE,
+    [month] INT,
+    [year] INT
+    
 )
-ALTER TABLE Payment ADD CONSTRAINT pk_Payment PRIMARY KEY (apartmentId, feeId)
+ALTER TABLE Payment ADD CONSTRAINT pk_Payment PRIMARY KEY (paymentId)
 ALTER TABLE Payment ADD CONSTRAINT fk_Payment_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)
 ALTER TABLE Payment ADD CONSTRAINT fk_Payment_Fee FOREIGN KEY (feeId) REFERENCES Fee(id)
 
@@ -316,7 +321,7 @@ INSERT INTO Vehicle VALUES
 ('29H155555', 901, 1),
 ('15H144444', 1001, 2)
 
-SELECT * FROM Resident WHERE id = (SELECT * FROM Apartment WHERE apartmentId = 601)
+DROP TABLE Payment
 
 USE master
 GO

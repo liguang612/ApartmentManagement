@@ -19,7 +19,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
 import Controller.ApartmentCtrl;
@@ -33,10 +35,10 @@ import View.Component.Display.ApartmentDisplay;
 public class EditApartment {
     ArrayList<Resident> residentList = ResidentCtrl.getResidentList();
     JButton cancelButton, verifyButton;
-    JComboBox<Integer> floorField, roomField;
     JComboBox ownerField;
     JFrame addApartmentFrame, prevFrame;
     JPanel contentPanel = new JPanel(), frPanel, functionPanel = new JPanel();
+    JSpinner floorField, roomField;
     String[] residents;
     User user;
 
@@ -68,10 +70,8 @@ public class EditApartment {
             }
         });
 
-        floorField = new JComboBox<Integer>(Constant.floor);
-        floorField.setSelectedItem(current / 100);
-        roomField = new JComboBox<Integer>(Constant.room);
-        roomField.setSelectedItem(current % 100);
+        floorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
+        roomField = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
         frPanel.add(floorField);
         frPanel.add(new JLabel("     Phòng     "));
         frPanel.add(roomField);
@@ -167,7 +167,7 @@ public class EditApartment {
         prevFrame.setEnabled(true);
         prevFrame.toFront();
 
-        DBQuery.addNewApartment((floorField.getSelectedIndex() + Constant.floor[0]) * 100 + roomField.getSelectedIndex() + 1, ((Resident)ownerField.getSelectedItem()).getId());
+        DBQuery.addNewApartment((int)floorField.getValue() * 100 + (int) roomField.getValue(), ((Resident)ownerField.getSelectedItem()).getId());
 
         ((Home)prevFrame).setApartmentDisplay(new ApartmentDisplay(user));
     }
