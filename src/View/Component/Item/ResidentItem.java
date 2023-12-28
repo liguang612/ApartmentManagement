@@ -16,17 +16,21 @@ import Resources.Constant.Constant;
 public class ResidentItem extends JPanel {
     private GridBagConstraints gbc = new GridBagConstraints();
     private JCheckBox checkBox = new JCheckBox();
-    private JLabel birthday = new JLabel("Ngày sinh"), floor = new JLabel("Tầng"), id = new JLabel("CCCD/CMT"), name = new JLabel("Họ tên"),
-                   nationality = new JLabel("Quốc tịch"), phoneNumber = new JLabel("Số điện thoại"), relationship = new JLabel("Mối quan hệ với chủ hộ"),
-                   room = new JLabel("Phòng");
+    private JLabel birthday = new JLabel("Ngày sinh"), ethnic = new JLabel("Dân tộc"), floor = new JLabel("Tầng"), gender = new JLabel("Giới tính"),
+                   id = new JLabel("CCCD/CMT"), name = new JLabel("Họ tên"), nationality = new JLabel("Quốc tịch"), phoneNumber = new JLabel("Số điện thoại"),
+                   relationship = new JLabel("Mối quan hệ với chủ hộ"), room = new JLabel("Phòng");
 
     public ResidentItem() {
         setLayout(new GridBagLayout());
 
         birthday.setHorizontalAlignment(JLabel.CENTER);
         birthday.setFont(Constant.titleFont);
+        ethnic.setHorizontalAlignment(JLabel.CENTER);
+        ethnic.setFont(Constant.titleFont);
         floor.setHorizontalAlignment(JLabel.CENTER);
         floor.setFont(Constant.titleFont);
+        gender.setHorizontalAlignment(JLabel.CENTER);
+        gender.setFont(Constant.titleFont);
         id.setHorizontalAlignment(JLabel.CENTER);
         id.setFont(Constant.titleFont);
         name.setHorizontalAlignment(JLabel.CENTER);
@@ -42,14 +46,21 @@ public class ResidentItem extends JPanel {
 
         paint();
     }
-    public ResidentItem(long id, String name, Date birthday, int phoneNumber, String nationality, int floor, int room, String relationship) {
+    public ResidentItem(long id, String name, boolean gender, Date birthday, int phoneNumber, String ethnic, String nationality, int floor, int room, String relationship) {
         setLayout(new GridBagLayout());
 
         this.birthday.setFont(Constant.contentFont);
         this.birthday.setText(birthday.toString());
 
+        this.ethnic.setFont(Constant.contentFont);
+        this.ethnic.setHorizontalAlignment(JLabel.CENTER);
+        this.ethnic.setText(ethnic);
+
         this.floor.setFont(Constant.contentFont);
         this.floor.setText(floor + "");
+
+        this.gender.setFont(Constant.contentFont);
+        this.gender.setText(gender ? "Nữ " : "Nam");
 
         this.id.setFont(Constant.contentFont);
         this.id.setText((id < Long.parseLong("100000000000") ? "0" : "") + id);
@@ -105,13 +116,15 @@ public class ResidentItem extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 2; gbc.weighty = 1; this.add(id, gbc);
         gbc.gridx = 1; gbc.gridy = 0; gbc.weightx = 4; gbc.weighty = 1; this.add(name, gbc);
-        gbc.gridx = 2; gbc.gridy = 0; gbc.weightx = 2; gbc.weighty = 1; this.add(birthday, gbc);
-        gbc.gridx = 3; gbc.gridy = 0; gbc.weightx = 2; gbc.weighty = 1; this.add(phoneNumber, gbc);
-        gbc.gridx = 4; gbc.gridy = 0; gbc.weightx = 2; gbc.weighty = 1; this.add(nationality, gbc);
-        gbc.gridx = 5; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(floor, gbc);
-        gbc.gridx = 6; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(room, gbc);
-        gbc.gridx = 7; gbc.gridy = 0; gbc.weightx = 4; gbc.weighty = 1; this.add(relationship, gbc);
-        gbc.gridx = 8; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(checkBox, gbc);
+        gbc.gridx = 2; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(gender, gbc);
+        gbc.gridx = 3; gbc.gridy = 0; gbc.weightx = 2; gbc.weighty = 1; this.add(birthday, gbc);
+        gbc.gridx = 4; gbc.gridy = 0; gbc.weightx = 2; gbc.weighty = 1; this.add(phoneNumber, gbc);
+        gbc.gridx = 5; gbc.gridy = 0; gbc.weightx = 2; gbc.weighty = 1; this.add(ethnic, gbc);
+        gbc.gridx = 6; gbc.gridy = 0; gbc.weightx = 2; gbc.weighty = 1; this.add(nationality, gbc);
+        gbc.gridx = 7; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(floor, gbc);
+        gbc.gridx = 8; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(room, gbc);
+        gbc.gridx = 9; gbc.gridy = 0; gbc.weightx = 4; gbc.weighty = 1; this.add(relationship, gbc);
+        gbc.gridx = 10; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 1; this.add(checkBox, gbc);
     }
 
     public JCheckBox getCheckBox() {return checkBox;}

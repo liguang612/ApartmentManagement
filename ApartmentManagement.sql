@@ -29,15 +29,14 @@ CREATE TABLE Apartment (
 )
 ALTER TABLE Apartment ADD CONSTRAINT pk_Apartment PRIMARY KEY (apartmentId)
 
-SELECT * FROM Apartment
-SELECT * FROM Resident WHERE id = 905
-
 CREATE TABLE Resident (
     id BIGINT NOT NULL,
     [name] NVARCHAR(50),
     birthday DATE,
+    gender BIT,
     phoneNumber INT,
     nationality NVARCHAR(50),
+    ethnic NVARCHAR(50),
     apartmentId INT,
     relationship NVARCHAR(50),
     [status] BIT,
@@ -226,27 +225,29 @@ INSERT INTO Apartment(apartmentId, ownerId, area) VALUES
 (2904, NULL, 80),
 (2905, NULL, 80)
 
-INSERT INTO Resident(id, [name], birthday, phoneNumber, nationality, apartmentId, relationship, [status]) VALUES
-(2312000100, N'Nguyễn Văn An', '03-01-2003 ', 0100000001, N'Việt Nam' , 601, N'Chủ hộ', 1),
-(2312000101, N'Lộc Thị Vân Anh', '04-02-2003 ', 0100000002, N'Việt Nam' , 601, N'Vợ', 1),
-(2312000102, N'Nguyễn Tuấn Anh', '10-04-2003 ', 0100000003, N'Việt Nam' , 601, N'Con', 1),
-(2312000103, N'Trần Xuân Bách', '10-12-2003 ', 0100000004, N'Việt Nam' , 601, N'Con', 1),
-(2312000104, N'Vũ Trí Bình', '9-09-2003 ', 0100000005, N'Việt Nam' , 701, N'Chủ hộ', 1),
-(2312000105, N'Kim Ngọc Chung', '01-01-2003 ', 0100000006, N'Việt Nam' , 701, N'Bố', 1),
-(2312000106, N'Bùi Quang Dũng', '05-01-2003 ', 0100000007, N'Việt Nam' , 701, N'Con', 1),
-(2312000107, N'Nguyễn Tiến Dũng', '04-11-2003 ', 0100000008, N'Việt Nam' , 701, N'Con', 1),
-(2312000108, N'Trần Đức Duy', '11-01-2003 ', 0100000009, N'Việt Nam' , 801, N'Chủ hộ', 1),
-(2312000109, N'Đào Nam Dương', '05-12-2003 ', 0100000010, N'Việt Nam' , 801, N'bạn', 1),
-(2312000110, N'Nguyễn Bình Dương', '04-03-2003 ', 0100000011, N'Việt Nam' , 801, N'bạn', 1),
-(2312000111, N'Phạm Đăng Đạt', '07-06-2002 ', 0100000012, N'Việt Nam' , 801, N'bạn', 1),
-(2312000112, N'Ngô Ngọc Đăng', '02-18-2003 ', 0100000013, N'Việt Nam' , 901, N'Chủ hộ', 1),
-(2312000113, N'Hoàng Minh Đức', '04-12-2003 ', 0100000014, N'Việt Nam' , 901, N'Con', 1),
-(2312000114, N'Lê Hữu Hải', '06-05-2003 ', 0100000015, N'Việt Nam' , 901, N'Con', 1),
-(2312000115, N'Hà Thế Hiển', '12-11-2003 ', 0100000016, N'Việt Nam' , 901, N'Vợ', 1),
-(2312000116, N'Vũ Đức Hiếu', '05-12-2003 ', 0100000017, N'Việt Nam' , 1001, N'Chủ hộ', 1),
-(2312000117, N'Nguyễn Đức Hoàng', '06-03-2003 ', 0100000018, N'Việt Nam' , 1001, N'Bố', 1),
-(2312000118, N'Vũ Trần Hoàng', '02-01-2003 ', 0100000019, N'Việt Nam' , 1001, N'Mẹ', 1),
-(2312000119, N'Trịnh Công Hùng', '07-04-2003 ', 0100000020, N'Việt Nam' , 1001, N'Em', 1)
+INSERT INTO Resident(id, [name], birthday, gender, phoneNumber, nationality, ethnic, apartmentId, relationship, [status]) VALUES
+(2312000100, N'Nguyễn Văn An', '03-01-2003', 0, 0100000001, N'Việt Nam', N'Kinh', 601, N'Chủ hộ', 1),
+(2312000101, N'Lộc Thị Vân Anh', '04-02-2003', 1, 0100000002, N'Việt Nam', N'Kinh', 601, N'Vợ', 1),
+(2312000102, N'Nguyễn Tuấn Anh', '10-04-2003', 0, 0100000003, N'Việt Nam', N'Kinh', 601, N'Con', 1),
+(2312000103, N'Trần Xuân Bách', '10-12-2003', 0, 0100000004, N'Việt Nam', N'Kinh', 601, N'Con', 1),
+(2312000104, N'Vũ Trí Bình', '9-09-2003', 0, 0100000005, N'Việt Nam', N'Kinh', 701, N'Chủ hộ', 1),
+(2312000105, N'Kim Ngọc Chung', '01-01-2003', 0, 0100000006, N'Việt Nam', N'Kinh', 701, N'Bố', 1),
+(2312000106, N'Bùi Quang Dũng', '05-01-2003', 0, 0100000007, N'Việt Nam', N'Kinh', 701, N'Con', 1),
+(2312000107, N'Nguyễn Tiến Dũng', '04-11-2003', 0, 0100000008, N'Việt Nam', N'Kinh', 701, N'Con', 1),
+(2312000108, N'Trần Đức Duy', '11-01-2003' , 0, 0100000009, N'Việt Nam', N'Kinh', 801, N'Chủ hộ', 1),
+(2312000109, N'Đào Nam Dương', '05-12-2003' , 0, 0100000010, N'Việt Nam', N'Kinh', 801, N'bạn', 1),
+(2312000110, N'Nguyễn Bình Dương', '04-03-2003', 0, 0100000011, N'Việt Nam', N'Kinh', 801, N'bạn', 1),
+(2312000111, N'Phạm Đăng Đạt', '07-06-2002', 0, 0100000012, N'Việt Nam', N'Kinh', 801, N'bạn', 1),
+(2312000112, N'Ngô Ngọc Đăng', '02-18-2003', 0, 0100000013, N'Việt Nam', N'Kinh', 901, N'Chủ hộ', 1),
+(2312000113, N'Hoàng Minh Đức', '04-12-2003', 0, 0100000014, N'Việt Nam', N'Kinh', 901, N'Con', 1),
+(2312000114, N'Lê Hữu Hải', '06-05-2003', 0, 0100000015, N'Việt Nam', N'Kinh', 901, N'Con', 1),
+(2312000115, N'Hà Thế Hiển', '12-11-2003', 0, 0100000016, N'Việt Nam', N'Kinh', 901, N'Vợ', 1),
+(2312000116, N'Vũ Đức Hiếu', '05-12-2003', 0, 0100000017, N'Việt Nam', N'Kinh', 1001, N'Chủ hộ', 1),
+(2312000117, N'Nguyễn Đức Hoàng', '06-03-2003', 0, 0100000018, N'Việt Nam', N'Kinh', 1001, N'Bố', 1),
+(2312000118, N'Vũ Trần Hoàng', '02-01-2003', 0, 0100000019, N'Việt Nam', N'Kinh', 1001, N'Mẹ', 1),
+(2312000119, N'Trịnh Công Hùng', '07-04-2003', 0, 0100000020, N'Việt Nam', N'Kinh', 1001, N'Em', 1)
+
+UPDATE Resident SET id = ?, [name] = ?, birthday = ?, gender = ?, phoneNumber = ?, nationality = ?, ethnic = ?, apartmentId = ?, relationship = ?
 
 
 INSERT INTO Activity(residentId, [status], timeIn, [timeOut], note) VALUES
@@ -321,7 +322,7 @@ INSERT INTO Vehicle VALUES
 ('29H155555', 901, 1),
 ('15H144444', 1001, 2)
 
-DROP TABLE Payment
+SELECT apartmentId, [number], timeValidate, [month], [year], [number] * cost AS paid FROM (SELECT * FROM Payment WHERE feeId = 41) AS Payment1 INNER JOIN Fee ON Payment1.feeId = Fee.id
 
 USE master
 GO

@@ -27,9 +27,9 @@ public class FeeCtrl {
         return DBQuery.getFeeList(cycle);
     }
 
-    // public static ArrayList<Payment> getPaymentList() {
-    //     return DBQuery.get
-    // }
+    public static ArrayList<Payment> getPaymentList(int feeId) {
+        return DBQuery.getPaymentList(feeId);
+    }
 
     public static boolean addPayment(Payment payment) {
         return DBQuery.addPayment(payment);

@@ -1,8 +1,6 @@
 package View.Component.Item;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
@@ -13,7 +11,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Model.Fee;
 import Resources.Constant.Constant;
 
 public class PaymentItem extends JPanel {

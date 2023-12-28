@@ -18,10 +18,12 @@ import Model.Resident;
 import Resources.Constant.Constant;
 
 public class ResidentCard extends JPanel {
+    boolean isOwner;
     GridBagConstraints gbc = new GridBagConstraints();
     Resident resident;
 
-    public ResidentCard(Resident resident) {
+    public ResidentCard(Resident resident, boolean isOwner) {
+        this.isOwner = isOwner;
         this.resident = resident;
 
         setLayout(new GridBagLayout());
@@ -51,7 +53,7 @@ public class ResidentCard extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Color startColor = new Color(0xFF8DD3D1), endColor = new Color(0xFFFDFFF5);
+        Color startColor = new Color(isOwner == true ? 0xFFFDD017 : 0xFF8DD3D1), endColor = new Color(0xFFFDFFF5);
         Dimension arcs = new Dimension(15, 15);
         Graphics2D g2d = (Graphics2D)g;
         int h = getHeight(), w = getWidth();

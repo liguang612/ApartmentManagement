@@ -31,8 +31,8 @@ import View.Component.Display.ResidentDisplay;
 
 public class EditResident {
     JButton cancelButton, verifyButton;
-    JComboBox<String> countryField;
-    JFrame addResidentFrame, prevFrame;
+    JComboBox<String> countryField, ethnicField, genderField;
+    JFrame editResidentFrame, prevFrame;
     JLabel notifyLabel;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
     JSpinner dateField, floorField, roomField;
@@ -46,20 +46,20 @@ public class EditResident {
 
         GridBagConstraints gbc = new GridBagConstraints();
         JLabel label = new JLabel("Sửa thông tin cư dân", JLabel.CENTER);
-        JPanel datePanel = new JPanel(new GridLayout(1, 6)), frPanel = new JPanel(new GridLayout(1, 3));
+        JPanel frPanel = new JPanel(new GridLayout(1, 3));
         Resident current = ResidentCtrl.getResident(currentId);
 
-        addResidentFrame = new JFrame("Sửa thông tin cư dân");
-        addResidentFrame.addWindowListener(new WindowAdapter() {
+        editResidentFrame = new JFrame("Sửa thông tin cư dân");
+        editResidentFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
                 prevFrame.toFront();
             }
         });
-        addResidentFrame.setBackground(Color.WHITE);
-        addResidentFrame.setLayout(new BorderLayout());
-        addResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        addResidentFrame.setSize(800, 400);
+        editResidentFrame.setBackground(Color.WHITE);
+        editResidentFrame.setLayout(new BorderLayout());
+        editResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
+        editResidentFrame.setSize(1000, 400);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -75,16 +75,27 @@ public class EditResident {
 
         Calendar calendar = Calendar.getInstance();
         java.util.Date initialDate = calendar.getTime();
-        java.util.Date starDate = calendar.getTime();
-        calendar.add(Calendar.YEAR, 10); java.util.Date endDate = calendar.getTime();
-        dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.YEAR));
+        calendar.add(Calendar.YEAR, -100); java.util.Date starDate = calendar.getTime();
+        calendar.add(Calendar.YEAR, 100); java.util.Date endDate = calendar.getTime();
+        dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.DAY_OF_MONTH));
         dateField.setEditor(new JSpinner.DateEditor(dateField, "dd/MM/yyyy"));
+        dateField.setValue(current.getBirthday());
+
+        ethnicField = new JComboBox<String>(Constant.ethnic);
+        ethnicField.setBackground(Color.WHITE);
+        ethnicField.setSelectedItem(current.getEthnic());
 
         floorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
+        floorField.setValue(current.getFloor());
         roomField = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
+        roomField.setValue(current.getRoom());
         frPanel.add(floorField);
         frPanel.add(new JLabel("     Phòng     "));
         frPanel.add(roomField);
+
+        genderField = new JComboBox<String>(Constant.gender);
+        genderField.setBackground(Color.WHITE);
+        genderField.setSelectedIndex(current.getGender() ? 1 : 0);
 
         idField = new JTextField();
         idField.setFont(Constant.digitFont);
@@ -99,7 +110,7 @@ public class EditResident {
 
         phoneField = new JTextField();
         phoneField.setFont(Constant.digitFont);
-        phoneField.setText(current.getPhoneNumber() + "");
+        phoneField.setText("0" + current.getPhoneNumber());
 
         relationshipField = new JTextField();
         relationshipField.setText(current.getRelationship());
@@ -115,24 +126,28 @@ public class EditResident {
         contentPanel.setLayout(new GridBagLayout());
         gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.insets = new Insets(0, 5, 0, 15);
         gbc.gridx = 0; gbc.weightx = 2; gbc.weighty = 1;
-        gbc.gridy = 0; contentPanel.add(new JLabel("Cắn cước công dân / Chứng minh thư"));
+        gbc.gridy = 0; contentPanel.add(new JLabel("Cắn cước công dân / Chứng minh thư", JLabel.RIGHT), gbc);
         gbc.gridy = 1; contentPanel.add(new JLabel("Họ và tên", JLabel.RIGHT), gbc);
         gbc.gridy = 2; contentPanel.add(new JLabel("Số điện thoại", JLabel.RIGHT), gbc);
-        gbc.gridy = 3; contentPanel.add(new JLabel("Ngày sinh", JLabel.RIGHT), gbc);
-        gbc.gridy = 4; contentPanel.add(new JLabel("Quốc tịch", JLabel.RIGHT), gbc);
-        gbc.gridy = 5; contentPanel.add(new JLabel("Tầng", JLabel.RIGHT), gbc);
-        gbc.gridy = 6; contentPanel.add(new JLabel("Mối quan hệ với chủ hộ", JLabel.RIGHT), gbc);
+        gbc.gridy = 3; contentPanel.add(new JLabel("Giới tính", JLabel.RIGHT), gbc);
+        gbc.gridy = 4; contentPanel.add(new JLabel("Ngày sinh", JLabel.RIGHT), gbc);
+        gbc.gridy = 5; contentPanel.add(new JLabel("Quốc tịch", JLabel.RIGHT), gbc);
+        gbc.gridy = 6; contentPanel.add(new JLabel("Dân tộc", JLabel.RIGHT), gbc);
+        gbc.gridy = 7; contentPanel.add(new JLabel("Tầng", JLabel.RIGHT), gbc);
+        gbc.gridy = 8; contentPanel.add(new JLabel("Mối quan hệ với chủ hộ", JLabel.RIGHT), gbc);
         gbc.gridx = 1; gbc.weightx = 5; gbc.weighty = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy = 0; contentPanel.add(idField, gbc);
         gbc.gridy = 1; contentPanel.add(nameField, gbc);
         gbc.gridy = 2; contentPanel.add(phoneField, gbc);
-        gbc.gridy = 3; contentPanel.add(datePanel, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
-        gbc.gridy = 4; contentPanel.add(countryField, gbc);
-        gbc.gridy = 5; contentPanel.add(frPanel, gbc);
+        gbc.gridy = 3; contentPanel.add(genderField, gbc);
+        gbc.gridy = 4; contentPanel.add(dateField, gbc);
+        gbc.gridy = 5; contentPanel.add(countryField, gbc);
+        gbc.gridy = 6; contentPanel.add(ethnicField, gbc);
+        gbc.gridy = 7; contentPanel.add(frPanel, gbc);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridy = 6; contentPanel.add(relationshipField, gbc);
-        gbc.gridy = 7; contentPanel.add(notifyLabel, gbc);
+        gbc.gridy = 8; contentPanel.add(relationshipField, gbc);
+        gbc.gridy = 9; contentPanel.add(notifyLabel, gbc);
 
         functionPanel.setLayout(new GridLayout(2, 5));
         functionPanel.add(new JLabel());
@@ -147,15 +162,15 @@ public class EditResident {
 
         label.setFont(Constant.titleFont.deriveFont((float)18.0));
 
-        addResidentFrame.add(label, BorderLayout.NORTH);
-        addResidentFrame.add(contentPanel, BorderLayout.CENTER);
-        addResidentFrame.add(functionPanel, BorderLayout.SOUTH);
+        editResidentFrame.add(label, BorderLayout.NORTH);
+        editResidentFrame.add(contentPanel, BorderLayout.CENTER);
+        editResidentFrame.add(functionPanel, BorderLayout.SOUTH);
 
-        addResidentFrame.setVisible(true);
+        editResidentFrame.setVisible(true);
     }
 
     private void cancel() {
-        addResidentFrame.setVisible(false);
+        editResidentFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }
@@ -189,9 +204,11 @@ public class EditResident {
             ResidentCtrl.editResident(new Resident(
                 Long.parseLong(idField.getText()),
                 nameField.getText(),
-                (Date)dateField.getValue(),
+                new Date(((java.util.Date)dateField.getValue()).getTime()),
+                genderField.getSelectedIndex() == 1,
                 Integer.parseInt(phoneField.getText()),
                 countryField.getSelectedItem().toString(),
+                ethnicField.getSelectedItem().toString(),
                 (Integer)floorField.getValue(), 
                 (Integer)roomField.getValue(),
                 relationshipField.getText()), currentId);
@@ -202,7 +219,7 @@ public class EditResident {
 
         ((Home)prevFrame).setResidentDisplay(new ResidentDisplay(user));
 
-        addResidentFrame.setVisible(false);
+        editResidentFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }

@@ -31,6 +31,25 @@ public class DBQuery {
         }
         return false;
     }
+    public static boolean addNewFee(String name, int cost, boolean mandatory, int cycle, String expirationDate) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Fee([name], cost, mandatory, cycle, expiration, [status]) VALUES (?, ?, ?, ?, ?, 1)");
+
+                preparedStatement.setString(1, name);
+                preparedStatement.setInt(2, cost);
+                preparedStatement.setBoolean(3, mandatory);
+                preparedStatement.setInt(4, cycle);
+                preparedStatement.setString(5, expirationDate);
+
+                preparedStatement.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
     public static boolean addPayment(Payment payment) {
         if (DBConnection.database != null) {
             try {
@@ -40,8 +59,8 @@ public class DBQuery {
                 preparedStatement.setInt(2, payment.getFeeId());
                 preparedStatement.setInt(3, payment.getQuantity());
                 preparedStatement.setDate(4, payment.getTimeValidate());
-                preparedStatement.setInt(5, payment.getMonth() == 0 ? null : payment.getMonth());
-                preparedStatement.setInt(6, payment.getYear() == 0 ? null : payment.getYear());
+                preparedStatement.setInt(5, payment.getMonth());
+                preparedStatement.setInt(6,payment.getYear());
 
                 preparedStatement.executeUpdate();
                 return true;
@@ -64,25 +83,6 @@ public class DBQuery {
                 preparedStatement.setString(5, resident.getNationality());
                 preparedStatement.setInt(6, resident.getFloor() * 100 + resident.getRoom());
                 preparedStatement.setString(7, resident.getRelationship());
-
-                preparedStatement.executeUpdate();
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-    public static boolean addNewFee(String name, int cost, boolean mandatory, int cycle, String expirationDate) {
-        if (DBConnection.database != null) {
-            try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Fee([name], cost, mandatory, cycle, expiration, [status]) VALUES (?, ?, ?, ?, ?, 1)");
-
-                preparedStatement.setString(1, name);
-                preparedStatement.setInt(2, cost);
-                preparedStatement.setBoolean(3, mandatory);
-                preparedStatement.setInt(4, cycle);
-                preparedStatement.setString(5, expirationDate);
 
                 preparedStatement.executeUpdate();
                 return true;
@@ -246,16 +246,18 @@ public class DBQuery {
     public static boolean editResident(Resident resident, Long oldId) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET id = ?, [name] = ?, birthday = ?, phoneNumber = ?, nationality = ?, apartmentId = ?, relationship = ? WHERE id = ?");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET id = ?, [name] = ?, birthday = ?, gender = ?, phoneNumber = ?, nationality = ?, ethnic = ?, apartmentId = ?, relationship = ? WHERE id = ?");
 
                 preparedStatement.setLong(1, resident.getId());
                 preparedStatement.setString(2, resident.getName());
                 preparedStatement.setDate(3, resident.getBirthday());
-                preparedStatement.setInt(4, resident.getPhoneNumber());
-                preparedStatement.setString(5, resident.getNationality());
-                preparedStatement.setInt(6, resident.getFloor() * 100 + resident.getRoom());
-                preparedStatement.setString(7, resident.getRelationship());
-                preparedStatement.setLong(8, oldId);
+                preparedStatement.setBoolean(4, resident.getGender());
+                preparedStatement.setInt(5, resident.getPhoneNumber());
+                preparedStatement.setString(6, resident.getNationality());
+                preparedStatement.setString(7, resident.getEthnic());
+                preparedStatement.setInt(8, resident.getFloor() * 100 + resident.getRoom());
+                preparedStatement.setString(9, resident.getRelationship());
+                preparedStatement.setLong(10, oldId);
 
                 preparedStatement.executeUpdate();
                 return true;
@@ -429,14 +431,16 @@ public class DBQuery {
 
                 while (resultSet.next()) {
                     members.add(new Resident(
-                        resultSet.getInt(1), 
-                        resultSet.getString(2), 
-                        resultSet.getDate(3), 
-                        resultSet.getInt(4), 
-                        resultSet.getString(5), 
-                        resultSet.getInt(6) / 100, 
-                        resultSet.getInt(6) % 100, 
-                        resultSet.getString(7)));
+                        resultSet.getLong(1),
+                        resultSet.getString(2),
+                        resultSet.getDate(3),
+                        resultSet.getBoolean(4),
+                        resultSet.getInt(5),
+                        resultSet.getString(6),
+                        resultSet.getString(7),
+                        resultSet.getInt(8) / 100,
+                        resultSet.getInt(8) % 100,
+                        resultSet.getString(9)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -460,11 +464,13 @@ public class DBQuery {
                         resultSet.getLong(1),
                         resultSet.getString(2),
                         resultSet.getDate(3),
-                        resultSet.getInt(4),
-                        resultSet.getString(5),
-                        resultSet.getInt(6) / 100,
-                        resultSet.getInt(6) % 100,
-                        resultSet.getString(7));
+                        resultSet.getBoolean(4),
+                        resultSet.getInt(5),
+                        resultSet.getString(6),
+                        resultSet.getString(7),
+                        resultSet.getInt(8) / 100,
+                        resultSet.getInt(8) % 100,
+                        resultSet.getString(9));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -473,23 +479,37 @@ public class DBQuery {
         return null;
     }
 
-    public static ArrayList<Payment> getPaymentList() {
-        ArrayList<Payment> paymentList = new ArrayList<Payment>();
+    public static ArrayList<Payment> getPaymentList(int feeId) {
+        ArrayList<Payment> payments = new ArrayList<Payment>();
+
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM");
-
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT apartmentId, [number], timeValidate, [month], [year], [number] * cost AS paid FROM (SELECT * FROM Payment WHERE feeId = ?) AS Payment1 INNER JOIN Fee ON Payment1.feeId = Fee.id");
+                
+                preparedStatement.setInt(1, feeId);
+                
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                if (resultSet.next()) {
-                    
-                }
+                while (resultSet.next()) {
+                    Payment payment = new Payment(
+                        resultSet.getInt(1) / 100,
+                        resultSet.getInt(1) % 100,
+                        feeId,
+                        resultSet.getInt(2),
+                        resultSet.getDate(3),
+                        resultSet.getInt(4),
+                        resultSet.getInt(5)
+                    );
+                    payment.setPaid(resultSet.getInt(6));
 
-                return paymentList;
+                    payments.add(payment);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
+        return payments;
     }
 
     public static Resident getResident(Long residentId) {
@@ -506,12 +526,13 @@ public class DBQuery {
                         resultSet.getLong(1),
                         resultSet.getString(2),
                         resultSet.getDate(3),
-                        resultSet.getInt(4),
-                        resultSet.getString(5),
-                        resultSet.getInt(6) / 100,
-                        resultSet.getInt(6) % 100,
-                        resultSet.getString(7)
-                    );
+                        resultSet.getBoolean(4),
+                        resultSet.getInt(5),
+                        resultSet.getString(6),
+                        resultSet.getString(7),
+                        resultSet.getInt(8) / 100,
+                        resultSet.getInt(8) % 100,
+                        resultSet.getString(9));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -532,11 +553,13 @@ public class DBQuery {
                         resultSet.getLong(1),
                         resultSet.getString(2),
                         resultSet.getDate(3),
-                        resultSet.getInt(4),
-                        resultSet.getString(5),
-                        resultSet.getInt(6) / 100,
-                        resultSet.getInt(6) % 100,
-                        resultSet.getString(7)));
+                        resultSet.getBoolean(4),
+                        resultSet.getInt(5),
+                        resultSet.getString(6),
+                        resultSet.getString(7),
+                        resultSet.getInt(8) / 100,
+                        resultSet.getInt(8) % 100,
+                        resultSet.getString(9)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -561,11 +584,13 @@ public class DBQuery {
                         resultSet.getLong(1),
                         resultSet.getString(2),
                         resultSet.getDate(3),
-                        resultSet.getInt(4),
-                        resultSet.getString(5),
-                        resultSet.getInt(6) / 100,
-                        resultSet.getInt(6) % 100,
-                        resultSet.getString(7)));
+                        resultSet.getBoolean(4),
+                        resultSet.getInt(5),
+                        resultSet.getString(6),
+                        resultSet.getString(7),
+                        resultSet.getInt(8) / 100,
+                        resultSet.getInt(8) % 100,
+                        resultSet.getString(9)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -10,6 +10,7 @@ public class Payment {
     private Date timeValidate;
     private int month;
     private int year;
+    private long paid;
 
     public Payment() {}
     public Payment(int floor, int room, int feeId, int quantity, Date timeValidate) {
@@ -21,6 +22,15 @@ public class Payment {
         this.month = 0;
         this.year = 0;
     }
+    public Payment(int floor, int room, int feeId, int quantity, Date timeValidate, int month, int year) {
+        this.floor = floor;
+        this.room = room;
+        this.feeId = feeId;
+        this.quantity = quantity;
+        this.timeValidate = timeValidate;
+        this.month = month;
+        this.year = year;
+    }
 
     public int getFloor() {return floor;}
     public int getRoom() {return room;}
@@ -29,6 +39,7 @@ public class Payment {
     public Date getTimeValidate() {return timeValidate;}
     public int getMonth() {return month;}
     public int getYear() {return year;}
+    public long getPaid() {return paid;}
 
     public void setFloor(int floor) {this.floor = floor;}
     public void setRoom(int room) {this.room = room;}
@@ -37,4 +48,5 @@ public class Payment {
     public void setTimeValidate(Date timeValiDate) {this.timeValidate = timeValiDate;}
     public void setMonth(int month) {this.month = month;}
     public void setYear(int year) {this.year = year;}
+    public void setPaid(long paid) {this.paid = paid;}
 }

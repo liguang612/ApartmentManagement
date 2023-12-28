@@ -50,8 +50,8 @@ public class Home extends JFrame {
             addFee, deleteFee, editFee, pay, payList,
             changePassword, editAccount, signOut;
     JPanel contentPanel, functionPanel,
-           accountManagePanel = new JPanel(), feeManagePanel = new JPanel(), paymentManagePanel = new JPanel(), residentManagePanel = new JPanel(),
-           accountContentPanel = new JPanel(), feeContentPanel = new JPanel(), paymentContentPanel = new JPanel(), residentContentPanel = new JPanel();
+           accountManagePanel = new JPanel(), feeManagePanel = new JPanel(), residentManagePanel = new JPanel(),
+           accountContentPanel = new JPanel(), feeContentPanel = new JPanel(), residentContentPanel = new JPanel();
     JScrollPane residentScroll = new JScrollPane();
     JTabbedPane functionTabbedPane = new JTabbedPane(), feeTabbedPane = new JTabbedPane(), residentTabbedPane = new JTabbedPane();
     SearchBox apartmentSearchBox = new SearchBox(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm"),
@@ -203,6 +203,11 @@ public class Home extends JFrame {
         });
         payList = new JButton(Constant.verticalImageTitle("payList.png", "Danh sách đã nộp phí"));
         payList.setBackground(Color.WHITE);
+        payList.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                showPaymentList();
+            }
+        });
 
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;
@@ -235,13 +240,8 @@ public class Home extends JFrame {
         feeManagePanel.add(addFee);
         feeManagePanel.add(editFee);
         feeManagePanel.add(deleteFee);
-    }
-    private void paymentManage() {
-        paymentManagePanel.setBackground(Color.WHITE);
-        paymentManagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-
-        paymentManagePanel.add(pay);
-        paymentManagePanel.add(payList);
+        feeManagePanel.add(pay);
+        feeManagePanel.add(payList);
     }
     private void residentManage() {
         residentManagePanel.setBackground(Color.WHITE);
@@ -304,9 +304,6 @@ public class Home extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL; gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1.0; gbc.weighty = 100.0; feeContentPanel.add(feeTabbedPane, gbc);
     }
-    private void paymentContent() {
-        paymentContentPanel.setBackground(Color.WHITE);
-    }
     private void residentContent() {
         ApartmentDisplay apartmentDisplay = new ApartmentDisplay(user);
         ResidentDisplay residentDisplay = new ResidentDisplay(user);
@@ -341,7 +338,6 @@ public class Home extends JFrame {
 
         accountContent();
         feeContent();
-        paymentContent();
         residentContent();
 
         residentTabbedPane.addChangeListener(new ChangeListener() {
@@ -385,17 +381,14 @@ public class Home extends JFrame {
 
         accountManage();
         feeManage();
-        paymentManage();
         residentManage();
 
         functionTabbedPane.addTab("Tài khoản", accountManagePanel);
         functionTabbedPane.addTab("Quản lý cư dân", residentManagePanel);
         functionTabbedPane.addTab("Quản lý phí thu", feeManagePanel);
-        functionTabbedPane.addTab("Nộp phí", paymentManagePanel);
         functionTabbedPane.setTabComponentAt(0, label1);
         functionTabbedPane.setTabComponentAt(1, label2);
         functionTabbedPane.setTabComponentAt(2, label3);
-        functionTabbedPane.setTabComponentAt(3, label4);
 
         functionTabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
@@ -416,20 +409,12 @@ public class Home extends JFrame {
                     
                     contentPanel.revalidate();
                     contentPanel.repaint();
-                } else if (functionTabbedPane.getSelectedIndex() == 2) {
+                } else {
                     contentPanel.removeAll();
 
                     gbc.anchor = GridBagConstraints.NORTH; gbc.fill = GridBagConstraints.HORIZONTAL;
                     contentPanel.add(feeContentPanel, gbc);
                     
-                    contentPanel.revalidate();
-                    contentPanel.repaint();
-                } else {
-                    contentPanel.removeAll();
-
-                    gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL;
-                    contentPanel.add(paymentContentPanel, gbc);
-
                     contentPanel.revalidate();
                     contentPanel.repaint();
                 }
@@ -503,6 +488,15 @@ public class Home extends JFrame {
     private void addPayment() {
         setEnabled(false);
         new AddPayment(this, user);
+    }
+    private void showPaymentList() {
+        ArrayList<Integer> selections = ((FeeDisplay)feeTabbedPane.getSelectedComponent()).getSelections();
+        if (selections.size() == 1) {
+            setEnabled(false);
+            new ShowPaymentList(this, selections.get(0));
+        } else {
+            new Dialog(this, user, 0, "Chỉ được chọn 1 mục!");
+        }
     }
 
     private void addResident() {

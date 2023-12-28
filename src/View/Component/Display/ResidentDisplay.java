@@ -37,8 +37,10 @@ public class ResidentDisplay extends JPanel {
             ResidentItem temp = new ResidentItem(
                 r.getId(),
                 r.getName(),
+                r.getGender(),
                 r.getBirthday(),
                 r.getPhoneNumber(),
+                r.getEthnic(),
                 r.getNationality(),
                 r.getFloor(),
                 r.getRoom(),

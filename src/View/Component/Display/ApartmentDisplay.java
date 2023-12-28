@@ -56,7 +56,6 @@ public class ApartmentDisplay extends JPanel {
                 }
             });
         }
-        System.out.println(apartmentViewport.getHeight());
         apartmentViewport.add(new Box.Filler(new Dimension(0, 0), new Dimension(0, apartmentViewport.getHeight()), new Dimension(0, apartmentViewport.getHeight())));
 
         apartmentScroll.setViewportView(apartmentViewport);

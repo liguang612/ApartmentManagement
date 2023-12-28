@@ -123,10 +123,13 @@ public class AddPayment {
                 feeList = FeeCtrl.getFeeList(1);
                 feeField.removeAllItems();
                 for (Fee f : feeList) {feeField.addItem(f);}
-
+            }
+        });
+        monthlyButton.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent ie) {
                 if (lateCheckBox.isSelected()) {
-                    monthField.setEnabled(false);
-                    yearField.setEnabled(false);
+                    monthField.setEnabled(true);
+                    yearField.setEnabled(true);
                 }
             }
         });
@@ -135,10 +138,13 @@ public class AddPayment {
                 feeList = FeeCtrl.getFeeList(2);
                 feeField.removeAllItems();
                 for (Fee f : feeList) {feeField.addItem(f);}
-
+            }
+        });
+        annualButton.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent ie) {
                 if (lateCheckBox.isSelected()) {
-                    monthField.setEnabled(false);
-                    yearField.setEnabled(false);
+                    monthField.setEnabled(true);
+                    yearField.setEnabled(true);
                 }
             }
         });
@@ -180,7 +186,8 @@ public class AddPayment {
         latePanel.add(monthField);
         latePanel.add(new JLabel("Năm", JLabel.RIGHT));
         latePanel.add(yearField);
-        latePanel.setVisible(false);
+        monthField.setEnabled(false);
+        yearField.setEnabled(false);
 
         nationalityField = new JComboBox<String>(Constant.country);
         nationalityField.setBackground(Color.WHITE);
