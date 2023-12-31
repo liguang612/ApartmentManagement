@@ -40,7 +40,8 @@ public class SearchBox extends JTextField {
 
     @Override
     protected void paintComponent(Graphics g) {
-        int height = getHeight(), width = getWidth();
+        // int height = getHeight(), width = getWidth();
+        super.paintComponent(g);
 
         if (icon != null) {
             g.drawImage(icon.getImage(), getWidth() - icon.getIconWidth(), (getHeight() - icon.getIconHeight()) / 2, this);
@@ -51,13 +52,11 @@ public class SearchBox extends JTextField {
 
                 g2d.setColor(Color.GRAY);
                 g2d.setFont(Constant.hintFont);
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                // g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                // g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
                 g2d.drawString(hint, 10, getHeight() / 2 + 7);
                 g2d.dispose();
             }
         }
-
-        super.paintComponent(g);
     }
 }
