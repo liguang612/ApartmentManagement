@@ -72,9 +72,9 @@ public class AddResident {
 
         Calendar calendar = Calendar.getInstance();
         java.util.Date initialDate = calendar.getTime();
-        java.util.Date starDate = calendar.getTime();
-        calendar.add(Calendar.YEAR, 10); java.util.Date endDate = calendar.getTime();
-        dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.YEAR));
+        calendar.add(Calendar.YEAR, -100); java.util.Date starDate = calendar.getTime();
+        calendar.add(Calendar.YEAR, 100); java.util.Date endDate = calendar.getTime();
+        dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.DAY_OF_MONTH));
         dateField.setEditor(new JSpinner.DateEditor(dateField, "dd/MM/yyyy"));
 
         ethnicField = new JComboBox<String>(Constant.ethnic);
@@ -171,8 +171,8 @@ public class AddResident {
             notifyLabel.setText("Tên không được bỏ trống");
             return ;
         }
-        if (phoneField.getText().length() != 10) {
-            notifyLabel.setText("Số điện thoại phải có 10 chữ số");
+        if (phoneField.getText().length() != 10 && phoneField.getText().length() != 0) {
+            notifyLabel.setText("Số điện thoại phải có 10 chữ số (hoặc không nhập gì nếu không có số điện thoại)");
             return ;
         }
 
@@ -190,7 +190,7 @@ public class AddResident {
                 Long.parseLong(idField.getText()),
                 nameField.getText(),
                 new Date(((java.util.Date)dateField.getValue()).getTime()),
-                genderField.getSelectedIndex() == 0,
+                genderField.getSelectedIndex() == 1,
                 Integer.parseInt(phoneField.getText()),
                 countryField.getSelectedItem().toString(),
                 ethnicField.getSelectedItem().toString(),

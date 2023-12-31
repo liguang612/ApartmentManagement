@@ -279,9 +279,16 @@ public class AddPayment {
         }
 
         try {
-            Payment payment = new Payment((int)floorField.getValue(), (int)roomField.getValue(), (int)((Fee)feeField.getSelectedItem()).getId(), (int)quantityField.getValue(), new Date(System.currentTimeMillis()));
-            if (monthField.isEnabled()) payment.setMonth((int)monthField.getValue());
-            if (yearField.isEnabled()) payment.setMonth((int)yearField.getValue());
+            LocalDate now = LocalDate.now();
+            Payment payment = new Payment((int)floorField.getValue(), (int)roomField.getValue(), (int)((Fee)feeField.getSelectedItem()).getId(), payeeField.getText(), (int)quantityField.getValue(), new Date(System.currentTimeMillis()));
+            if (oneTimeButton.isSelected()) {
+                payment.setMonth(0);
+                payment.setYear(0);
+            } else {
+                payment.setTimeValidate(Date.valueOf(now));
+                payment.setMonth(monthField.isEnabled() ? (int)monthField.getValue() : now.getMonthValue());
+                payment.setYear(yearField.isEnabled() ? (int)yearField.getValue() : now.getYear());
+            }
             
             FeeCtrl.addPayment(payment);
         } catch (Exception e) {

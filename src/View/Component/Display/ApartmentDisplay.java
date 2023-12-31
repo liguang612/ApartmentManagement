@@ -1,91 +1,81 @@
 package View.Component.Display;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.Color;
 import java.util.ArrayList;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
 
 import Controller.ApartmentCtrl;
 import Model.Apartment;
 import Model.User;
-import View.Component.Item.ApartmentItem;
+import Resources.Constant.Constant;
 
 public class ApartmentDisplay extends JPanel {
     ArrayList<Apartment> apartmentList;
-    ArrayList<Integer> selections = new ArrayList<Integer>();
-    JPanel apartmentViewport = new JPanel();
-    JScrollPane apartmentScroll = new JScrollPane();
+    JLabel statistics;
+    JTable table;
+    DefaultTableModel model;
+    String[] header = {"Tầng", "Phòng", "Tên chủ sở hữu", "Số điện thoại", "Diện tích (m^2)"};
+    String[][] data;
 
     public ApartmentDisplay(User user) {
-        ApartmentItem header = new ApartmentItem();
+        UIManager.put("Table.font", Constant.contentFont);
+        UIManager.put("TableHeader.font", Constant.titleFont);
 
-        setLayout(new BorderLayout());
-
-        add(header, BorderLayout.NORTH);
-        add(apartmentScroll, BorderLayout.CENTER);
-
-        apartmentViewport.setLayout(new BoxLayout(apartmentViewport, BoxLayout.Y_AXIS));
+        setBackground(Color.WHITE);
+        setLayout(new BorderLayout(0, 15));
 
         apartmentList = ApartmentCtrl.getApartmentList();
 
-        for(Apartment apartment: apartmentList) {
-            ApartmentItem temp = new ApartmentItem(
-                apartment.getArea(),
-                apartment.getFloor(),
-                apartment.getRoom(),
-                apartment.getOwnerName(),
-                '0' + apartment.getOwnerPhone()
-            );
-
-            apartmentViewport.add(temp);
-            temp.getCheckBox().addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent ie) {
-                    if (ie.getStateChange() == ItemEvent.SELECTED) {
-                        selections.add(Integer.valueOf(temp.getApartmentId()));
-                    }
-                    if (ie.getStateChange() == ItemEvent.DESELECTED) {
-                        selections.remove(Integer.valueOf(temp.getApartmentId()));
-                    }
-                }
-            });
-        }
-        apartmentViewport.add(new Box.Filler(new Dimension(0, 0), new Dimension(0, apartmentViewport.getHeight()), new Dimension(0, apartmentViewport.getHeight())));
-
-        apartmentScroll.setViewportView(apartmentViewport);
-
-        header.getCheckBox().addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                boolean state = ie.getStateChange() == ItemEvent.SELECTED ? true : false;
-                int count = apartmentViewport.getComponentCount();
-
-                selections.clear();
-                for (int i = 0; i < count; i++) {
-                    ((ApartmentItem)apartmentViewport.getComponent(i)).getCheckBox().setSelected(state);
-                    if (state) selections.add(((ApartmentItem)apartmentViewport.getComponent(i)).getApartmentId());
-                }
+        model = new DefaultTableModel(data, header) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
-        });
+        };
+        table = new JTable(model);
+        table.setRowHeight(25);
+
+        statistics = new JLabel("");
+
+        filter("");
+
+        add(new JScrollPane(table), BorderLayout.CENTER);
+        add(statistics, BorderLayout.SOUTH);
     }
     
     public void filter(String keyword) {
-        Component item;
-        int endBound = apartmentList.size();
-        for (int i = 0; i < endBound; i++) {
-            item = apartmentViewport.getComponent(i);
-            if (apartmentList.get(i).getOwnerName().toLowerCase().contains(keyword.toLowerCase())) {
-                item.setVisible(true);
-            } else {
-                item.setVisible(false);
+        ArrayList<String[]> filteredData = new ArrayList<>();
+        int count = 0;
+
+        for (Apartment apartment : apartmentList) {
+            if (apartment.getOwnerName().toLowerCase().contains(keyword.toLowerCase())) {
+                filteredData.add(apartment.toData());
+                ++count;
             }
         }
+
+        model.setDataVector(filteredData.toArray(new String[0][0]), header);
+        statistics.setHorizontalAlignment(JLabel.RIGHT);
+        statistics.setText("Tổng số căn hộ: " + count);
+
+        this.revalidate();
+        this.repaint();
     }
 
-    public ArrayList<Integer> getSelections() {return selections;}
+    public ArrayList<Integer> getSelections() {
+        ArrayList<Integer> selections = new ArrayList<>();
+
+        for (int i : table.getSelectedRows()) {
+            selections.add(Integer.parseInt(table.getValueAt(i,0).toString()) * 100 + Integer.parseInt(table.getValueAt(i, 1).toString()));
+        }
+
+        return selections;
+    }
 }

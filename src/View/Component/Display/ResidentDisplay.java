@@ -1,92 +1,67 @@
 package View.Component.Display;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
 
 import Controller.ResidentCtrl;
 import Model.Resident;
 import Model.User;
-import View.Component.Item.ResidentItem;
+import Resources.Constant.Constant;
 
 public class ResidentDisplay extends JPanel {
-    ArrayList<Long> selections = new ArrayList<Long>();
     ArrayList<Resident> residentList;
-    JPanel residentViewport = new JPanel();
-    JScrollPane residentScroll = new JScrollPane();
+    DefaultTableModel model;
+    JTable table;
+    String[] header = {"CCCD/CMT", "Họ tên", "Giới tính", "Ngày sinh", "Số điện thoại", "Dân tộc", "Quốc tịch", "Tầng", "Phòng", "Mối quan hệ với chủ hộ"};
+    String[][] data;
 
     public ResidentDisplay(User user) {
-        ResidentItem header = new ResidentItem();
+        UIManager.put("Table.font", Constant.contentFont);
+        UIManager.put("TableHeader.font", Constant.titleFont);
 
-        setLayout(new BorderLayout());
-
-        add(header, BorderLayout.NORTH);
-        add(residentScroll, BorderLayout.CENTER);
-
-        residentViewport.setLayout(new BoxLayout(residentViewport, BoxLayout.Y_AXIS));
+        setLayout(new GridLayout(1, 1));
 
         residentList = ResidentCtrl.getResidentList();
 
-        for(Resident r : residentList) {
-            ResidentItem temp = new ResidentItem(
-                r.getId(),
-                r.getName(),
-                r.getGender(),
-                r.getBirthday(),
-                r.getPhoneNumber(),
-                r.getEthnic(),
-                r.getNationality(),
-                r.getFloor(),
-                r.getRoom(),
-                r.getRelationship());
-
-            residentViewport.add(temp);
-            temp.getCheckBox().addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent ie) {
-                    if (ie.getStateChange() == ItemEvent.SELECTED) {
-                        selections.add(temp.getId());
-                    }
-                    if (ie.getStateChange() == ItemEvent.DESELECTED) {
-                        selections.remove(temp.getId());
-                    }
-                }
-            });
-        }
-
-        residentScroll.setViewportView(residentViewport);
-
-        header.getCheckBox().addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent ie) {
-                boolean state = ie.getStateChange() == ItemEvent.SELECTED ? true : false;
-                int count = residentViewport.getComponentCount();
-
-                selections.clear();
-                for (int i = 0; i < count; i++) {
-                    ((ResidentItem)residentViewport.getComponent(i)).getCheckBox().setSelected(state);
-                    if (state) selections.add(((ResidentItem)residentViewport.getComponent(i)).getId());
-                }
+        model = new DefaultTableModel(data, header){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
-        });
+        };
+        table = new JTable(model);
+        table.setRowHeight(25);
+
+        filter("");
+
+        add(new JScrollPane(table));
     }
 
     public void filter(String keyword) {
-        Component item;
-        int endBound = residentList.size();
-        for (int i = 0; i < endBound; i++) {
-            item = residentViewport.getComponent(i);
-            if (residentList.get(i).getName().toLowerCase().contains(keyword.toLowerCase())) {
-                item.setVisible(true);
-            } else {
-                item.setVisible(false);
+        ArrayList<String[]> filteredData = new ArrayList<>();
+
+        for (Resident resident : residentList) {
+            if (resident.getName().toLowerCase().contains(keyword.toLowerCase())) {
+                filteredData.add(resident.toData());
             }
         }
+
+        model.setDataVector(filteredData.toArray(new String[0][0]), header);
     }
 
-    public ArrayList<Long> getSelections() {return selections;}
+    public ArrayList<Long> getSelections() {
+        ArrayList<Long> selections = new ArrayList<>();
+
+        for (int i : table.getSelectedRows()) {
+            selections.add(Long.parseLong(table.getValueAt(i, 0).toString()));
+        }
+
+        return selections;
+    }
 }

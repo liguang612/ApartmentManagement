@@ -1,4 +1,4 @@
-package View;
+package View.Page;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -32,6 +32,8 @@ public class ShowApartment extends JFrame {
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
+                prevFrame.revalidate();
+                prevFrame.repaint();
                 prevFrame.setEnabled(true);
             }
         });

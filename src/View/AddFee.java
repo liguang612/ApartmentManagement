@@ -84,8 +84,8 @@ public class AddFee {
         });
 
         Calendar calendar = Calendar.getInstance();
-        java.util.Date initialDate = calendar.getTime();
         java.util.Date starDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_MONTH, 1); java.util.Date initialDate = calendar.getTime();
         calendar.add(Calendar.YEAR, 10); java.util.Date endDate = calendar.getTime();
         dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.DATE));
         dateField.setEditor(new JSpinner.DateEditor(dateField, "dd/MM/yyyy"));
@@ -150,10 +150,9 @@ public class AddFee {
         String feeName = nameField.getText();
         int feeCost = Integer.parseInt(costField.getText());
         boolean feeMandatory = mandatoryField.isSelected() ? true : false;
-        int feeCycle = java.util.Arrays.asList(Constant.cycleType).indexOf(cycleField.getSelectedItem().toString());
+        // int feeCycle = java.util.Arrays.asList(Constant.cycleType).indexOf(cycleField.getSelectedItem().toString());
+        int feeCycle = cycleField.getSelectedIndex();
         String expirationDate = (new SimpleDateFormat("yyyy-MM-dd")).format(dateField.getValue());
-
-        System.out.println(expirationDate);
 
         FeeCtrl.addNewFee(feeName, feeCost, feeMandatory, feeCycle, expirationDate);
 

@@ -41,4 +41,9 @@ public class Fee {
             + (cycle == 0 ? expiration : cycle == 1 ? ("31/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear()) : ("hạn 31/12/" + LocalDate.now().getYear()))
             + ")";
     }
+
+    public Object[] toData() {
+        Object[] data = {String.valueOf(id), name, String.valueOf(cost), String.valueOf(expiration), mandatory};
+        return data;
+    }
 }

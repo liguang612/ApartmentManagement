@@ -54,4 +54,9 @@ public class Resident {
     public String toString() {
         return name + " (Tầng " + floor + ", phòng" + room + ", " + relationship + ")";
     }
+
+    public String[] toData() {
+        String[] data = {String.valueOf(id), name, gender ? "Nữ" : "Nam", String.valueOf(birthday), "0" + phoneNumber, ethnic, nationality, String.valueOf(floor), String.valueOf(room), relationship};
+        return data;
+    }
 }

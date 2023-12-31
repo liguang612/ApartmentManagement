@@ -53,14 +53,16 @@ public class DBQuery {
     public static boolean addPayment(Payment payment) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Payment VALUES(?, ?, ?, ?, ?, ?)");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement(
+                    "INSERT INTO Payment(apartmentId, feeId, payee, [number], timeValidate, [month], [year]) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
                 preparedStatement.setInt(1, payment.getFloor() * 100 + payment.getRoom());
                 preparedStatement.setInt(2, payment.getFeeId());
-                preparedStatement.setInt(3, payment.getQuantity());
-                preparedStatement.setDate(4, payment.getTimeValidate());
-                preparedStatement.setInt(5, payment.getMonth());
-                preparedStatement.setInt(6,payment.getYear());
+                preparedStatement.setString(3, payment.getPayee());
+                preparedStatement.setInt(4, payment.getQuantity());
+                preparedStatement.setDate(5, payment.getTimeValidate());
+                preparedStatement.setInt(6, payment.getMonth());
+                preparedStatement.setInt(7,payment.getYear());
 
                 preparedStatement.executeUpdate();
                 return true;
@@ -74,15 +76,17 @@ public class DBQuery {
     public static boolean addResident(Resident resident) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Resident VALUES(?, ?, ?, ?, ?, ?, ?, 1)");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Resident VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 preparedStatement.setLong(1, resident.getId());
                 preparedStatement.setString(2, resident.getName());
                 preparedStatement.setDate(3, resident.getBirthday());
-                preparedStatement.setInt(4, resident.getPhoneNumber());
-                preparedStatement.setString(5, resident.getNationality());
-                preparedStatement.setInt(6, resident.getFloor() * 100 + resident.getRoom());
-                preparedStatement.setString(7, resident.getRelationship());
+                preparedStatement.setBoolean(4, resident.getGender());
+                preparedStatement.setInt(5, resident.getPhoneNumber());
+                preparedStatement.setString(6, resident.getNationality());
+                preparedStatement.setString(7, resident.getEthnic());
+                preparedStatement.setInt(8, resident.getFloor() * 100 + resident.getRoom());
+                preparedStatement.setString(9, resident.getRelationship());
 
                 preparedStatement.executeUpdate();
                 return true;
@@ -203,7 +207,7 @@ public class DBQuery {
     public static boolean deleteResident(ArrayList<Long> selections) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET [status] = 0 WHERE id = ?");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("DELETE FROM Resident WHERE id = ?");
                 PreparedStatement preparedStatement2 = DBConnection.database.prepareStatement("UPDATE Apartment SET ownerId = null WHERE ownerId = ?");
 
                 for (Long i : selections) {
@@ -348,6 +352,25 @@ public class DBQuery {
         return null;
     }
 
+    public static Apartment getApartment(Integer id) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT Apartment.apartmentId, area, [name], phoneNumber FROM Apartment INNER JOIN Resident ON ownerId = id WHERE Apartment.apartmentId = ?");
+
+                preparedStatement.setInt(1, id);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    return new Apartment(resultSet.getInt(1), resultSet.getInt(1) / 100, resultSet.getInt(1) % 100, resultSet.getFloat(2), resultSet.getString(3), resultSet.getString(4));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
     public static ArrayList<Apartment> getApartmentList() {
         ArrayList<Apartment> apartmentList = new ArrayList<Apartment>();
 
@@ -484,25 +507,25 @@ public class DBQuery {
 
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT apartmentId, [number], timeValidate, [month], [year], [number] * cost AS paid FROM (SELECT * FROM Payment WHERE feeId = ?) AS Payment1 INNER JOIN Fee ON Payment1.feeId = Fee.id");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement(
+                    "SELECT paymentId, apartmentId, payee, timeValidate, [month], [year], [number], [number] * cost FROM Payment INNER JOIN Fee ON Payment.feeId = Fee.id AND Fee.id = ?");
                 
                 preparedStatement.setInt(1, feeId);
                 
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
-                    Payment payment = new Payment(
-                        resultSet.getInt(1) / 100,
-                        resultSet.getInt(1) % 100,
+                    payments.add(new Payment(
+                        resultSet.getInt(1),
+                        resultSet.getInt(2) / 100,
+                        resultSet.getInt(2) % 100,
                         feeId,
-                        resultSet.getInt(2),
-                        resultSet.getDate(3),
-                        resultSet.getInt(4),
-                        resultSet.getInt(5)
-                    );
-                    payment.setPaid(resultSet.getInt(6));
-
-                    payments.add(payment);
+                        resultSet.getString(3),
+                        resultSet.getInt(7),
+                        resultSet.getDate(4),
+                        resultSet.getInt(5),
+                        resultSet.getInt(6)
+                    ).setPaid(resultSet.getLong(8)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -545,7 +568,7 @@ public class DBQuery {
 
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE [status] = 1 ORDER BY apartmentId ASC, [name] ASC");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident ORDER BY apartmentId ASC, [name] ASC");
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {

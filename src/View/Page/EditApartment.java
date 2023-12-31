@@ -1,4 +1,4 @@
-package View;
+package View.Page;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,10 +26,12 @@ import javax.swing.SwingUtilities;
 
 import Controller.ApartmentCtrl;
 import Controller.ResidentCtrl;
+import Model.Apartment;
 import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
 import SQLServer.DBQuery;
+import View.Home;
 import View.Component.Display.ApartmentDisplay;
 
 public class EditApartment {
@@ -45,6 +47,8 @@ public class EditApartment {
     public EditApartment(JFrame prev, User user, Integer current) {
         this.prevFrame = prev;
         this.user = user;
+
+        Apartment apartment = ApartmentCtrl.getApartment(current);
 
         GridBagConstraints gbc = new GridBagConstraints();
         JLabel label = new JLabel("Thay đổi thông tin chủ căn hộ", JLabel.CENTER);
@@ -71,7 +75,9 @@ public class EditApartment {
         });
 
         floorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
+        floorField.setValue(apartment.getFloor());
         roomField = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
+        roomField.setValue(apartment.getRoom());
         frPanel.add(floorField);
         frPanel.add(new JLabel("     Phòng     "));
         frPanel.add(roomField);

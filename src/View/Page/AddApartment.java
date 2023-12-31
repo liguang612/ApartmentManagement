@@ -1,4 +1,4 @@
-package View;
+package View.Page;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,6 +29,7 @@ import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
 import SQLServer.DBQuery;
+import View.Home;
 import View.Component.Display.ApartmentDisplay;
 
 public class AddApartment {

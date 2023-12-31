@@ -15,6 +15,10 @@ public class ApartmentCtrl {
         return DBQuery.deleteApartment(selections);
     }
 
+    public static Apartment getApartment(Integer id) {
+        return DBQuery.getApartment(id);
+    }
+
     public static ArrayList<Apartment> getApartmentList() {
         return DBQuery.getApartmentList();
     }

@@ -29,5 +29,10 @@ public class Apartment {
     public void setRoom(int room) {this.room = room;}
     public void setArea(float area) {this.area = area;}
     public void setOwnerName(String ownerName) {this.ownerName = ownerName;}   
-    public void setOwnerPhone(String ownerPhone) {this.ownerPhone = ownerPhone;}    
+    public void setOwnerPhone(String ownerPhone) {this.ownerPhone = ownerPhone;}
+
+    public String[] toData() {
+        String[] data = {String.valueOf(floor), String.valueOf(room), ownerName, ownerPhone, String.valueOf(area)};
+        return data;
+    }
 }
