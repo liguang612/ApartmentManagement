@@ -23,7 +23,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -39,10 +38,13 @@ import View.Component.Display.ApartmentDisplay;
 import View.Component.Display.FeeDisplay;
 import View.Component.Display.ResidentDisplay;
 import View.Component.Object.Dialog;
-import View.Component.Object.SearchBox;
-import View.Page.AddApartment;
-import View.Page.EditApartment;
-import View.Page.ShowApartment;
+import View.Component.Object.TextField;
+import View.Page.Apartment.*;
+import View.Page.Fee.AddFee;
+import View.Page.Fee.EditFee;
+import View.Page.Payment.AddPayment;
+import View.Page.Payment.ShowPaymentList;
+import View.Page.Resident.*;
 
 public class Home extends JFrame {
     AccountDisplay accountDisplay;
@@ -60,24 +62,11 @@ public class Home extends JFrame {
     JPopupMenu changeStatusPopupMenu = new JPopupMenu();
     JScrollPane residentScroll = new JScrollPane();
     JTabbedPane functionTabbedPane = new JTabbedPane(), feeTabbedPane = new JTabbedPane(), residentTabbedPane = new JTabbedPane();
-    SearchBox apartmentSearchBox = new SearchBox(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm"),
-              feeSearchBox = new SearchBox(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm");
+    TextField apartmentSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm"),
+              feeSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm");
     User user;
 
     public Home(User user) {
-        try {
-            if(!System.getProperty("os.name").startsWith("Linux")) {
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
         this.user = user;
 
         UIManager.put("Button.font", Constant.buttonFont.deriveFont((float)13.0));
@@ -163,7 +152,7 @@ public class Home extends JFrame {
         exchange = new JButton("Chuyển hộ khẩu");
         exchange.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-
+                exchange();
             }
         });
         getInTemp = new JButton("Đăng ký tạm trú");
@@ -568,17 +557,22 @@ public class Home extends JFrame {
             setEnabled(false);
             new EditResident(this, user, selections.get(0));
         } else {
-            new Dialog(this, user, 0, "Chỉ được chọn 1 mục !");
+            new Dialog(this, user, 0, "Phải chọn 1 cư dân!");
         }
     }
-    private void exchange() {
-
-    }
+    private void exchange() {}
     private void getInTempStatus() {
-
+        setEnabled(false);
+        new GetInTemp(this, user);
     }
     private void getOutTempStatus() {
-
+        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        if (selections.size() == 1) {
+            setEnabled(false);
+            new GetOutTemp(this, user, selections.get(0));
+        } else {
+            new Dialog(this, user, 0, "Phải chọn 1 cư dân!");
+        }
     }
 
     private void changePassword() {

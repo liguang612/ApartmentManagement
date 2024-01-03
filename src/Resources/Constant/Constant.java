@@ -1,19 +1,22 @@
 package Resources.Constant;
 
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.SpinnerDateModel;
 
 public class Constant {
+    public static final String font = System.getProperty("user.dir") + "/src/Resources/Font/";
     public static final String image = System.getProperty("user.dir") + "/src/Resources/Image/";
     
     public static final String customFont = System.getProperty("user.dir") + "/src/Resources/Font";
     public static final Font buttonFont = new Font("Segoe UI", Font.PLAIN, 13);
     public static final Font contentFont = new Font("Segoe UI", Font.PLAIN, 14);
     public static final Font digitFont = new Font("Consolas", Font.PLAIN, 14);
-    public static final Font hintFont = new Font("Segoe UI", Font.ITALIC, 14);
+    public static final Font hintFont = new Font("Segoe UI", Font.PLAIN, 14);
     public static final Font notifyFont = new Font("Times New Roman", Font.PLAIN, 12);
     public static final Font titleFont = new Font("Segoe UI", Font.BOLD, 14);
 
@@ -33,5 +36,31 @@ public class Constant {
         Date starDate = calendar.getTime();
         calendar.add(Calendar.YEAR, 10); Date endDate = calendar.getTime();
         return new SpinnerDateModel(initialDate, starDate, endDate, Calendar.YEAR);
+    }
+
+    public static Font getHintFont(int style) {
+        try {
+            final Font contentFont2 = Font.createFont(Font.TRUETYPE_FONT, new File(font + "Montserrat.ttf"));
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(contentFont2);
+
+            return contentFont2;
+        } catch (Exception e) {
+            System.out.println("Error to get contentfont2\n");
+        }
+
+        return contentFont;
+    }
+
+    public static Font getTitleFont2(int style) {
+        try {
+            final Font titleFont2 = Font.createFont(Font.TRUETYPE_FONT, new File(font + "Poppins.ttf"));
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(titleFont2);
+
+            return titleFont2.deriveFont(style);
+        } catch (Exception e) {
+            System.out.println("Error to get titleFont2\n");
+        }
+
+        return titleFont;
     }
 }

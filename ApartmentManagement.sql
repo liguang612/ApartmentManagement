@@ -341,3 +341,5 @@ USE master
 GO
 DROP DATABASE ApartmentManagement
 GO
+
+BACKUP DATABASE ApartmentManagement TO DISK = 'C:\sqlbackup\QLBongDa_BuiAnhQuoc_20215634.bak'

@@ -1,4 +1,4 @@
-package View.Page;
+package View.Page.Apartment;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -1,4 +1,4 @@
-package View;
+package View.Page.Resident;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Date;
 import java.util.Calendar;
 
 import javax.swing.JButton;
@@ -27,37 +26,38 @@ import Controller.ResidentCtrl;
 import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
-import View.Component.Display.ResidentDisplay;
 
-public class AddResident {
+public class GetOutTemp {
     JButton cancelButton, verifyButton;
     JComboBox<String> countryField, ethnicField, genderField;
-    JFrame addResidentFrame, prevFrame;
+    JFrame editResidentFrame, prevFrame;
     JLabel notifyLabel;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
     JSpinner dateField, floorField, roomField;
     JTextField idField, nameField, phoneField, relationshipField;
+    Long oldId;
     User user;
 
-    public AddResident(JFrame prev, User user) {
+    public GetOutTemp(JFrame prev, User user, Long currentId) {
         this.prevFrame = prev;
         this.user = user;
 
         GridBagConstraints gbc = new GridBagConstraints();
-        JLabel label = new JLabel("Chào mừng cư dân mới tới BlueMoon", JLabel.CENTER);
+        JLabel label = new JLabel("Sửa thông tin cư dân", JLabel.CENTER);
         JPanel frPanel = new JPanel(new GridLayout(1, 3));
+        Resident current = ResidentCtrl.getResident(currentId);
 
-        addResidentFrame = new JFrame("Thêm cư dân mới");
-        addResidentFrame.addWindowListener(new WindowAdapter() {
+        editResidentFrame = new JFrame("Sửa thông tin cư dân");
+        editResidentFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
                 prevFrame.toFront();
             }
         });
-        addResidentFrame.setBackground(Color.WHITE);
-        addResidentFrame.setLayout(new BorderLayout());
-        addResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        addResidentFrame.setSize(1000, 400);
+        editResidentFrame.setBackground(Color.WHITE);
+        editResidentFrame.setLayout(new BorderLayout());
+        editResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
+        editResidentFrame.setSize(1000, 400);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -69,6 +69,7 @@ public class AddResident {
 
         countryField = new JComboBox<String>(Constant.country);
         countryField.setBackground(Color.WHITE);
+        countryField.setSelectedItem(current.getNationality());
 
         Calendar calendar = Calendar.getInstance();
         java.util.Date initialDate = calendar.getTime();
@@ -76,23 +77,30 @@ public class AddResident {
         calendar.add(Calendar.YEAR, 100); java.util.Date endDate = calendar.getTime();
         dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.DAY_OF_MONTH));
         dateField.setEditor(new JSpinner.DateEditor(dateField, "dd/MM/yyyy"));
+        dateField.setValue(current.getBirthday());
 
         ethnicField = new JComboBox<String>(Constant.ethnic);
         ethnicField.setBackground(Color.WHITE);
+        ethnicField.setSelectedItem(current.getEthnic());
 
         floorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
+        floorField.setValue(current.getFloor());
         roomField = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
+        roomField.setValue(current.getRoom());
         frPanel.add(floorField);
         frPanel.add(new JLabel("     Phòng     "));
         frPanel.add(roomField);
 
         genderField = new JComboBox<String>(Constant.gender);
         genderField.setBackground(Color.WHITE);
+        genderField.setSelectedIndex(current.getGender() ? 1 : 0);
 
         idField = new JTextField();
         idField.setFont(Constant.digitFont);
+        idField.setText(current.getId() + "");
         
         nameField = new JTextField();
+        nameField.setText(current.getName());
 
         notifyLabel = new JLabel("", JLabel.LEFT);
         notifyLabel.setFont(Constant.notifyFont);
@@ -100,14 +108,16 @@ public class AddResident {
 
         phoneField = new JTextField();
         phoneField.setFont(Constant.digitFont);
+        phoneField.setText("0" + current.getPhoneNumber());
 
         relationshipField = new JTextField();
+        relationshipField.setText(current.getRelationship());
 
         verifyButton = new JButton("Thêm");
         verifyButton.setFont(Constant.buttonFont);
         verifyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                verify();
+                // verify(current, currentId);
             }
         });
 
@@ -150,61 +160,15 @@ public class AddResident {
 
         label.setFont(Constant.titleFont.deriveFont((float)18.0));
 
-        addResidentFrame.add(label, BorderLayout.NORTH);
-        addResidentFrame.add(contentPanel, BorderLayout.CENTER);
-        addResidentFrame.add(functionPanel, BorderLayout.SOUTH);
+        editResidentFrame.add(label, BorderLayout.NORTH);
+        editResidentFrame.add(contentPanel, BorderLayout.CENTER);
+        editResidentFrame.add(functionPanel, BorderLayout.SOUTH);
 
-        addResidentFrame.setVisible(true);
+        editResidentFrame.setVisible(true);
     }
 
     private void cancel() {
-        addResidentFrame.setVisible(false);
-        prevFrame.setEnabled(true);
-        prevFrame.toFront();
-    }
-    private void verify() {
-        if (idField.getText().isEmpty()) {
-            notifyLabel.setText("Căn cước công dân / Chứng minh nhân dân không thể bỏ trống!");
-            return ;
-        }
-        if (nameField.getText().isEmpty()) {
-            notifyLabel.setText("Tên không được bỏ trống");
-            return ;
-        }
-        if (phoneField.getText().length() != 10 && phoneField.getText().length() != 0) {
-            notifyLabel.setText("Số điện thoại phải có 10 chữ số (hoặc không nhập gì nếu không có số điện thoại)");
-            return ;
-        }
-
-        try {
-            if (ResidentCtrl.existsPhoneNumber(Integer.parseInt(phoneField.getText()))) {
-                notifyLabel.setText("Số điện thoại đã tồn tại");
-                return;
-            }
-            if (ResidentCtrl.existsResident(Long.parseLong(idField.getText()))) {
-                notifyLabel.setText("Số căn cước công dân này đã tồn tại");
-                return;
-            }
-
-            ResidentCtrl.addResident(new Resident(
-                Long.parseLong(idField.getText()),
-                nameField.getText(),
-                new Date(((java.util.Date)dateField.getValue()).getTime()),
-                genderField.getSelectedIndex() == 1,
-                Integer.parseInt(phoneField.getText()),
-                countryField.getSelectedItem().toString(),
-                ethnicField.getSelectedItem().toString(),
-                (Integer)floorField.getValue(), 
-                (Integer)roomField.getValue(),
-                relationshipField.getText()));
-        } catch (NumberFormatException e) {
-            notifyLabel.setText("Số căn cước công dân / chứng minh nhân dân, số điện thoại phải là các số");
-            return;
-        }
-
-        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay(user));
-
-        addResidentFrame.setVisible(false);
+        editResidentFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }

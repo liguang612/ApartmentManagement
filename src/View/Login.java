@@ -2,21 +2,21 @@ package View;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -24,20 +24,23 @@ import Controller.AuthCtrl;
 import Model.User;
 import Resources.Constant.Constant;
 import Resources.Constant.Tool;
+import View.Component.Object.Button;
+import View.Component.Object.PasswordField;
+import View.Component.Object.RoundedPanel;
+import View.Component.Object.TextField;
 
 public class Login {
     GridBagConstraints gbc;
     GridBagLayout gb;
-    JButton button1, button2;
     JFrame loginFrame;
-    JLabel label1, label2, label3, label4;
-    JPanel panel1, panel2, panel3;
-    JTextField username;
-    JPasswordField password;
+    JLabel notifyLabel;
+    JPanel backgroundPanel;
+    TextField username;
+    PasswordField password;
 
     public Login() {
         try {
-            if(!System.getProperty("os.name").startsWith("Linux")) {
+            if (!System.getProperty("os.name").startsWith("Linux")) {
                 UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             }
         } catch (ClassNotFoundException e) {
@@ -54,86 +57,91 @@ public class Login {
         UIManager.put("PasswordField.font", Constant.contentFont.deriveFont((float)12.0));
         UIManager.put("TextField.font", Constant.contentFont.deriveFont((float)12.0));
 
+        Button button;
+        JLabel label1, label2;
+        JPanel rightPanel = new JPanel(new BorderLayout(80, 80));
+        RoundedPanel authPanel = new RoundedPanel(16);        
+        authPanel.setBackground(Color.WHITE);
+        authPanel.setBorder(BorderFactory.createEmptyBorder(0, 32, 0, 32));
+        authPanel.setLayout(new BoxLayout(authPanel, BoxLayout.Y_AXIS));
+        authPanel.setShadow(15, 15, 0);
+
         gb = new GridBagLayout();
         gbc = new GridBagConstraints();
 
         loginFrame = new JFrame("Đăng nhập");
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginFrame.setLayout(gb);
-        loginFrame.setSize(600, 400);
+        loginFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        loginFrame.setSize(1920, 1024);
+        loginFrame.setLayout(new GridLayout(1, 2));
+        int height = loginFrame.getHeight();
 
-        button1 = new JButton("Hủy");
-        button1.setBackground(Color.WHITE);
-        button1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                cancel();
-            }
-        });
-
-        button2 = new JButton("Xác nhận");
-        button2.setBackground(Color.WHITE);
-        button2.addActionListener(new ActionListener() {
+        button = new Button("Đăng nhập");
+        button.setBackground(new Color(99, 88, 220));
+        button.setContentAreaFilled(true);
+        button.setFont(Constant.getTitleFont2(Font.BOLD).deriveFont((float)16.0));
+        button.setForeground(Color.WHITE);
+        button.setPreferredSize(new Dimension(1000, 50));
+        button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 verify();
             }
         });
 
-        label1 = new JLabel(Tool.resize(new ImageIcon(System.getProperty("user.dir") + "/src/Resources/Image/avatar.png"), 125, 138) );
+        label1 = new JLabel("Welcome to");
+        label1.setFont(Constant.getTitleFont2(Font.PLAIN).deriveFont((float)32));
 
-        label2 = new JLabel("Đăng nhập");
-        label2.setFont(Constant.titleFont.deriveFont((float)18.0));
+        label2 = new JLabel("BlueMoon");
+        label2.setFont(Constant.getTitleFont2(Font.BOLD).deriveFont((float)50));
+        label2.setForeground(new Color(99, 88, 220));
 
-        label3 = new JLabel("Tài khoản");
-        label4 = new JLabel("Mật khẩu");
+        notifyLabel = new JLabel("     ");
+        notifyLabel.setForeground(Color.RED);
 
-        username = new JTextField();
-        username.setSize(400, 50);
+        username = new TextField("Tài khoản");
+        username.setBackground(new Color(236, 236, 236));
+        username.setFont(Constant.contentFont.deriveFont((float)16));
 
-        password = new JPasswordField();
-        password.setSize(400, 50);
+        password = new PasswordField("Mật khẩu");
+        password.setBackground(new Color(236, 236, 236));
+        password.setFont(Constant.contentFont.deriveFont((float)16));
 
-        panel1 = new JPanel(new BorderLayout(10, 0));
-        panel1.add(label3, BorderLayout.WEST);
-        panel1.add(username, BorderLayout.CENTER);
+        authPanel.add(Box.createVerticalStrut(height * 140 / 1024));
+        authPanel.add(label1);
+        authPanel.add(label2);
+        authPanel.add(Box.createVerticalStrut(height * 116 / 1024));
+        authPanel.add(username);
+        authPanel.add(Box.createVerticalStrut(height * 31 / 1024));
+        authPanel.add(password);
+        authPanel.add(Box.createVerticalStrut(height * 31 / 1024));
+        authPanel.add(notifyLabel);
+        authPanel.add(Box.createVerticalStrut(height * 10 / 1024));
+        authPanel.add(button);
+        authPanel.add(Box.createVerticalStrut(height * 300 / 1024));
 
-        panel2 = new JPanel(new BorderLayout(10, 0));
-        panel2.add(label4, BorderLayout.WEST);
-        panel2.add(password, BorderLayout.CENTER);
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(37, 80, 37, 80));
+        rightPanel.add(authPanel, BorderLayout.CENTER);
 
-        panel3 = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        panel3.add(button1);
-        panel3.add(button2);
+        backgroundPanel = new JPanel(new GridLayout(1, 1, loginFrame.getHeight() / 4, loginFrame.getHeight() / 4));
+        
+        backgroundPanel.add(new JLabel(Tool.resize(new ImageIcon(Constant.image + "loginBackground.png"), loginFrame.getHeight() * 3 / 5, loginFrame.getHeight() * 3 / 5)));
 
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 150; loginFrame.add(label1, gbc);
-        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1; gbc.weighty = 50; loginFrame.add(label2, gbc);
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 1; gbc.weighty = 50; loginFrame.add(panel1, gbc);
-        gbc.gridx = 0; gbc.gridy = 3; gbc.weightx = 1; gbc.weighty = 50; loginFrame.add(panel2, gbc);
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 1; gbc.weighty = 100; loginFrame.add(panel3, gbc);
+        loginFrame.add(backgroundPanel);
+        loginFrame.add(rightPanel);
 
         loginFrame.setVisible(true);
     }
 
-    public void cancel() {
-        System.exit(0);
-    }
-
     public void verify() {
+        if (password.getPassword().toString().isEmpty() || username.getText().isEmpty()) {
+            notifyLabel.setText("Tài khoản và mật khẩu không được để trống");
+            return;
+        }
+
         User myUser = AuthCtrl.Login(username.getText(), new String(password.getPassword()));
         
         if (myUser == null) {
-            JFrame frame = new JFrame("Thông báo");
-            JLabel label = new JLabel("Đăng nhập thất bại");
-
-            label.setFont(label.getFont().deriveFont(Font.BOLD, (float)18.0));
-
-            frame.add(label);
-            frame.setLocationRelativeTo(loginFrame);
-            frame.setSize(200, 100);
-            frame.setVisible(true);
+            notifyLabel.setText("Sai tài khoản hoặc mật khẩu");
         } else {
             loginFrame.setVisible(false);
             new Home(myUser);

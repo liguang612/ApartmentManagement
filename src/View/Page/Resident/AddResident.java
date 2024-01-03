@@ -1,4 +1,4 @@
-package View;
+package View.Page.Resident;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,39 +27,38 @@ import Controller.ResidentCtrl;
 import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
+import View.Home;
 import View.Component.Display.ResidentDisplay;
 
-public class EditResident {
+public class AddResident {
     JButton cancelButton, verifyButton;
     JComboBox<String> countryField, ethnicField, genderField;
-    JFrame editResidentFrame, prevFrame;
+    JFrame addResidentFrame, prevFrame;
     JLabel notifyLabel;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
     JSpinner dateField, floorField, roomField;
     JTextField idField, nameField, phoneField, relationshipField;
-    Long oldId;
     User user;
 
-    public EditResident(JFrame prev, User user, Long currentId) {
+    public AddResident(JFrame prev, User user) {
         this.prevFrame = prev;
         this.user = user;
 
         GridBagConstraints gbc = new GridBagConstraints();
-        JLabel label = new JLabel("Sửa thông tin cư dân", JLabel.CENTER);
+        JLabel label = new JLabel("Chào mừng cư dân mới tới BlueMoon", JLabel.CENTER);
         JPanel frPanel = new JPanel(new GridLayout(1, 3));
-        Resident current = ResidentCtrl.getResident(currentId);
 
-        editResidentFrame = new JFrame("Sửa thông tin cư dân");
-        editResidentFrame.addWindowListener(new WindowAdapter() {
+        addResidentFrame = new JFrame("Thêm cư dân mới");
+        addResidentFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
                 prevFrame.toFront();
             }
         });
-        editResidentFrame.setBackground(Color.WHITE);
-        editResidentFrame.setLayout(new BorderLayout());
-        editResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        editResidentFrame.setSize(1000, 400);
+        addResidentFrame.setBackground(Color.WHITE);
+        addResidentFrame.setLayout(new BorderLayout());
+        addResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
+        addResidentFrame.setSize(1000, 400);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -71,7 +70,6 @@ public class EditResident {
 
         countryField = new JComboBox<String>(Constant.country);
         countryField.setBackground(Color.WHITE);
-        countryField.setSelectedItem(current.getNationality());
 
         Calendar calendar = Calendar.getInstance();
         java.util.Date initialDate = calendar.getTime();
@@ -79,30 +77,23 @@ public class EditResident {
         calendar.add(Calendar.YEAR, 100); java.util.Date endDate = calendar.getTime();
         dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.DAY_OF_MONTH));
         dateField.setEditor(new JSpinner.DateEditor(dateField, "dd/MM/yyyy"));
-        dateField.setValue(current.getBirthday());
 
         ethnicField = new JComboBox<String>(Constant.ethnic);
         ethnicField.setBackground(Color.WHITE);
-        ethnicField.setSelectedItem(current.getEthnic());
 
         floorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
-        floorField.setValue(current.getFloor());
         roomField = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
-        roomField.setValue(current.getRoom());
         frPanel.add(floorField);
         frPanel.add(new JLabel("     Phòng     "));
         frPanel.add(roomField);
 
         genderField = new JComboBox<String>(Constant.gender);
         genderField.setBackground(Color.WHITE);
-        genderField.setSelectedIndex(current.getGender() ? 1 : 0);
 
         idField = new JTextField();
         idField.setFont(Constant.digitFont);
-        idField.setText(current.getId() + "");
         
         nameField = new JTextField();
-        nameField.setText(current.getName());
 
         notifyLabel = new JLabel("", JLabel.LEFT);
         notifyLabel.setFont(Constant.notifyFont);
@@ -110,16 +101,14 @@ public class EditResident {
 
         phoneField = new JTextField();
         phoneField.setFont(Constant.digitFont);
-        phoneField.setText("0" + current.getPhoneNumber());
 
         relationshipField = new JTextField();
-        relationshipField.setText(current.getRelationship());
 
         verifyButton = new JButton("Thêm");
         verifyButton.setFont(Constant.buttonFont);
         verifyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                verify(current, currentId);
+                verify();
             }
         });
 
@@ -162,20 +151,19 @@ public class EditResident {
 
         label.setFont(Constant.titleFont.deriveFont((float)18.0));
 
-        editResidentFrame.add(label, BorderLayout.NORTH);
-        editResidentFrame.add(contentPanel, BorderLayout.CENTER);
-        editResidentFrame.add(functionPanel, BorderLayout.SOUTH);
+        addResidentFrame.add(label, BorderLayout.NORTH);
+        addResidentFrame.add(contentPanel, BorderLayout.CENTER);
+        addResidentFrame.add(functionPanel, BorderLayout.SOUTH);
 
-        editResidentFrame.setVisible(true);
+        addResidentFrame.setVisible(true);
     }
 
     private void cancel() {
-        editResidentFrame.setVisible(false);
+        addResidentFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }
-
-    private void verify(Resident current, Long currentId) {
+    private void verify() {
         if (idField.getText().isEmpty()) {
             notifyLabel.setText("Căn cước công dân / Chứng minh nhân dân không thể bỏ trống!");
             return ;
@@ -184,24 +172,22 @@ public class EditResident {
             notifyLabel.setText("Tên không được bỏ trống");
             return ;
         }
-        if (phoneField.getText().length() != 10) {
-            notifyLabel.setText("Số điện thoại phải có 10 chữ số");
+        if (phoneField.getText().length() != 10 && phoneField.getText().length() != 0) {
+            notifyLabel.setText("Số điện thoại phải có 10 chữ số (hoặc không nhập gì nếu không có số điện thoại)");
             return ;
         }
 
         try {
-            Integer phoneNumber = Integer.parseInt(phoneField.getText());
-            if (current.getPhoneNumber() != phoneNumber && ResidentCtrl.existsPhoneNumber(phoneNumber)) {
+            if (ResidentCtrl.existsPhoneNumber(Integer.parseInt(phoneField.getText()))) {
                 notifyLabel.setText("Số điện thoại đã tồn tại");
                 return;
             }
-            Long id = Long.parseLong(idField.getText());
-            if (current.getId() != id && ResidentCtrl.existsResident(id)) {
+            if (ResidentCtrl.existsResident(Long.parseLong(idField.getText()))) {
                 notifyLabel.setText("Số căn cước công dân này đã tồn tại");
                 return;
             }
 
-            ResidentCtrl.editResident(new Resident(
+            ResidentCtrl.addResident(new Resident(
                 Long.parseLong(idField.getText()),
                 nameField.getText(),
                 new Date(((java.util.Date)dateField.getValue()).getTime()),
@@ -211,7 +197,7 @@ public class EditResident {
                 ethnicField.getSelectedItem().toString(),
                 (Integer)floorField.getValue(), 
                 (Integer)roomField.getValue(),
-                relationshipField.getText()), currentId);
+                relationshipField.getText()));
         } catch (NumberFormatException e) {
             notifyLabel.setText("Số căn cước công dân / chứng minh nhân dân, số điện thoại phải là các số");
             return;
@@ -219,7 +205,7 @@ public class EditResident {
 
         ((Home)prevFrame).setResidentDisplay(new ResidentDisplay(user));
 
-        editResidentFrame.setVisible(false);
+        addResidentFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }

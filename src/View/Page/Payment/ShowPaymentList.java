@@ -1,4 +1,4 @@
-package View;
+package View.Page.Payment;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,14 +24,14 @@ import Controller.FeeCtrl;
 import Model.Fee;
 import Model.Payment;
 import Resources.Constant.Constant;
-import View.Component.Object.SearchBox;
+import View.Component.Object.TextField;
 
 public class ShowPaymentList extends JFrame {
     ArrayList<Payment> payments;
     DefaultTableModel model;
     Fee fee;
     JTable table;
-    SearchBox paymentSearchBox = new SearchBox(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm");
+    TextField paymentSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm");
     String[] header = {"Tầng", "Phòng", "Người nộp", "Ngày nộp", "Định kỳ", "Số lượng\n(m2, người, ...)", "Đã nộp"};
     String[][] data;
 

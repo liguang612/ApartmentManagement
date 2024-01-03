@@ -1,4 +1,4 @@
-package View;
+package View.Page.Fee;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,6 +28,7 @@ import javax.swing.SpinnerDateModel;
 import Controller.FeeCtrl;
 import Model.User;
 import Resources.Constant.Constant;
+import View.Home;
 import View.Component.Display.FeeDisplay;
 
 public class AddFee {

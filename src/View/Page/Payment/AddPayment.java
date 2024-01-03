@@ -1,4 +1,4 @@
-package View;
+package View.Page.Payment;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
