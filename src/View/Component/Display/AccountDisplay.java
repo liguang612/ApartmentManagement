@@ -86,7 +86,7 @@ public class AccountDisplay extends JPanel {
         editPanel.add(cancelButton);
         editPanel.add(verifyButton);
 
-        label.setFont(new Font("Verdana", Font.BOLD, 26));
+        label.setFont(Constant.getTitleFont2(Font.BOLD).deriveFont((float)32));
         label.setForeground(Color.BLUE);
 
         panel.setBackground(Color.WHITE);        

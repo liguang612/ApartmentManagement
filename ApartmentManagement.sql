@@ -38,7 +38,8 @@ CREATE TABLE Resident (
     nationality NVARCHAR(50),
     ethnic NVARCHAR(50),
     apartmentId INT,
-    relationship NVARCHAR(50)
+    relationship NVARCHAR(50),
+    [status] INT
 )
 ALTER TABLE Resident ADD CONSTRAINT pk_Resident PRIMARY KEY (id)
 ALTER TABLE Resident ADD CONSTRAINT fk_Resident_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)
@@ -46,12 +47,6 @@ ALTER TABLE Resident ADD CONSTRAINT fk_Resident_Apartment FOREIGN KEY (apartment
 CREATE TABLE Activity (
     id NUMERIC IDENTITY(1, 1) NOT NULL,
     residentId BIGINT,
-    [name] NVARCHAR(50),
-    birthday DATE,
-    gender BIT,
-    phoneNumber INT,
-    nationality NVARCHAR(50),
-    ethnic NVARCHAR(50),
     [status] INT, -- Thường trú: 0, tạm trú: 1, tạm vắng: 2, cút: 3
     timeIn DATE,
     [timeOut] DATE,
@@ -278,8 +273,6 @@ INSERT INTO Activity(residentId, [status], timeIn, [timeOut], note) VALUES
 (2312000118, 1, '10-01-2023', NULL, NULL),
 (2312000119, 1, '10-01-2023', NULL, NULL)
 
-DROP TABLE Payment
-
 INSERT INTO Payment(apartmentId, feeId, [number], timeValidate) VALUES
 (601, 01, 1, '10-30-2023'),
 (601, 02, 1, '10-30-2023'),
@@ -342,4 +335,4 @@ GO
 DROP DATABASE ApartmentManagement
 GO
 
-BACKUP DATABASE ApartmentManagement TO DISK = 'C:\sqlbackup\QLBongDa_BuiAnhQuoc_20215634.bak'
+BACKUP DATABASE ApartmentManagement TO DISK = 'C:\sqlbackup\ApartmentManagement.bak'

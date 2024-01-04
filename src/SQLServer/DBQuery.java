@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+import Model.Activity;
 import Model.Apartment;
 import Model.Fee;
 import Model.Payment;
@@ -15,6 +16,26 @@ import Model.User;
 import Resources.Constant.Constant;
 import Resources.Constant.Tool;
 public class DBQuery {
+    public static boolean addActivity(Activity activity) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Activity VALUES (?, ?, ?, ?, ?)");
+                
+                preparedStatement.setLong(1, activity.getResidentId());
+                preparedStatement.setInt(2, activity.getStatus());
+                preparedStatement.setDate(3, activity.getTimeIn());
+                preparedStatement.setDate(4, activity.getTimeOut());
+                preparedStatement.setString(5, activity.getNote());
+
+                preparedStatement.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
+    }
     public static boolean addNewApartment(int apartmentId, long ownerId) {
         if (DBConnection.database != null) {
             try {
@@ -76,19 +97,34 @@ public class DBQuery {
     public static boolean addResident(Resident resident) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Resident VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement preparedStatement;
+                if (getResident(resident.getId()) != null) {
+                    preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET name = ?, birthday = ?, gender = ?, phoneNumber = ?, nationality = ?, ethnic = ?, apartmentId = ?, relationship = ?, [status] = 0 WHERE id = ?");
 
-                preparedStatement.setLong(1, resident.getId());
-                preparedStatement.setString(2, resident.getName());
-                preparedStatement.setDate(3, resident.getBirthday());
-                preparedStatement.setBoolean(4, resident.getGender());
-                preparedStatement.setInt(5, resident.getPhoneNumber());
-                preparedStatement.setString(6, resident.getNationality());
-                preparedStatement.setString(7, resident.getEthnic());
-                preparedStatement.setInt(8, resident.getFloor() * 100 + resident.getRoom());
-                preparedStatement.setString(9, resident.getRelationship());
+                    preparedStatement.setString(1, resident.getName());
+                    preparedStatement.setDate(2, resident.getBirthday());
+                    preparedStatement.setBoolean(3, resident.getGender());
+                    preparedStatement.setInt(4, resident.getPhoneNumber());
+                    preparedStatement.setString(5, resident.getNationality());
+                    preparedStatement.setString(6, resident.getEthnic());
+                    preparedStatement.setInt(7, resident.getFloor() * 100 + resident.getRoom());
+                    preparedStatement.setString(8, resident.getRelationship());
+                    preparedStatement.setLong(9, resident.getId());
+                } else {
+                    preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Resident VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, 0)");
 
+                    preparedStatement.setLong(1, resident.getId());
+                    preparedStatement.setString(2, resident.getName());
+                    preparedStatement.setDate(3, resident.getBirthday());
+                    preparedStatement.setBoolean(4, resident.getGender());
+                    preparedStatement.setInt(5, resident.getPhoneNumber());
+                    preparedStatement.setString(6, resident.getNationality());
+                    preparedStatement.setString(7, resident.getEthnic());
+                    preparedStatement.setInt(8, resident.getFloor() * 100 + resident.getRoom());
+                    preparedStatement.setString(9, resident.getRelationship());
+                }
                 preparedStatement.executeUpdate();
+
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -207,7 +243,7 @@ public class DBQuery {
     public static boolean deleteResident(ArrayList<Long> selections) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("DELETE FROM Resident WHERE id = ?");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET [status] = 3 WHERE id = ?");
                 PreparedStatement preparedStatement2 = DBConnection.database.prepareStatement("UPDATE Apartment SET ownerId = null WHERE ownerId = ?");
 
                 for (Long i : selections) {
@@ -293,7 +329,7 @@ public class DBQuery {
     public static boolean existsResident(long residentId) {
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE id = ?");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE id = ? AND [status] != 3");
 
                 preparedStatement.setLong(1, residentId);
 
@@ -440,39 +476,33 @@ public class DBQuery {
         }
         return feeList;
     }
-
-    public static ArrayList<Resident> getMembers(int id) {
-        ArrayList<Resident> members = new ArrayList<Resident>();
+    public static ArrayList<Activity> getHistory(Long residentId) {
+        ArrayList<Activity> activities = new ArrayList<Activity>();
 
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE apartmentId = ?");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Activity WHERE residentId = ? ORDER BY id ASC");
 
-                preparedStatement.setInt(1, id);
+                preparedStatement.setLong(1, residentId);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
-                    members.add(new Resident(
-                        resultSet.getLong(1),
-                        resultSet.getString(2),
-                        resultSet.getDate(3),
-                        resultSet.getBoolean(4),
-                        resultSet.getInt(5),
-                        resultSet.getString(6),
-                        resultSet.getString(7),
-                        resultSet.getInt(8) / 100,
-                        resultSet.getInt(8) % 100,
-                        resultSet.getString(9)));
+                    activities.add(new Activity(
+                        resultSet.getInt(1),
+                        residentId,
+                        resultSet.getInt(3),
+                        resultSet.getDate(4),
+                        resultSet.getDate(5),
+                        resultSet.getString(6)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        return members;
+        return activities;
     }
-
     public static Resident getOwner(int floor, int room) {
         if (DBConnection.database != null) {
             try {
@@ -493,7 +523,8 @@ public class DBQuery {
                         resultSet.getString(7),
                         resultSet.getInt(8) / 100,
                         resultSet.getInt(8) % 100,
-                        resultSet.getString(9));
+                        resultSet.getString(9),
+                        resultSet.getInt(10));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -555,7 +586,8 @@ public class DBQuery {
                         resultSet.getString(7),
                         resultSet.getInt(8) / 100,
                         resultSet.getInt(8) % 100,
-                        resultSet.getString(9));
+                        resultSet.getString(9),
+                        resultSet.getInt(10));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -568,7 +600,7 @@ public class DBQuery {
 
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident ORDER BY apartmentId ASC, [name] ASC");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE [status] != 3 ORDER BY apartmentId ASC, [name] ASC");
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
@@ -582,7 +614,8 @@ public class DBQuery {
                         resultSet.getString(7),
                         resultSet.getInt(8) / 100,
                         resultSet.getInt(8) % 100,
-                        resultSet.getString(9)));
+                        resultSet.getString(9),
+                        resultSet.getInt(10)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -596,7 +629,7 @@ public class DBQuery {
 
         if (DBConnection.database != null) {
             try {
-                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE apartmentId = ?");
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Resident WHERE apartmentId = ? AND status != 3");
 
                 preparedStatement.setInt(1, floor * 100 + room);
 
@@ -613,7 +646,8 @@ public class DBQuery {
                         resultSet.getString(7),
                         resultSet.getInt(8) / 100,
                         resultSet.getInt(8) % 100,
-                        resultSet.getString(9)));
+                        resultSet.getString(9),
+                        resultSet.getInt(10)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

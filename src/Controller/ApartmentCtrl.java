@@ -24,7 +24,7 @@ public class ApartmentCtrl {
     }
 
     public static ArrayList<Resident> getMembers(int id) {
-        return DBQuery.getMembers(id);
+        return DBQuery.getResidentList(id / 100, id % 100);
     }
 
     public static Resident getOwner(int floor, int room) {

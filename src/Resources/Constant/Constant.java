@@ -53,10 +53,10 @@ public class Constant {
 
     public static Font getTitleFont2(int style) {
         try {
-            final Font titleFont2 = Font.createFont(Font.TRUETYPE_FONT, new File(font + "Poppins.ttf"));
+            final Font titleFont2 = Font.createFont(Font.TRUETYPE_FONT, new File(font + (style == Font.BOLD ? "PoppinsBold.ttf" : "Poppins.ttf")));
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(titleFont2);
 
-            return titleFont2.deriveFont(style);
+            return titleFont2;
         } catch (Exception e) {
             System.out.println("Error to get titleFont2\n");
         }

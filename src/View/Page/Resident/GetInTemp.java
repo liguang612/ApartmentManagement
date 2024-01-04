@@ -18,12 +18,15 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 
 import Controller.ResidentCtrl;
+import Model.Activity;
 import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
@@ -37,6 +40,7 @@ public class GetInTemp {
     JLabel notifyLabel;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
     JSpinner dateField, floorField, roomField;
+    JTextArea reason;
     JTextField idField, nameField, phoneField, relationshipField;
     User user;
 
@@ -57,8 +61,8 @@ public class GetInTemp {
         });
         addResidentFrame.setBackground(Color.WHITE);
         addResidentFrame.setLayout(new BorderLayout());
-        addResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        addResidentFrame.setSize(1000, 400);
+        addResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 300, prevFrame.getY() + prevFrame.getHeight() / 2 - 350);
+        addResidentFrame.setSize(800, 700);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -104,6 +108,9 @@ public class GetInTemp {
 
         relationshipField = new JTextField();
 
+        reason = new JTextArea();
+        reason.setRows(5);
+
         verifyButton = new JButton("Thêm");
         verifyButton.setFont(Constant.buttonFont);
         verifyButton.addActionListener(new ActionListener() {
@@ -124,7 +131,9 @@ public class GetInTemp {
         gbc.gridy = 6; contentPanel.add(new JLabel("Dân tộc", JLabel.RIGHT), gbc);
         gbc.gridy = 7; contentPanel.add(new JLabel("Tầng", JLabel.RIGHT), gbc);
         gbc.gridy = 8; contentPanel.add(new JLabel("Mối quan hệ với chủ hộ", JLabel.RIGHT), gbc);
-        gbc.gridx = 1; gbc.weightx = 5; gbc.weighty = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.gridy = 9; contentPanel.add(new JLabel("Lý do", JLabel.RIGHT), gbc);
+        gbc.gridx = 1; gbc.weightx = 5; gbc.weighty = 1; gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy = 0; contentPanel.add(idField, gbc);
         gbc.gridy = 1; contentPanel.add(nameField, gbc);
         gbc.gridy = 2; contentPanel.add(phoneField, gbc);
@@ -136,7 +145,10 @@ public class GetInTemp {
         gbc.gridy = 7; contentPanel.add(frPanel, gbc);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy = 8; contentPanel.add(relationshipField, gbc);
-        gbc.gridy = 9; contentPanel.add(notifyLabel, gbc);
+        // gbc.anchor = GridBagConstraints.NORTH; gbc.weighty = 3;
+        gbc.gridy = 9; contentPanel.add(new JScrollPane(reason), gbc);
+        gbc.weighty = 1;
+        gbc.gridy = 10; contentPanel.add(notifyLabel, gbc);
 
         functionPanel.setLayout(new GridLayout(2, 5));
         functionPanel.add(new JLabel());
@@ -195,9 +207,16 @@ public class GetInTemp {
                 Integer.parseInt(phoneField.getText()),
                 countryField.getSelectedItem().toString(),
                 ethnicField.getSelectedItem().toString(),
-                (Integer)floorField.getValue(), 
+                (Integer)floorField.getValue(),
                 (Integer)roomField.getValue(),
-                relationshipField.getText()));
+                relationshipField.getText(),
+                1));
+            ResidentCtrl.addActivity(new Activity(
+                Long.parseLong(idField.getText()),
+                1,
+                new Date(System.currentTimeMillis()),
+                null,
+                reason.getText()));
         } catch (NumberFormatException e) {
             notifyLabel.setText("Số căn cước công dân / chứng minh nhân dân, số điện thoại phải là các số");
             return;

@@ -24,6 +24,7 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 
 import Controller.ResidentCtrl;
+import Model.Activity;
 import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
@@ -187,7 +188,7 @@ public class AddResident {
                 return;
             }
 
-            ResidentCtrl.addResident(new Resident(
+            if (ResidentCtrl.addResident(new Resident(
                 Long.parseLong(idField.getText()),
                 nameField.getText(),
                 new Date(((java.util.Date)dateField.getValue()).getTime()),
@@ -197,7 +198,11 @@ public class AddResident {
                 ethnicField.getSelectedItem().toString(),
                 (Integer)floorField.getValue(), 
                 (Integer)roomField.getValue(),
-                relationshipField.getText()));
+                relationshipField.getText(),
+                0))) {
+                    ResidentCtrl.addActivity(new Activity(
+                        Long.parseLong(idField.getText()), 0, new Date(System.currentTimeMillis()), null, ""));
+                }
         } catch (NumberFormatException e) {
             notifyLabel.setText("Số căn cước công dân / chứng minh nhân dân, số điện thoại phải là các số");
             return;

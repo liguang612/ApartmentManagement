@@ -1,8 +1,10 @@
 package View.Component.Display;
 
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -15,6 +17,7 @@ import Model.User;
 import Resources.Constant.Constant;
 public class FeeDisplay extends JPanel {
     ArrayList<Fee> feeList;
+    JLabel statistics;
     JTable table;
     DefaultTableModel model;
     String[] header = {"Mã phí", "Tên", "Chi phí / đơn vị", "Hạn nộp", "Bắt buộc"};
@@ -24,7 +27,8 @@ public class FeeDisplay extends JPanel {
         UIManager.put("Table.font", Constant.contentFont);
         UIManager.put("TableHeader.font", Constant.titleFont);
 
-        setLayout(new GridLayout(1, 1));
+        setBackground(Color.WHITE);
+        setLayout(new BorderLayout(0, 15));
 
         feeList = FeeCtrl.getFeeList(cycle);
 
@@ -47,21 +51,27 @@ public class FeeDisplay extends JPanel {
         table = new JTable(model);
         table.setRowHeight(25);
 
+        statistics = new JLabel("", JLabel.RIGHT);
+
         filter("");
 
-        add(new JScrollPane(table));
+        add(new JScrollPane(table), BorderLayout.CENTER);
+        add(statistics, BorderLayout.SOUTH);
     }
 
     public void filter(String keyword) {
         ArrayList<Object[]> filteredData = new ArrayList<>();
+        int mandatory = 0, optional = 0;
 
         for (Fee fee : feeList) {
             if (fee.getName().toLowerCase().contains(keyword.toLowerCase())) {
                 filteredData.add(fee.toData());
+                if (fee.getMandatory()) {++mandatory;} else {++optional;}
             }
         }
 
         model.setDataVector(filteredData.toArray(new Object[0][0]), header);
+        statistics.setText("Số loại phí: " + filteredData.size() + "   (Bắt buộc: " + mandatory + "   Không bắt buộc: " + optional + ")");
 
         this.revalidate();
         this.repaint();

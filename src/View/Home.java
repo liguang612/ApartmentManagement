@@ -75,6 +75,7 @@ public class Home extends JFrame {
         UIManager.put("Label.font", Constant.contentFont);
         UIManager.put("PopupMenu.Background", Color.WHITE);
         UIManager.put("TabbedPane.font", Constant.contentFont);
+        UIManager.put("TextArea.font", Constant.contentFont);
 
         changePassword = new JButton(Constant.verticalImageTitle("changePassword.png", "Đổi mật khẩu"));
         changePassword.addActionListener(new ActionListener() {
@@ -111,6 +112,8 @@ public class Home extends JFrame {
                 }
             }
         });
+        apartmentSearchBox.setBackground(new Color(204, 200, 170));
+        apartmentSearchBox.setForeground(Color.WHITE);
         apartmentSearchBox.setPreferredSize(new Dimension(300, 30));
         deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
         deleteApartment.addActionListener(new ActionListener() {
@@ -181,7 +184,7 @@ public class Home extends JFrame {
         historyStatus = new JButton(Constant.verticalImageTitle("historyStatus.png", "Lịch sử cư trú"));
         historyStatus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-
+                historyStatus();
             }
         });
 
@@ -210,6 +213,7 @@ public class Home extends JFrame {
                 }
             }
         });
+        feeSearchBox.setBackground(new Color(204, 200, 170));
         feeSearchBox.setPreferredSize(new Dimension(300, 30));
 
         pay = new JButton(Constant.verticalImageTitle("pay.png", "Nộp phí"));
@@ -233,7 +237,7 @@ public class Home extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(gb);
         setSize(1000, 500);
-        setTitle("Quản lý chung chư BlueMoon");
+        setTitle("Quản lý chung cư BlueMoon");
 
         function();
         content();
@@ -327,6 +331,9 @@ public class Home extends JFrame {
                     feeTabbedPane.setComponentAt(1, null);
                     feeTabbedPane.setComponentAt(2, new FeeDisplay(user, 2));
                 }
+
+                revalidate();
+                repaint();
             }
         });
 
@@ -543,12 +550,17 @@ public class Home extends JFrame {
         new AddResident(this, user);
     }
     private void deleteResident() {
-        if (ResidentCtrl.deleteResident(((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections())) {
-            new Dialog(this, user, 2, "Thành công");
-            residentTabbedPane.setComponentAt(0, new ApartmentDisplay(user));
-            residentTabbedPane.setComponentAt(1, new ResidentDisplay(user));
+        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        if (selections.size() > 0) {
+            if (ResidentCtrl.deleteResident(selections)) {
+                residentTabbedPane.setComponentAt(0, new ApartmentDisplay(user));
+                residentTabbedPane.setComponentAt(1, new ResidentDisplay(user));
+                new Dialog(this, user, 2, "Thành công");
+            } else {
+                new Dialog(this, user, 0, "Thất bại");
+            }
         } else {
-            new Dialog(this, user, 0, "Thất bại");
+            new Dialog(this, user, 0, "Phải chọn ít nhất 1 mục");
         }
     }
     private void editResident() {
@@ -570,6 +582,15 @@ public class Home extends JFrame {
         if (selections.size() == 1) {
             setEnabled(false);
             new GetOutTemp(this, user, selections.get(0));
+        } else {
+            new Dialog(this, user, 0, "Phải chọn 1 cư dân!");
+        }
+    }
+    private void historyStatus() {
+        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        if (selections.size() == 1) {
+            setEnabled(false);
+            new ShowHistory(this, selections.get(0));
         } else {
             new Dialog(this, user, 0, "Phải chọn 1 cư dân!");
         }

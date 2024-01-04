@@ -88,7 +88,7 @@ public class Login {
             }
         });
 
-        label1 = new JLabel("Welcome to");
+        label1 = new JLabel("Chào mừng đến với");
         label1.setFont(Constant.getTitleFont2(Font.PLAIN).deriveFont((float)32));
 
         label2 = new JLabel("BlueMoon");

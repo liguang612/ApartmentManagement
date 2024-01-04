@@ -13,6 +13,7 @@ public class Resident {
     private int floor;
     private int room;
     private String relationship;
+    private int status;
 
     public Resident() {}
     public Resident(long id, String name, Date birthday, boolean gender, int phoneNumber, String nationality, String ethnic, int floor, int room, String relationship) {
@@ -27,6 +28,19 @@ public class Resident {
         this.room = room;
         this.relationship = relationship;
     }
+    public Resident(long id, String name, Date birthday, boolean gender, int phoneNumber, String nationality, String ethnic, int floor, int room, String relationship, int status) {
+        this.id = id;
+        this.name = name;
+        this.birthday = birthday;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.nationality = nationality;
+        this.ethnic = ethnic;
+        this.floor = floor;
+        this.room = room;
+        this.relationship = relationship;
+        this.status = status;
+    }
 
     public long getId() {return id;}
     public String getName() {return name;}
@@ -38,6 +52,21 @@ public class Resident {
     public int getFloor() {return floor;}
     public int getRoom() {return room;}
     public String getRelationship() {return relationship;}
+    public int getStatus() {return status;}
+    public String getStatusStr() {
+        switch (status) {
+            case 0:
+                return "Thường trú";
+            case 1:
+                return "Tạm trú";
+            case 2:
+                return "Tạm vắng";
+            case 3:
+                return "Rời đi";
+            default:
+                return "";
+        }
+    }
 
     public void setId(long id) {this.id = id;}
     public void setName(String name) {this.name = name;}
@@ -49,6 +78,7 @@ public class Resident {
     public void setFloor(int floor) {this.floor = floor;}
     public void setRoom(int room) {this.room = room;}
     public void setRelationship(String relationship) {this.relationship = relationship;}
+    public void setStatus(int status) {this.status = status;}
 
     @Override
     public String toString() {

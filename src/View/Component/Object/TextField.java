@@ -1,6 +1,7 @@
 package View.Component.Object;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -49,6 +50,7 @@ public class TextField extends JTextField {
 
         if (!isOpaque()) {
             Graphics2D g2 = (Graphics2D) g.create();
+            // GradientPaint gradientPaint = new GradientPaint(0, 0, Color.decode("#2193b0"), height, width, Color.decode("#6dd5ed"));
             g2.setPaint(getBackground());
             g2.fillRoundRect(0, 0, width, height, 24, 24);
             g2.dispose();

@@ -42,7 +42,7 @@ public class ApartmentDisplay extends JPanel {
         table = new JTable(model);
         table.setRowHeight(25);
 
-        statistics = new JLabel("");
+        statistics = new JLabel("", JLabel.RIGHT);
 
         filter("");
 
@@ -52,18 +52,15 @@ public class ApartmentDisplay extends JPanel {
     
     public void filter(String keyword) {
         ArrayList<String[]> filteredData = new ArrayList<>();
-        int count = 0;
 
         for (Apartment apartment : apartmentList) {
             if (apartment.getOwnerName().toLowerCase().contains(keyword.toLowerCase())) {
                 filteredData.add(apartment.toData());
-                ++count;
             }
         }
 
         model.setDataVector(filteredData.toArray(new String[0][0]), header);
-        statistics.setHorizontalAlignment(JLabel.RIGHT);
-        statistics.setText("Tổng số căn hộ: " + count);
+        statistics.setText("Tổng số căn hộ: " + filteredData.size());
 
         this.revalidate();
         this.repaint();
