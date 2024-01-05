@@ -101,6 +101,7 @@ public class AddVehicle {
         gbc.gridy = 1; contentPanel.add(typeField, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
         gbc.gridy = 2; contentPanel.add(frPanel, gbc);
+        gbc.gridy = 3; contentPanel.add(notifyLabel, gbc);
 
         functionPanel.setLayout(new GridLayout(2, 5));
         functionPanel.add(new JLabel());
@@ -129,21 +130,23 @@ public class AddVehicle {
     }
     private void verify() {
         if (licensePlateField.getText().isEmpty()) {
-            notifyLabel.setText("Căn cước công dân / Chứng minh nhân dân không thể bỏ trống!");
+            notifyLabel.setText("Biển số xe không thể bỏ trống!");
             return ;
         }
-
+        
         try {
             if (ApartmentCtrl.getVehicle(licensePlateField.getText()) != null) {
                 notifyLabel.setText("Biến số xe đã tồn tại");
                 return;
             }
-            if (ApartmentCtrl.getApartment((int)floorField.getValue() * 100 + (int)roomField.getValue()) != null) {
+            if (ApartmentCtrl.getApartment((int)floorField.getValue() * 100 + (int)roomField.getValue()) == null) {
                 notifyLabel.setText("Căn hộ này chưa có chủ sở hữu");
                 return;
             }
 
-            if (!ApartmentCtrl.addVehicle(new Vehicle(licensePlateField.getText(), (Integer)floorField.getValue(), (Integer)roomField.getValue(), typeField.getSelectedIndex()))) {
+            if (ApartmentCtrl.addVehicle(new Vehicle(licensePlateField.getText(), (Integer)floorField.getValue(), (Integer)roomField.getValue(), typeField.getSelectedIndex()))) {
+                new Dialog(addVehicleFrame, user, 2, "Thành công");
+            } else {
                 new Dialog(addVehicleFrame, user, 0, "Lỗi");
             }
         } catch (Exception e) {
