@@ -86,9 +86,9 @@ public class EditResident {
         ethnicField.setBackground(Color.WHITE);
         ethnicField.setSelectedItem(current.getEthnic());
 
-        floorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
+        floorField = new JSpinner(new SpinnerNumberModel(current.getFloor(), 6, 29, 1));
         floorField.setValue(current.getFloor());
-        roomField = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
+        roomField = new JSpinner(new SpinnerNumberModel(current.getRoom(), 1, 5, 1));
         roomField.setValue(current.getRoom());
         frPanel.add(floorField);
         frPanel.add(new JLabel("     Phòng     "));

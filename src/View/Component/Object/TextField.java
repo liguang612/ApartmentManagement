@@ -1,7 +1,6 @@
 package View.Component.Object;
 
 import java.awt.Color;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -66,7 +65,7 @@ public class TextField extends JTextField {
                 Graphics2D g2d = (Graphics2D)g.create();
 
                 g2d.setColor(Color.GRAY);
-                g2d.setFont(Constant.hintFont.deriveFont((float)16));
+                g2d.setFont(Constant.hintFont.deriveFont((float)14));
                 g2d.drawString(hint, 10, height / 2 + 7);
                 g2d.dispose();
             }

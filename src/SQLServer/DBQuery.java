@@ -13,6 +13,7 @@ import Model.Fee;
 import Model.Payment;
 import Model.Resident;
 import Model.User;
+import Model.Vehicle;
 import Resources.Constant.Constant;
 import Resources.Constant.Tool;
 public class DBQuery {
@@ -99,7 +100,7 @@ public class DBQuery {
             try {
                 PreparedStatement preparedStatement;
                 if (getResident(resident.getId()) != null) {
-                    preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET name = ?, birthday = ?, gender = ?, phoneNumber = ?, nationality = ?, ethnic = ?, apartmentId = ?, relationship = ?, [status] = 0 WHERE id = ?");
+                    preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET name = ?, birthday = ?, gender = ?, phoneNumber = ?, nationality = ?, ethnic = ?, apartmentId = ?, relationship = ?, [status] = ? WHERE id = ?");
 
                     preparedStatement.setString(1, resident.getName());
                     preparedStatement.setDate(2, resident.getBirthday());
@@ -109,9 +110,11 @@ public class DBQuery {
                     preparedStatement.setString(6, resident.getEthnic());
                     preparedStatement.setInt(7, resident.getFloor() * 100 + resident.getRoom());
                     preparedStatement.setString(8, resident.getRelationship());
-                    preparedStatement.setLong(9, resident.getId());
+                    preparedStatement.setInt(9, resident.getStatus());
+                    preparedStatement.setLong(10, resident.getId());
+                    System.out.println(resident.getStatus());
                 } else {
-                    preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Resident VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, 0)");
+                    preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Resident VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                     preparedStatement.setLong(1, resident.getId());
                     preparedStatement.setString(2, resident.getName());
@@ -122,6 +125,7 @@ public class DBQuery {
                     preparedStatement.setString(7, resident.getEthnic());
                     preparedStatement.setInt(8, resident.getFloor() * 100 + resident.getRoom());
                     preparedStatement.setString(9, resident.getRelationship());
+                    preparedStatement.setInt(10, resident.getStatus());
                 }
                 preparedStatement.executeUpdate();
 
@@ -130,6 +134,25 @@ public class DBQuery {
                 e.printStackTrace();
             }
         }
+        return false;
+    }
+    public static boolean addVehicle(Vehicle vehicle) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("INSERT INTO Vehicle VALUES (?, ?, ?)");
+
+                preparedStatement.setString(1, vehicle.getLicensePlates());
+                preparedStatement.setInt(2, vehicle.getFloor() * 100 + vehicle.getRoom());
+                preparedStatement.setInt(3, vehicle.getType());
+
+                preparedStatement.executeUpdate();
+
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         return false;
     }
 
@@ -655,5 +678,52 @@ public class DBQuery {
         }
 
         return residentList;
+    }
+
+    public static ArrayList<Vehicle> getVehicle() {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Vehicle ORDER BY apartmentId");
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    vehicles.add(new Vehicle(
+                        resultSet.getString(1),
+                        resultSet.getInt(2) / 100, 
+                        resultSet.getInt(2) % 100,
+                        resultSet.getInt(3)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return vehicles;
+    }
+    public static Vehicle getVehicle(String licensePlate) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Vehicle WHERE license_plates = ?");
+
+                preparedStatement.setString(1, licensePlate);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    return new Vehicle(
+                        resultSet.getString(1),
+                        resultSet.getInt(2) / 100, 
+                        resultSet.getInt(2) % 100,
+                        resultSet.getInt(3));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
     }
 }

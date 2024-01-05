@@ -82,7 +82,7 @@ public class Resident {
 
     @Override
     public String toString() {
-        return name + " (Tầng " + floor + ", phòng" + room + ", " + relationship + ")";
+        return name + " (Tầng " + floor + ", phòng" + room + ", " + relationship + "," + status + ")";
     }
 
     public String[] toData() {

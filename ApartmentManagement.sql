@@ -66,7 +66,7 @@ CREATE TABLE Fee (
 )
 ALTER TABLE Fee ADD CONSTRAINT pk_id PRIMARY KEY (id)
 
-SELECT * FROM Fee
+SELECT * FROM Resident ORDER BY apartmentId
 
 CREATE TABLE Payment (
     paymentId NUMERIC IDENTITY(1, 1) NOT NULL,
@@ -81,14 +81,12 @@ CREATE TABLE Payment (
 )
 ALTER TABLE Payment ADD CONSTRAINT pk_Payment PRIMARY KEY (paymentId)
 ALTER TABLE Payment ADD CONSTRAINT fk_Payment_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)
-ALTER TABLE Payment ADD CONSTRAINT fk_Payment_Fee FOREIGN KEY (feeId) REFERENCES Fee(id)
-
-INSERT INTO Payment(apartmentId, feeId, payee, [number], timeValidate, [month], [year]) VALUES ()
+ALTER TABLE Payment ADD CONSTRAINT fk_Payment_Fee FOREIGN KEY (feeId) REFERENCES Fee(id)    
 
 CREATE TABLE Vehicle (
     license_plates VARCHAR(9) NOT NULL,
     apartmentId INT,
-    [type] INT,
+    [type] INT, -- 0: Xe máy, 1: Ô tô
 )
 ALTER TABLE Vehicle ADD CONSTRAINT pk_Vehicle PRIMARY KEY (license_plates)
 ALTER TABLE Vehicle ADD CONSTRAINT fk_Vehicle_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)

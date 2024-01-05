@@ -25,6 +25,7 @@ public class Constant {
     public static final String[] dialogIconPath = {image + "failed.png", image + "alert.png", image + "success.png"};
     public static final String[] ethnic = {"Kinh", "Ba na", "Bố Y", "Brâu", "Bru-Vân Kiều", "Co", "Co Lao", "Cống", "Cơ-ho", "Cơ-tu", "Chăm", "Chơ-ro", "Chu ru", "Chứt", "Dao", "Ê-đê", "Gia-rai", "Giáy", "Gié Triêng", "Hà Nhì", "HMông", "Hoa", "Hrê", "Kháng", "Khơ-me", "Khơ-mú", "La Chí", "La Ha", "La Hủ", "Lào", "Lô Lô", "Lự", "Mạ", "Mảng", "Mnông", "Mường", "Nùng", "Ngái", "Ơ Đu", "Pà Thẻn", "Pu Péo", "Phù Lá", "Ra-glai", "Rơ măm", "Sán Chay", "Sán Dìu", "Si La", "Tà-ôi", "Tày", "Thái", "Thổ", "Xinh-mun", "Xơ-Đăng", "Xtiêng"};
     public static final String[] gender = {"Nam", "Nữ"};
+    public static final String[] vehicleType = {"Xe máy", "Ô tô"};
 
     public static String verticalImageTitle(String img, String title) {
         return "<html><center><img src='file:" + Constant.image + img + "'/><br/>" + title + "</center></html>";

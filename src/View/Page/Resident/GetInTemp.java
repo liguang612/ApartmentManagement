@@ -61,7 +61,7 @@ public class GetInTemp {
         });
         addResidentFrame.setBackground(Color.WHITE);
         addResidentFrame.setLayout(new BorderLayout());
-        addResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 300, prevFrame.getY() + prevFrame.getHeight() / 2 - 350);
+        addResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 350);
         addResidentFrame.setSize(800, 700);
 
         cancelButton = new JButton("Hủy");
@@ -109,6 +109,7 @@ public class GetInTemp {
         relationshipField = new JTextField();
 
         reason = new JTextArea();
+        reason.setLineWrap(true);
         reason.setRows(5);
 
         verifyButton = new JButton("Thêm");
@@ -190,10 +191,6 @@ public class GetInTemp {
         }
 
         try {
-            if (ResidentCtrl.existsPhoneNumber(Integer.parseInt(phoneField.getText()))) {
-                notifyLabel.setText("Số điện thoại đã tồn tại");
-                return;
-            }
             if (ResidentCtrl.existsResident(Long.parseLong(idField.getText()))) {
                 notifyLabel.setText("Số căn cước công dân này đã tồn tại");
                 return;

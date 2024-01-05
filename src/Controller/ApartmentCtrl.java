@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 import Model.Apartment;
 import Model.Resident;
+import Model.Vehicle;
 import SQLServer.DBQuery;
 
 public class ApartmentCtrl {
     public static boolean addNewApartment(int apartmentId, int ownerId) {
         return DBQuery.addNewApartment(apartmentId, ownerId);
+    }
+    public static boolean addVehicle(Vehicle vehicle) {
+        return DBQuery.addVehicle(vehicle);
     }
 
     public static boolean deleteApartment(ArrayList<Integer> selections) {
@@ -29,5 +33,12 @@ public class ApartmentCtrl {
 
     public static Resident getOwner(int floor, int room) {
         return DBQuery.getOwner(floor, room);
+    }
+
+    public static ArrayList<Vehicle> getVehicle() {
+        return DBQuery.getVehicle();
+    }
+    public static Vehicle getVehicle(String licensePlate) {
+        return DBQuery.getVehicle(licensePlate);
     }
 }

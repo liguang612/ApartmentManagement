@@ -37,6 +37,7 @@ import View.Component.Display.AccountDisplay;
 import View.Component.Display.ApartmentDisplay;
 import View.Component.Display.FeeDisplay;
 import View.Component.Display.ResidentDisplay;
+import View.Component.Display.VehicleDisplay;
 import View.Component.Object.Dialog;
 import View.Component.Object.TextField;
 import View.Page.Apartment.*;
@@ -45,6 +46,7 @@ import View.Page.Fee.EditFee;
 import View.Page.Payment.AddPayment;
 import View.Page.Payment.ShowPaymentList;
 import View.Page.Resident.*;
+import View.Page.Vehicle.AddVehicle;
 
 public class Home extends JFrame {
     AccountDisplay accountDisplay;
@@ -53,7 +55,7 @@ public class Home extends JFrame {
     GridBagLayout gb = new GridBagLayout();
     Integer mode = 0;
     JButton addApartment, deleteApartment, editApartment, showApartment,
-            addResident, changeStatus, deleteResident, editResident, exchange, getInTemp, getOutTemp, historyStatus,
+            addResident, changeStatus, deleteResident, editResident, exchange, getInTemp, getOutTemp, historyStatus, addVehicle, deleteVehicle, editVehicle,
             addFee, deleteFee, editFee, pay, payList,
             changePassword, editAccount, signOut;
     JPanel contentPanel, functionPanel,
@@ -107,12 +109,12 @@ public class Home extends JFrame {
                 if (ke.getKeyCode() == '\n') {
                     if (residentTabbedPane.getSelectedComponent() instanceof ApartmentDisplay)
                         ((ApartmentDisplay)residentTabbedPane.getSelectedComponent()).filter(apartmentSearchBox.getText());
-                    else
+                    else if (residentTabbedPane.getSelectedComponent() instanceof ResidentDisplay)
                         ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).filter(apartmentSearchBox.getText());
                 }
             }
         });
-        apartmentSearchBox.setBackground(new Color(204, 200, 170));
+        apartmentSearchBox.setBackground(new Color(245, 245, 245));
         apartmentSearchBox.setForeground(Color.WHITE);
         apartmentSearchBox.setPreferredSize(new Dimension(300, 30));
         deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
@@ -158,21 +160,22 @@ public class Home extends JFrame {
                 exchange();
             }
         });
-        getInTemp = new JButton("Đăng ký tạm trú");
+        getInTemp = new JButton("  Đăng ký tạm trú", new ImageIcon(Constant.image + "getInTemp.png"));
         getInTemp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 getInTempStatus();
             }
         });
-        getOutTemp = new JButton("Đăng ký tạm vắng");
+        getOutTemp = new JButton("  Đăng ký tạm vắng", new ImageIcon(Constant.image + "getOutTemp.png"));
         getOutTemp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 getOutTempStatus();
             }
         });
 
+        changeStatusPopupMenu.setBackground(new Color(0, 0, 0, 0));
         changeStatusPopupMenu.setLayout(new GridLayout(1, 3));
-        changeStatusPopupMenu.add(exchange);
+        // changeStatusPopupMenu.add(exchange);
         changeStatusPopupMenu.add(getInTemp);
         changeStatusPopupMenu.add(getOutTemp);
         changeStatus = new JButton(Constant.verticalImageTitle("changeStatus.png", "Thay đổi nhân khẩu"));
@@ -185,6 +188,25 @@ public class Home extends JFrame {
         historyStatus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 historyStatus();
+            }
+        });
+
+        addVehicle = new JButton(Constant.verticalImageTitle("addVehicle.png", "Thêm phương tiện"));
+        addVehicle.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                addVehicle();
+            }
+        });
+        deleteVehicle = new JButton(Constant.verticalImageTitle("deleteVehicle.png", "Xóa phương tiện"));
+        deleteVehicle.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                deleteVehicle();
+            }
+        });
+        editVehicle = new JButton(Constant.verticalImageTitle("editVehicle.png", "Sửa phương tiện"));
+        editVehicle.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                editVehicle();
             }
         });
 
@@ -213,7 +235,7 @@ public class Home extends JFrame {
                 }
             }
         });
-        feeSearchBox.setBackground(new Color(204, 200, 170));
+        feeSearchBox.setBackground(new Color(245, 245, 245));
         feeSearchBox.setPreferredSize(new Dimension(300, 30));
 
         pay = new JButton(Constant.verticalImageTitle("pay.png", "Nộp phí"));
@@ -273,12 +295,16 @@ public class Home extends JFrame {
             residentManagePanel.add(editApartment);
             residentManagePanel.add(deleteApartment);
             residentManagePanel.add(showApartment);
-        } else {
+        } else if (mode == 1) {
             residentManagePanel.add(addResident);
             residentManagePanel.add(editResident);
             residentManagePanel.add(deleteResident);
             residentManagePanel.add(changeStatus);
             residentManagePanel.add(historyStatus);
+        } else {
+            residentManagePanel.add(addVehicle);
+            residentManagePanel.add(editVehicle);
+            residentManagePanel.add(deleteVehicle);
         }
 
         residentManagePanel.revalidate();
@@ -345,7 +371,7 @@ public class Home extends JFrame {
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1.0; gbc.weighty = 100.0; feeContentPanel.add(feeTabbedPane, gbc);
     }
     private void residentContent() {
-        JLabel label1, label2;
+        JLabel label1, label2, label3;
 
         label1 = new JLabel("Danh sách căn hộ", JLabel.CENTER);
         label1.setBackground(Color.WHITE);
@@ -357,19 +383,32 @@ public class Home extends JFrame {
         label2.setFont(label1.getFont());
         label2.setPreferredSize(new Dimension(100, 25));
 
+        label3 = new JLabel("Danh sách phương tiện", JLabel.CENTER);
+        label3.setBackground(Color.WHITE);
+        label3.setFont(label1.getFont());
+        label3.setPreferredSize(new Dimension(150, 25));
+
         residentTabbedPane.addTab("Danh sách căn hộ", new ApartmentDisplay(user));
         residentTabbedPane.addTab("Danh sách cư dân", null);
+        residentTabbedPane.addTab("Danh sách phương tiện", null);
         residentTabbedPane.setTabComponentAt(0, label1);
         residentTabbedPane.setTabComponentAt(1, label2);
+        residentTabbedPane.setTabComponentAt(2, label3);
 
         residentTabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 if (residentTabbedPane.getSelectedIndex() == 0) {
                     residentTabbedPane.setComponentAt(0, new ApartmentDisplay(user));
                     residentTabbedPane.setComponentAt(1, null);
-                } else {
+                    residentTabbedPane.setComponentAt(2, null);
+                } else if (residentTabbedPane.getSelectedIndex() == 1) {
                     residentTabbedPane.setComponentAt(0, null);
                     residentTabbedPane.setComponentAt(1, new ResidentDisplay(user));
+                    residentTabbedPane.setComponentAt(2, null);
+                } else {
+                    residentTabbedPane.setComponentAt(0, null);
+                    residentTabbedPane.setComponentAt(1, null);
+                    residentTabbedPane.setComponentAt(2, new VehicleDisplay(user));
                 }
             }
         });
@@ -476,6 +515,7 @@ public class Home extends JFrame {
 
     public void setApartmentDisplay(ApartmentDisplay apartmentDisplay) {residentTabbedPane.setComponentAt(0, apartmentDisplay);}
     public void setResidentDisplay(ResidentDisplay residentDisplay) {residentTabbedPane.setComponentAt(1, residentDisplay);}
+    public void setVehicleDisplay(VehicleDisplay vehicleDisplay) {residentTabbedPane.setComponentAt(2, vehicleDisplay);}
 
     private void addApartment() {
         setEnabled(false);
@@ -594,6 +634,17 @@ public class Home extends JFrame {
         } else {
             new Dialog(this, user, 0, "Phải chọn 1 cư dân!");
         }
+    }
+
+    private void addVehicle() {
+        setEnabled(false);
+        new AddVehicle(this, user);
+    }
+    private void editVehicle() {
+
+    }
+    private void deleteVehicle() {
+
     }
 
     private void changePassword() {

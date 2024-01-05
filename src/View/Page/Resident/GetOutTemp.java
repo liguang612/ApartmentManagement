@@ -10,32 +10,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Calendar;
+import java.sql.Date;
+import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import Controller.ResidentCtrl;
+import Model.Activity;
 import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
+import Resources.Constant.Tool;
+import View.Home;
+import View.Component.Display.ResidentDisplay;
+import View.Component.Object.Dialog;
 
 public class GetOutTemp {
     JButton cancelButton, verifyButton;
-    JComboBox<String> countryField, ethnicField, genderField;
-    JFrame editResidentFrame, prevFrame;
+    JFrame getOutTempFrame, prevFrame;
     JLabel notifyLabel;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
-    JSpinner dateField, floorField, roomField;
-    JTextField idField, nameField, phoneField, relationshipField;
-    Long oldId;
+    JTextArea reason;
     User user;
 
     public GetOutTemp(JFrame prev, User user, Long currentId) {
@@ -43,21 +45,20 @@ public class GetOutTemp {
         this.user = user;
 
         GridBagConstraints gbc = new GridBagConstraints();
-        JLabel label = new JLabel("Sửa thông tin cư dân", JLabel.CENTER);
-        JPanel frPanel = new JPanel(new GridLayout(1, 3));
-        Resident current = ResidentCtrl.getResident(currentId);
+        JLabel label = new JLabel("Đăng ký tạm vắng", JLabel.CENTER);
+        Resident resident = ResidentCtrl.getResident(currentId);
 
-        editResidentFrame = new JFrame("Sửa thông tin cư dân");
-        editResidentFrame.addWindowListener(new WindowAdapter() {
+        getOutTempFrame = new JFrame("Sửa thông tin cư dân");
+        getOutTempFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
                 prevFrame.toFront();
             }
         });
-        editResidentFrame.setBackground(Color.WHITE);
-        editResidentFrame.setLayout(new BorderLayout());
-        editResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        editResidentFrame.setSize(1000, 400);
+        getOutTempFrame.setBackground(Color.WHITE);
+        getOutTempFrame.setLayout(new BorderLayout());
+        getOutTempFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 180);
+        getOutTempFrame.setSize(800, 360);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -67,85 +68,35 @@ public class GetOutTemp {
             }
         });
 
-        countryField = new JComboBox<String>(Constant.country);
-        countryField.setBackground(Color.WHITE);
-        countryField.setSelectedItem(current.getNationality());
-
-        Calendar calendar = Calendar.getInstance();
-        java.util.Date initialDate = calendar.getTime();
-        calendar.add(Calendar.YEAR, -100); java.util.Date starDate = calendar.getTime();
-        calendar.add(Calendar.YEAR, 100); java.util.Date endDate = calendar.getTime();
-        dateField = new JSpinner(new SpinnerDateModel(initialDate, starDate, endDate, Calendar.DAY_OF_MONTH));
-        dateField.setEditor(new JSpinner.DateEditor(dateField, "dd/MM/yyyy"));
-        dateField.setValue(current.getBirthday());
-
-        ethnicField = new JComboBox<String>(Constant.ethnic);
-        ethnicField.setBackground(Color.WHITE);
-        ethnicField.setSelectedItem(current.getEthnic());
-
-        floorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
-        floorField.setValue(current.getFloor());
-        roomField = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
-        roomField.setValue(current.getRoom());
-        frPanel.add(floorField);
-        frPanel.add(new JLabel("     Phòng     "));
-        frPanel.add(roomField);
-
-        genderField = new JComboBox<String>(Constant.gender);
-        genderField.setBackground(Color.WHITE);
-        genderField.setSelectedIndex(current.getGender() ? 1 : 0);
-
-        idField = new JTextField();
-        idField.setFont(Constant.digitFont);
-        idField.setText(current.getId() + "");
-        
-        nameField = new JTextField();
-        nameField.setText(current.getName());
-
         notifyLabel = new JLabel("", JLabel.LEFT);
         notifyLabel.setFont(Constant.notifyFont);
-        notifyLabel.setForeground(Color.RED);
+        if (resident.getStatus() == 1) {
+            notifyLabel.setIcon(Tool.resize(new ImageIcon(Constant.image + "alert.png"), 15, 15));
+            notifyLabel.setText("<html>Cư dân này hiện đang tạm trú ở chung cư.<br>Việc thực hiện đăng ký tạm vắng cho cư dân này sẽ tương ứng với rời khỏi chung cư.</html>");
+        }
 
-        phoneField = new JTextField();
-        phoneField.setFont(Constant.digitFont);
-        phoneField.setText("0" + current.getPhoneNumber());
-
-        relationshipField = new JTextField();
-        relationshipField.setText(current.getRelationship());
+        reason = new JTextArea();
+        reason.setLineWrap(true);
+        reason.setRows(5);
 
         verifyButton = new JButton("Thêm");
         verifyButton.setFont(Constant.buttonFont);
         verifyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                // verify(current, currentId);
+                verify(resident);
             }
         });
 
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         contentPanel.setLayout(new GridBagLayout());
-        gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.insets = new Insets(0, 5, 0, 15);
-        gbc.gridx = 0; gbc.weightx = 2; gbc.weighty = 1;
-        gbc.gridy = 0; contentPanel.add(new JLabel("Cắn cước công dân / Chứng minh thư", JLabel.RIGHT), gbc);
-        gbc.gridy = 1; contentPanel.add(new JLabel("Họ và tên", JLabel.RIGHT), gbc);
-        gbc.gridy = 2; contentPanel.add(new JLabel("Số điện thoại", JLabel.RIGHT), gbc);
-        gbc.gridy = 3; contentPanel.add(new JLabel("Giới tính", JLabel.RIGHT), gbc);
-        gbc.gridy = 4; contentPanel.add(new JLabel("Ngày sinh", JLabel.RIGHT), gbc);
-        gbc.gridy = 5; contentPanel.add(new JLabel("Quốc tịch", JLabel.RIGHT), gbc);
-        gbc.gridy = 6; contentPanel.add(new JLabel("Dân tộc", JLabel.RIGHT), gbc);
-        gbc.gridy = 7; contentPanel.add(new JLabel("Tầng", JLabel.RIGHT), gbc);
-        gbc.gridy = 8; contentPanel.add(new JLabel("Mối quan hệ với chủ hộ", JLabel.RIGHT), gbc);
-        gbc.gridx = 1; gbc.weightx = 5; gbc.weighty = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridy = 0; contentPanel.add(idField, gbc);
-        gbc.gridy = 1; contentPanel.add(nameField, gbc);
-        gbc.gridy = 2; contentPanel.add(phoneField, gbc);
-        gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
-        gbc.gridy = 3; contentPanel.add(genderField, gbc);
-        gbc.gridy = 4; contentPanel.add(dateField, gbc);
-        gbc.gridy = 5; contentPanel.add(countryField, gbc);
-        gbc.gridy = 6; contentPanel.add(ethnicField, gbc);
-        gbc.gridy = 7; contentPanel.add(frPanel, gbc);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridy = 8; contentPanel.add(relationshipField, gbc);
-        gbc.gridy = 9; contentPanel.add(notifyLabel, gbc);
+        gbc.anchor = GridBagConstraints.NORTH; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.insets = new Insets(0, 5, 0, 15);
+        gbc.gridx = 0; gbc.weightx = 2; gbc.weighty = 5;
+        gbc.gridy = 0; contentPanel.add(new JLabel("Lý do (nếu có)", JLabel.RIGHT), gbc);
+
+        gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.BOTH; 
+        gbc.gridx = 1; gbc.weightx = 5;
+        gbc.gridy = 0; gbc.weighty = 5; contentPanel.add(new JScrollPane(reason), gbc);
+        gbc.gridy = 1; gbc.weighty = 1; contentPanel.add(notifyLabel, gbc);
 
         functionPanel.setLayout(new GridLayout(2, 5));
         functionPanel.add(new JLabel());
@@ -160,16 +111,41 @@ public class GetOutTemp {
 
         label.setFont(Constant.titleFont.deriveFont((float)18.0));
 
-        editResidentFrame.add(label, BorderLayout.NORTH);
-        editResidentFrame.add(contentPanel, BorderLayout.CENTER);
-        editResidentFrame.add(functionPanel, BorderLayout.SOUTH);
+        getOutTempFrame.add(label, BorderLayout.NORTH);
+        getOutTempFrame.add(contentPanel, BorderLayout.CENTER);
+        getOutTempFrame.add(functionPanel, BorderLayout.SOUTH);
 
-        editResidentFrame.setVisible(true);
+        getOutTempFrame.setVisible(true);
     }
 
     private void cancel() {
-        editResidentFrame.setVisible(false);
+        getOutTempFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
+    }
+
+    private void verify(Resident resident) {
+        ArrayList<Long> temp = new ArrayList<>();
+        temp.add(resident.getId());
+        
+        if (resident.getStatus() == 1) {
+            if (ResidentCtrl.deleteResident(temp)) {
+                getOutTempFrame.setVisible(false);
+                prevFrame.toFront();
+                new Dialog(prevFrame, user, 2, "Thành công");
+            } else {
+                new Dialog(getOutTempFrame, user, 0, "Thất bại");
+            }
+        } else {
+            if (ResidentCtrl.addActivity(new Activity(Long.valueOf(resident.getId()), 1, new Date(System.currentTimeMillis()), null, reason.getText()))) {
+                getOutTempFrame.setVisible(false);
+                prevFrame.toFront();
+                new Dialog(prevFrame, user, 2, "Thành công");
+            } else {
+                new Dialog(prevFrame, user, 0, "Thất bại");
+            }
+        }
+
+        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay(user));
     }
 }
