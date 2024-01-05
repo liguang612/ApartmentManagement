@@ -33,7 +33,7 @@ import View.Home;
 import View.Component.Display.ApartmentDisplay;
 
 public class AddApartment {
-    ArrayList<Resident> residentList = ResidentCtrl.getResidentList();
+    ArrayList<Resident> residents = ResidentCtrl.getResidentList();
     JButton cancelButton, verifyButton;
     JSpinner floorField, roomField;
     JComboBox ownerField;
@@ -76,7 +76,7 @@ public class AddApartment {
         frPanel.add(roomField);
 
         // DefaultComboBoxModel model = new DefaultComboBoxModel(residentList.toArray());
-        ownerField = new JComboBox<>(residentList.toArray());
+        ownerField = new JComboBox<>(residents.toArray());
         ownerField.setEditable(true);
         ownerField.setFont(Constant.contentFont.deriveFont((float)12.0));
         suggestion();
@@ -139,7 +139,7 @@ public class AddApartment {
                             String enteredText = textField.getText();
 
                             ownerField.removeAllItems();
-                            for (Resident r : residentList) {
+                            for (Resident r : residents) {
                                 if (r.getName().toLowerCase().contains(enteredText.toLowerCase())) {
                                     ownerField.addItem(r);
                                 }
@@ -151,7 +151,7 @@ public class AddApartment {
                         } else {
                             ownerField.hidePopup();
                             ownerField.removeAllItems();
-                            for (Resident r : residentList) {
+                            for (Resident r : residents) {
                                 ownerField.addItem(r);
                             }
                         }

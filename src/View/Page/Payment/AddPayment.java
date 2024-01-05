@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
@@ -28,28 +30,34 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import Controller.FeeCtrl;
+import Controller.ResidentCtrl;
 import Model.Fee;
 import Model.Payment;
+import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
+import View.Component.Object.Dialog;
 
 public class AddPayment {
     ArrayList<Fee> feeList;
+    ArrayList<Resident> residents = ResidentCtrl.getResidentList();
     ButtonGroup feeType;
     JButton cancelButton, verifyButton;
     JCheckBox lateCheckBox;
+    JComboBox ownerField;
     JComboBox<Fee> feeField;
     JComboBox<String> nationalityField;
-    JFrame addFeeFrame, prevFrame;
+    JFrame addPaymentFrame, prevFrame;
     JLabel moneyLabel, notifyLabel, MoneyLabel;
     JPanel contentPanel = new JPanel(), feeTypePanel = new JPanel(new GridLayout(1, 3)), functionPanel = new JPanel(), moneyPanel = new JPanel(new GridLayout(1, 5, 15, 0));
     JSpinner floorField, monthField, roomField, quantityField, yearField;
-    JTextField birthdayField, payeeField;
+    JTextField birthdayField;
     JRadioButton oneTimeButton, monthlyButton, annualButton;
     User user;
 
@@ -68,17 +76,17 @@ public class AddPayment {
         JLabel label = new JLabel("Nộp phí", JLabel.CENTER);
         JPanel frPanel = new JPanel(new GridLayout(1, 4)), latePanel = new JPanel(new GridLayout(1, 5, 15, 0));
 
-        addFeeFrame = new JFrame("Nộp phí");
-        addFeeFrame.addWindowListener(new WindowAdapter() {
+        addPaymentFrame = new JFrame("Nộp phí");
+        addPaymentFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
                 prevFrame.toFront();
             }
         });
-        addFeeFrame.setBackground(Color.WHITE);
-        addFeeFrame.setLayout(new BorderLayout());
-        addFeeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        addFeeFrame.setSize(800, 500);
+        addPaymentFrame.setBackground(Color.WHITE);
+        addPaymentFrame.setLayout(new BorderLayout());
+        addPaymentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
+        addPaymentFrame.setSize(800, 500);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -196,6 +204,11 @@ public class AddPayment {
         notifyLabel.setFont(Constant.notifyFont);
         notifyLabel.setForeground(Color.RED);
 
+        ownerField = new JComboBox<>(residents.toArray());
+        ownerField.setEditable(true);
+        ownerField.setFont(Constant.contentFont.deriveFont((float)12.0));
+        suggestion();
+
         quantityField = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
         quantityField.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
@@ -209,8 +222,6 @@ public class AddPayment {
         moneyPanel.add(quantityField);
         moneyPanel.add(new JLabel("Phải nộp"));
         moneyPanel.add(MoneyLabel);
-
-        payeeField = new JTextField();
 
         verifyButton = new JButton("Thêm");
         verifyButton.setFont(Constant.buttonFont);
@@ -232,7 +243,7 @@ public class AddPayment {
 
         gbc.gridx = 1; gbc.weightx = 5; gbc.weighty = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy = 0; contentPanel.add(frPanel, gbc);
-        gbc.gridy = 1; contentPanel.add(payeeField, gbc);
+        gbc.gridy = 1; contentPanel.add(ownerField, gbc);
         gbc.gridy = 2; contentPanel.add(moneyPanel, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
         gbc.gridy = 3; contentPanel.add(nationalityField, gbc);
@@ -255,24 +266,20 @@ public class AddPayment {
 
         label.setFont(Constant.titleFont.deriveFont((float)18.0));
 
-        addFeeFrame.add(label, BorderLayout.NORTH);
-        addFeeFrame.add(contentPanel, BorderLayout.CENTER);
-        addFeeFrame.add(functionPanel, BorderLayout.SOUTH);
+        addPaymentFrame.add(label, BorderLayout.NORTH);
+        addPaymentFrame.add(contentPanel, BorderLayout.CENTER);
+        addPaymentFrame.add(functionPanel, BorderLayout.SOUTH);
 
-        addFeeFrame.setVisible(true);
+        addPaymentFrame.setVisible(true);
     }
 
     private void cancel() {
-        addFeeFrame.setVisible(false);
+        addPaymentFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }
 
     private void verify() {
-        if (payeeField.getText().isEmpty()) {
-            notifyLabel.setText("Người nộp không thể bỏ trống!");
-            return ;
-        }
         if (feeField.getSelectedItem() == null) {
             notifyLabel.setText("Chưa chọn loại phí!");
             return ;
@@ -280,7 +287,7 @@ public class AddPayment {
 
         try {
             LocalDate now = LocalDate.now();
-            Payment payment = new Payment((int)floorField.getValue(), (int)roomField.getValue(), (int)((Fee)feeField.getSelectedItem()).getId(), payeeField.getText(), (int)quantityField.getValue(), new Date(System.currentTimeMillis()));
+            Payment payment = new Payment((int)floorField.getValue(), (int)roomField.getValue(), (int)((Fee)feeField.getSelectedItem()).getId(), ((Resident)ownerField.getSelectedItem()).getName(), (int)quantityField.getValue(), new Date(System.currentTimeMillis()));
             if (oneTimeButton.isSelected()) {
                 payment.setMonth(0);
                 payment.setYear(0);
@@ -290,13 +297,55 @@ public class AddPayment {
                 payment.setYear(yearField.isEnabled() ? (int)yearField.getValue() : now.getYear());
             }
             
-            FeeCtrl.addPayment(payment);
+            if (FeeCtrl.addPayment(payment)) {
+                new Dialog(prevFrame, user, 2, "Nộp phí thành công");
+                addPaymentFrame.setVisible(false);
+            } else {
+                new Dialog(addPaymentFrame, user, 0, "Nộp phí thất bại");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        addFeeFrame.setVisible(false);
+        addPaymentFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }
+
+    private void suggestion() {
+        JTextField textField = (JTextField)ownerField.getEditor().getEditorComponent();
+
+        textField.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent ke) {
+                char c = ke.getKeyChar();
+
+                if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || ((int)c == 8))
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        if (!textField.getText().isEmpty()) {
+                            String enteredText = textField.getText();
+
+                            ownerField.removeAllItems();
+                            for (Resident r : residents) {
+                                if (r.getName().toLowerCase().contains(enteredText.toLowerCase())) {
+                                    ownerField.addItem(r);
+                                }
+                            }
+                            if (ownerField.getItemCount() > 0) {
+                                ownerField.showPopup();
+                            }
+                            textField.setText(enteredText);
+                        } else {
+                            ownerField.hidePopup();
+                            ownerField.removeAllItems();
+                            for (Resident r : residents) {
+                                ownerField.addItem(r);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 }
