@@ -138,13 +138,16 @@ public class AddVehicle {
                 notifyLabel.setText("Biến số xe đã tồn tại");
                 return;
             }
+            if (ApartmentCtrl.getApartment((int)floorField.getValue() * 100 + (int)roomField.getValue()) != null) {
+                notifyLabel.setText("Căn hộ này chưa có chủ sở hữu");
+                return;
+            }
 
             if (!ApartmentCtrl.addVehicle(new Vehicle(licensePlateField.getText(), (Integer)floorField.getValue(), (Integer)roomField.getValue(), typeField.getSelectedIndex()))) {
                 new Dialog(addVehicleFrame, user, 0, "Lỗi");
             }
-        } catch (NumberFormatException e) {
-            notifyLabel.setText("Số căn cước công dân / chứng minh nhân dân, số điện thoại phải là các số");
-            return;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         ((Home)prevFrame).setVehicleDisplay(new VehicleDisplay(user));

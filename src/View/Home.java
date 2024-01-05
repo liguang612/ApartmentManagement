@@ -47,6 +47,7 @@ import View.Page.Payment.AddPayment;
 import View.Page.Payment.ShowPaymentList;
 import View.Page.Resident.*;
 import View.Page.Vehicle.AddVehicle;
+import View.Page.Vehicle.EditVehicle;
 
 public class Home extends JFrame {
     AccountDisplay accountDisplay;
@@ -115,7 +116,7 @@ public class Home extends JFrame {
             }
         });
         apartmentSearchBox.setBackground(new Color(245, 245, 245));
-        apartmentSearchBox.setForeground(Color.WHITE);
+        apartmentSearchBox.setForeground(Color.BLACK);
         apartmentSearchBox.setPreferredSize(new Dimension(300, 30));
         deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
         deleteApartment.addActionListener(new ActionListener() {
@@ -640,11 +641,28 @@ public class Home extends JFrame {
         setEnabled(false);
         new AddVehicle(this, user);
     }
-    private void editVehicle() {
-
-    }
     private void deleteVehicle() {
+        ArrayList<String> selections = ((VehicleDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
 
+        if (selections.size() > 0) {
+            if (ApartmentCtrl.deleteVehicle(selections)) {
+                residentTabbedPane.setComponentAt(2, new VehicleDisplay(user));
+                new Dialog(this, user, 2, "Thành công");
+            } else {
+                new Dialog(this, user, 0, "Thất bại");
+            }
+        } else {
+            new Dialog(this, user, 0, "Phải chọn ít nhất 1 mục");
+        }
+    }
+    private void editVehicle() {
+        ArrayList<String> selections = ((VehicleDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        if (selections.size() == 1) {
+            setEnabled(false);
+            new EditVehicle(this, user, selections.get(0));
+        } else {
+            new Dialog(this, user, 0, "Chỉ được chọn 1 mục!");
+        }
     }
 
     private void changePassword() {

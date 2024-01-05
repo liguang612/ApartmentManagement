@@ -25,7 +25,7 @@ import Model.User;
 import Model.Vehicle;
 import Resources.Constant.Constant;
 import View.Home;
-import View.Component.Display.ResidentDisplay;
+import View.Component.Display.VehicleDisplay;
 import View.Component.Object.Dialog;
 
 public class EditVehicle {
@@ -89,7 +89,7 @@ public class EditVehicle {
         verifyButton.setFont(Constant.buttonFont);
         verifyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                verify();
+                verify(licensePlate);
             }
         });
 
@@ -130,19 +130,19 @@ public class EditVehicle {
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }
-    private void verify() {
+    private void verify(String licensePlate) {
         if (licensePlateField.getText().isEmpty()) {
             notifyLabel.setText("Căn cước công dân / Chứng minh nhân dân không thể bỏ trống!");
             return ;
         }
 
         try {
-            if (ApartmentCtrl.getVehicle(licensePlateField.getText()) != null) {
+            if (licensePlateField.getText() != licensePlate && ApartmentCtrl.getVehicle(licensePlateField.getText()) != null) {
                 notifyLabel.setText("Biến số xe đã tồn tại");
                 return;
             }
 
-            if (!ApartmentCtrl.addVehicle(new Vehicle(licensePlateField.getText(), (Integer)floorField.getValue(), (Integer)roomField.getValue(), typeField.getSelectedIndex()))) {
+            if (!ApartmentCtrl.editVehicle(new Vehicle(licensePlateField.getText(), (Integer)floorField.getValue(), (Integer)roomField.getValue(), typeField.getSelectedIndex()), licensePlate)) {
                 new Dialog(addVehicleFrame, user, 0, "Lỗi");
             }
         } catch (NumberFormatException e) {
@@ -150,7 +150,7 @@ public class EditVehicle {
             return;
         }
 
-        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay(user));
+        ((Home)prevFrame).setVehicleDisplay(new VehicleDisplay(user));
 
         addVehicleFrame.setVisible(false);
         prevFrame.setEnabled(true);

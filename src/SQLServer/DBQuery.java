@@ -285,6 +285,24 @@ public class DBQuery {
         }
         return false;
     }
+    public static boolean deleteVehicle(ArrayList<String> selections) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("DELETE FROM Vehicle WHERE license_plates = ?");
+
+                for (String selection : selections) {
+                    preparedStatement.setString(1, selection);
+                    preparedStatement.addBatch();
+                }
+                preparedStatement.executeBatch();
+
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
 
     public static boolean editFee(Fee fee) {
         if (DBConnection.database != null) {
@@ -323,6 +341,25 @@ public class DBQuery {
                 preparedStatement.setLong(10, oldId);
 
                 preparedStatement.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    public static boolean editVehicle(Vehicle vehicle, String oldLicensePlate) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Vehicle SET license_plates = ?, apartmentId = ?, [type] = ? WHERE license_plates = ?");
+
+                preparedStatement.setString(1, vehicle.getLicensePlates());
+                preparedStatement.setInt(2, vehicle.getFloor() * 100 + vehicle.getRoom());
+                preparedStatement.setInt(3, vehicle.getType());
+                preparedStatement.setString(4, oldLicensePlate);
+
+                preparedStatement.executeUpdate();
+
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();

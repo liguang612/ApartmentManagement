@@ -18,6 +18,13 @@ public class ApartmentCtrl {
     public static boolean deleteApartment(ArrayList<Integer> selections) {
         return DBQuery.deleteApartment(selections);
     }
+    public static boolean deleteVehicle(ArrayList<String> selections) {
+        return DBQuery.deleteVehicle(selections);
+    }
+
+    public static boolean editVehicle(Vehicle vehicle, String oldLicensePlate) {
+        return DBQuery.editVehicle(vehicle, oldLicensePlate);
+    }
 
     public static Apartment getApartment(Integer id) {
         return DBQuery.getApartment(id);

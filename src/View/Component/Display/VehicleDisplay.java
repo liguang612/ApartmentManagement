@@ -66,11 +66,11 @@ public class VehicleDisplay extends JPanel {
         this.repaint();
     }
 
-    public ArrayList<Integer> getSelections() {
-        ArrayList<Integer> selections = new ArrayList<>();
+    public ArrayList<String> getSelections() {
+        ArrayList<String> selections = new ArrayList<>();
 
         for (int i : table.getSelectedRows()) {
-            selections.add(Integer.parseInt(table.getValueAt(i, 0).toString()));
+            selections.add(table.getValueAt(i, 2).toString());
         }
 
         return selections;
