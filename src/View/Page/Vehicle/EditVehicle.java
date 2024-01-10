@@ -31,7 +31,7 @@ import View.Component.Object.Dialog;
 public class EditVehicle {
     JButton cancelButton, verifyButton;
     JComboBox<String> typeField;
-    JFrame addVehicleFrame, prevFrame;
+    JFrame editVehicleFrame, prevFrame;
     JLabel notifyLabel;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
     JSpinner floorField, roomField;
@@ -47,17 +47,17 @@ public class EditVehicle {
         JPanel frPanel = new JPanel(new GridLayout(1, 3));
         Vehicle vehicle = ApartmentCtrl.getVehicle(licensePlate);
 
-        addVehicleFrame = new JFrame("Thêm phương tiện mới");
-        addVehicleFrame.addWindowListener(new WindowAdapter() {
+        editVehicleFrame = new JFrame("Thêm phương tiện mới");
+        editVehicleFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
                 prevFrame.toFront();
             }
         });
-        addVehicleFrame.setBackground(Color.WHITE);
-        addVehicleFrame.setLayout(new BorderLayout());
-        addVehicleFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        addVehicleFrame.setSize(1000, 400);
+        editVehicleFrame.setBackground(Color.WHITE);
+        editVehicleFrame.setLayout(new BorderLayout());
+        editVehicleFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
+        editVehicleFrame.setSize(1000, 400);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -118,41 +118,38 @@ public class EditVehicle {
 
         label.setFont(Constant.titleFont.deriveFont((float)18.0));
 
-        addVehicleFrame.add(label, BorderLayout.NORTH);
-        addVehicleFrame.add(contentPanel, BorderLayout.CENTER);
-        addVehicleFrame.add(functionPanel, BorderLayout.SOUTH);
+        editVehicleFrame.add(label, BorderLayout.NORTH);
+        editVehicleFrame.add(contentPanel, BorderLayout.CENTER);
+        editVehicleFrame.add(functionPanel, BorderLayout.SOUTH);
 
-        addVehicleFrame.setVisible(true);
+        editVehicleFrame.setVisible(true);
     }
 
     private void cancel() {
-        addVehicleFrame.setVisible(false);
+        editVehicleFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }
     private void verify(String licensePlate) {
         if (licensePlateField.getText().isEmpty()) {
-            notifyLabel.setText("Căn cước công dân / Chứng minh nhân dân không thể bỏ trống!");
+            notifyLabel.setText("Biển số xe không thể bỏ trống!");
             return ;
         }
-
-        try {
-            if (licensePlateField.getText() != licensePlate && ApartmentCtrl.getVehicle(licensePlateField.getText()) != null) {
-                notifyLabel.setText("Biến số xe đã tồn tại");
-                return;
-            }
-
-            if (!ApartmentCtrl.editVehicle(new Vehicle(licensePlateField.getText(), (Integer)floorField.getValue(), (Integer)roomField.getValue(), typeField.getSelectedIndex()), licensePlate)) {
-                new Dialog(addVehicleFrame, user, 0, "Lỗi");
-            }
-        } catch (NumberFormatException e) {
-            notifyLabel.setText("Số căn cước công dân / chứng minh nhân dân, số điện thoại phải là các số");
+   
+        if (!licensePlateField.getText().equals(licensePlate) && ApartmentCtrl.getVehicle(licensePlateField.getText()) != null) {
+            notifyLabel.setText("Biến số xe đã tồn tại");
             return;
+        }
+
+        if (!ApartmentCtrl.editVehicle(new Vehicle(licensePlateField.getText(), (Integer)floorField.getValue(), (Integer)roomField.getValue(), typeField.getSelectedIndex()), licensePlate)) {
+            new Dialog(editVehicleFrame, user, 0, "Lỗi");
+        } else {
+            System.out.println("thành côgn");
         }
 
         ((Home)prevFrame).setVehicleDisplay(new VehicleDisplay(user));
 
-        addVehicleFrame.setVisible(false);
+        editVehicleFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }

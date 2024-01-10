@@ -86,7 +86,17 @@ public class Resident {
     }
 
     public String[] toData() {
-        String[] data = {String.valueOf(id), name, gender ? "Nữ" : "Nam", String.valueOf(birthday), "0" + phoneNumber, ethnic, nationality, String.valueOf(floor), String.valueOf(room), relationship};
+        String[] data = {
+            name, gender ? "Nữ" : "Nam",
+            String.valueOf(birthday),
+            "0" + phoneNumber,
+            ethnic,
+            nationality,
+            String.valueOf(floor),
+            String.valueOf(room),
+            relationship,
+            status == 0 ? "Thường trú" : status == 1 ? "Tạm trú" : "Tạm vắng"
+        };
         return data;
     }
 }

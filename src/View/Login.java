@@ -98,7 +98,7 @@ public class Login {
         notifyLabel = new JLabel("     ");
         notifyLabel.setForeground(Color.RED);
 
-        username = new TextField("Tài khoản");
+        username = new TextField("Tài khoản", 16);
         username.setBackground(new Color(236, 236, 236));
         username.setFont(Constant.contentFont.deriveFont((float)16));
 

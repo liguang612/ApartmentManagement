@@ -1,38 +1,36 @@
+import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.table.*;
 
-public class Main extends JFrame implements ActionListener {
-    CardLayout card;
-    JButton b1, b2, b3;
-    Container c;
-
-    Main() {
-        c = getContentPane();
-        card = new CardLayout(40, 30);
-        c.setLayout(card);
-
-        b1 = new JButton("Apple");
-        b2 = new JButton("Boy");
-        b3 = new JButton("Cat");
-        b1.addActionListener(this);
-        b2.addActionListener(this);
-        b3.addActionListener(this);
-
-        c.add("a", b1);
-        c.add("b", b2);
-        c.add("c", b3);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        card.next(c);
-    }
-
+public class Main {
     public static void main(String[] args) {
-        Main cl = new Main();
-        cl.setSize(400, 400);
-        cl.setVisible(true);
-        cl.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // Tạo dữ liệu cho bảng
+        Object[][] data = {{"John", "Doe"}, {"Jane", "Doe"}};
+        String[] columnNames = {"First Name", "Last Name"};
+
+        // Tạo JTable
+        JTable table = new JTable(data, columnNames);
+
+        // Tạo TableCellRenderer tùy chỉnh
+        TableCellRenderer renderer = new DefaultTableCellRenderer() {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                label.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3, true));
+                return label;
+            }
+        };
+
+        // Đặt TableCellRenderer cho header của JTable
+        JTableHeader header = table.getTableHeader();
+        header.setDefaultRenderer(renderer);
+
+        // Hiển thị JTable trong JFrame
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new JScrollPane(table));
+        frame.pack();
+        frame.setVisible(true);
     }
 }

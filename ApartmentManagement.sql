@@ -29,6 +29,8 @@ CREATE TABLE Apartment (
 )
 ALTER TABLE Apartment ADD CONSTRAINT pk_Apartment PRIMARY KEY (apartmentId)
 
+SELECT * FROM Apartment
+
 CREATE TABLE Resident (
     id BIGINT NOT NULL,
     [name] NVARCHAR(50),
@@ -65,8 +67,6 @@ CREATE TABLE Fee (
     [status] BIT
 )
 ALTER TABLE Fee ADD CONSTRAINT pk_id PRIMARY KEY (id)
-
-SELECT * FROM Resident ORDER BY apartmentId
 
 CREATE TABLE Payment (
     paymentId NUMERIC IDENTITY(1, 1) NOT NULL,

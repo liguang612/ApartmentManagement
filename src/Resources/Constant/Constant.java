@@ -54,7 +54,23 @@ public class Constant {
 
     public static Font getTitleFont2(int style) {
         try {
-            final Font titleFont2 = Font.createFont(Font.TRUETYPE_FONT, new File(font + (style == Font.BOLD ? "PoppinsBold.ttf" : "Poppins.ttf")));
+            String path = "";
+            switch (style) {
+                case 0:
+                    path = "Poppins.ttf";
+                    break;
+                case 1:
+                    path = "PoppinsBold.ttf";
+                    break;
+                case 2:
+                    path = "PoppinsSemiBold.ttf";
+                case 3:
+                    path = "PoppinsMedium.ttf";
+                default:
+                    break;
+            }
+
+            final Font titleFont2 = Font.createFont(Font.TRUETYPE_FONT, new File(font + path)).deriveFont((float)14);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(titleFont2);
 
             return titleFont2;

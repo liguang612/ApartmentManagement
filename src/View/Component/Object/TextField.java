@@ -12,6 +12,7 @@ import Resources.Constant.Constant;
 
 public class TextField extends JTextField {
     private ImageIcon icon;
+    private int radius = 24, hintSize = 14;
     private String hint;
 
     public TextField() {
@@ -27,20 +28,28 @@ public class TextField extends JTextField {
         setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
         setOpaque(false);
     }
-    public TextField(String hint) {
+    public TextField(String hint, int hintSize) {
         super();
         this.hint = hint;
+        this.hintSize = hintSize;
 
         setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
         setOpaque(false);
     }
-    public TextField(ImageIcon icon, String hint) {
+    public TextField(ImageIcon icon, String hint, int hintSize) {
         super();
         this.icon = icon;
         this.hint = hint;
+        this.hintSize = hintSize;
 
         setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
         setOpaque(false);
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+        revalidate();
+        repaint();
     }
 
     @Override
@@ -51,7 +60,7 @@ public class TextField extends JTextField {
             Graphics2D g2 = (Graphics2D) g.create();
             // GradientPaint gradientPaint = new GradientPaint(0, 0, Color.decode("#2193b0"), height, width, Color.decode("#6dd5ed"));
             g2.setPaint(getBackground());
-            g2.fillRoundRect(0, 0, width, height, 24, 24);
+            g2.fillRoundRect(0, 0, width, height, radius, radius);
             g2.dispose();
         }
 
@@ -65,7 +74,7 @@ public class TextField extends JTextField {
                 Graphics2D g2d = (Graphics2D)g.create();
 
                 g2d.setColor(Color.GRAY);
-                g2d.setFont(Constant.hintFont.deriveFont((float)14));
+                g2d.setFont(Constant.hintFont.deriveFont((float)hintSize));
                 g2d.drawString(hint, 10, height / 2 + 7);
                 g2d.dispose();
             }

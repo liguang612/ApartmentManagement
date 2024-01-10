@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -15,39 +17,69 @@ import Controller.ResidentCtrl;
 import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
+import View.Component.Object.StatisticCard;
 
 public class ResidentDisplay extends JPanel {
     ArrayList<Resident> residentList;
     DefaultTableModel model;
-    JLabel statistics;
     JTable table;
-    String[] header = {"CCCD/CMT", "Họ tên", "Giới tính", "Ngày sinh", "Số điện thoại", "Dân tộc", "Quốc tịch", "Tầng", "Phòng", "Mối quan hệ với chủ hộ"};
+    StatisticCard absentCard, livingCard, stayingCard, totalCard;
+    String[] header = {"Họ tên", "Giới tính", "Ngày sinh", "Số điện thoại", "Dân tộc", "Quốc tịch", "Tầng", "Phòng", "Mối quan hệ với chủ hộ", "Trạng thái"};
     String[][] data;
 
     public ResidentDisplay(User user) {
-        UIManager.put("Table.font", Constant.contentFont);
-        UIManager.put("TableHeader.font", Constant.titleFont);
+        UIManager.put("Table.font", Constant.getTitleFont2(0));
+        UIManager.put("TableHeader.font", Constant.getTitleFont2(3));
+        UIManager.put("TableHeader.foregroound", new Color(131, 133, 142));
+
+        JPanel statistic = new JPanel();
 
         setBackground(Color.WHITE);
-        setLayout(new BorderLayout(0, 15));
+        setLayout(new BorderLayout(15, 0));
+        
+        absentCard = new StatisticCard("ic_absent.png", "Tạm vắng", "");
+        absentCard.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        absentCard.setGradient(new Color(255, 0, 0, 100), new Color(255, 255, 255, 100));
+
+        livingCard = new StatisticCard("ic_living.png", "Thường trú", "");
+        livingCard.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        livingCard.setGradient(new Color(0, 92, 254, 100), new Color(240, 250, 255, 100));
+
+        stayingCard = new StatisticCard("ic_staying.png", "Tạm trú", "");
+        stayingCard.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        stayingCard.setGradient(new Color(255, 253, 55, 100), new Color(255, 252, 156, 100));
+
+        totalCard = new StatisticCard("ic_resident.png", "Tổng số cư dân", "");
+        totalCard.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        totalCard.setGradient(new Color(128, 128, 128, 100), new Color(238, 237, 255, 100));
 
         residentList = ResidentCtrl.getResidentList();
 
         model = new DefaultTableModel(data, header){
             @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
+            public boolean isCellEditable(int row, int column) {return false;}
         };
         table = new JTable(model);
-        table.setRowHeight(25);
+        table.setRowHeight(50);
+        table.setShowVerticalLines(false);
 
-        statistics = new JLabel("", JLabel.RIGHT);
+        statistic.setBackground(Color.WHITE);
+        statistic.setLayout(new BoxLayout(statistic, BoxLayout.Y_AXIS));
+        statistic.add(totalCard);
+        statistic.add(Box.createVerticalStrut(20));
+        statistic.add(livingCard);
+        statistic.add(Box.createVerticalStrut(20));
+        statistic.add(stayingCard);
+        statistic.add(Box.createVerticalStrut(20));
+        statistic.add(absentCard);
 
         filter("");
 
-        add(new JScrollPane(table), BorderLayout.CENTER);
-        add(statistics, BorderLayout.SOUTH);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+
+        add(scrollPane, BorderLayout.CENTER);
+        add(statistic, BorderLayout.EAST);
     }
 
     public void filter(String keyword) {
@@ -75,7 +107,10 @@ public class ResidentDisplay extends JPanel {
         }
 
         model.setDataVector(filteredData.toArray(new String[0][0]), header);
-        statistics.setText("Tổng số cư dân: " + filteredData.size() + "   (Thường trú: " + living + "   Tạm trú: " + staying + "   Tạm vắng: " + absent + ")");
+        absentCard.setContent("" + absent);
+        livingCard.setContent("" + living);
+        stayingCard.setContent("" + staying);
+        totalCard.setContent("" + (absent + living + staying));
     }
 
     public ArrayList<Long> getSelections() {

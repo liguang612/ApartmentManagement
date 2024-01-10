@@ -45,7 +45,7 @@ public class ShowPaymentList extends JFrame {
     JLabel statistics;
     JSpinner endSpinner, startSpinner;
     JTable table;
-    TextField paymentSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Số phòng");
+    TextField paymentSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Số phòng", 14);
     String[] header = {"Tầng", "Phòng", "Người nộp", "Ngày nộp", "Định kỳ", "Số lượng\n(m2, người, ...)", "Đã nộp"};
     String[][] data;
 

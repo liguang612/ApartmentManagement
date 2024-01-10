@@ -14,6 +14,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,7 +24,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -39,6 +39,7 @@ import View.Component.Display.FeeDisplay;
 import View.Component.Display.ResidentDisplay;
 import View.Component.Display.VehicleDisplay;
 import View.Component.Object.Dialog;
+import View.Component.Object.RoundedPanel;
 import View.Component.Object.TextField;
 import View.Page.Apartment.*;
 import View.Page.Fee.AddFee;
@@ -59,14 +60,14 @@ public class Home extends JFrame {
             addResident, changeStatus, deleteResident, editResident, exchange, getInTemp, getOutTemp, historyStatus, addVehicle, deleteVehicle, editVehicle,
             addFee, deleteFee, editFee, pay, payList,
             changePassword, editAccount, signOut;
-    JPanel contentPanel, functionPanel,
-           accountManagePanel = new JPanel(), feeManagePanel = new JPanel(), residentManagePanel = new JPanel(),
+    RoundedPanel contentPanel, functionPanel;
+    JPanel accountManagePanel = new JPanel(), feeManagePanel = new JPanel(), residentManagePanel = new JPanel(),
            accountContentPanel = new JPanel(), feeContentPanel = new JPanel(), residentContentPanel = new JPanel();
     JPopupMenu changeStatusPopupMenu = new JPopupMenu();
     JScrollPane residentScroll = new JScrollPane();
     JTabbedPane functionTabbedPane = new JTabbedPane(), feeTabbedPane = new JTabbedPane(), residentTabbedPane = new JTabbedPane();
-    TextField apartmentSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm"),
-              feeSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm");
+    TextField apartmentSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm", 14),
+              feeSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm", 14);
     User user;
 
     public Home(User user) {
@@ -116,8 +117,10 @@ public class Home extends JFrame {
             }
         });
         apartmentSearchBox.setBackground(new Color(245, 245, 245));
+        apartmentSearchBox.setFont(Constant.contentFont);
         apartmentSearchBox.setForeground(Color.BLACK);
         apartmentSearchBox.setPreferredSize(new Dimension(300, 30));
+        apartmentSearchBox.setRadius(10);
         deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
         deleteApartment.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -237,7 +240,9 @@ public class Home extends JFrame {
             }
         });
         feeSearchBox.setBackground(new Color(245, 245, 245));
+        feeSearchBox.setFont(Constant.contentFont);
         feeSearchBox.setPreferredSize(new Dimension(300, 30));
+        feeSearchBox.setRadius(10);
 
         pay = new JButton(Constant.verticalImageTitle("pay.png", "Nộp phí"));
         pay.addActionListener(new ActionListener() {
@@ -255,7 +260,7 @@ public class Home extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;
 
-        setBackground(Color.WHITE);
+        getContentPane().setBackground(new Color(211, 255, 231));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(gb);
@@ -319,26 +324,31 @@ public class Home extends JFrame {
         contentPanel.add(accountDisplay);
     }
     private void feeContent() {
-        JLabel label1, label2, label3;
+        JLabel label, label1, label2, label3;
+        JPanel panel = new JPanel(new GridBagLayout());
 
-        label1 = new JLabel("Phí", JLabel.CENTER);
-        label1.setBackground(Color.WHITE);
-        label1.setFont(label1.getFont().deriveFont((float)12.0));
-        label1.setPreferredSize(new Dimension(75, 25));
+        label = new JLabel("Danh sách loại phí", JLabel.LEFT);
+        label.setBackground(Color.WHITE);
+        label.setFont(Constant.getTitleFont2(2).deriveFont((float)22));
+        label.setPreferredSize(new Dimension(100, 25));
 
-        label2 = new JLabel("Phí hàng tháng", JLabel.CENTER);
-        label2.setBackground(Color.WHITE);
-        label2.setFont(label1.getFont());
-        label2.setPreferredSize(new Dimension(100, 25));
+        label1 = new JLabel("Một lần", JLabel.CENTER);
+        label1.setPreferredSize(new Dimension(100, 30));
+        label2 = new JLabel("Hàng tháng", JLabel.CENTER);
+        label2.setPreferredSize(new Dimension(100, 30));
+        label3 = new JLabel("Thường niên", JLabel.CENTER);
+        label3.setPreferredSize(new Dimension(100, 30));
 
-        label3 = new JLabel("Phí thường niên", JLabel.CENTER);
-        label3.setBackground(Color.WHITE);
-        label3.setFont(label1.getFont());
-        label3.setPreferredSize(new Dimension(100, 25));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
+        gbc.fill = GridBagConstraints.HORIZONTAL; gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1; panel.add(label, gbc);
+        gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.EAST;
+        gbc.gridx = 1; gbc.gridy = 1; gbc.weightx = 1; panel.add(feeSearchBox, gbc);
 
-        feeTabbedPane.addTab("Phí", new FeeDisplay(user, 0));
-        feeTabbedPane.addTab("Phí hàng tháng", null);
-        feeTabbedPane.addTab("Phí thường niên", null);
+        feeTabbedPane.addTab("Một lần", new FeeDisplay(user, 0));
+        feeTabbedPane.addTab("Hàng tháng", null);
+        feeTabbedPane.addTab("Thường niên", null);
         feeTabbedPane.setTabComponentAt(0, label1);
         feeTabbedPane.setTabComponentAt(1, label2);
         feeTabbedPane.setTabComponentAt(2, label3);
@@ -366,32 +376,37 @@ public class Home extends JFrame {
 
         feeContentPanel.setBackground(Color.WHITE);
         feeContentPanel.setLayout(new GridBagLayout());
-        gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.LINE_END;
-        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0; feeContentPanel.add(feeSearchBox, gbc);
         gbc.fill = GridBagConstraints.HORIZONTAL; gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0; feeContentPanel.add(panel, gbc);
+        gbc.fill = GridBagConstraints.BOTH; gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1.0; gbc.weighty = 100.0; feeContentPanel.add(feeTabbedPane, gbc);
     }
     private void residentContent() {
-        JLabel label1, label2, label3;
+        JLabel label, label1, label2, label3;
+        JPanel panel = new JPanel(new GridBagLayout());
 
-        label1 = new JLabel("Danh sách căn hộ", JLabel.CENTER);
-        label1.setBackground(Color.WHITE);
-        label1.setFont(label1.getFont().deriveFont((float)12.0));
-        label1.setPreferredSize(new Dimension(100, 25));
+        label = new JLabel("Danh sách căn hộ", JLabel.LEFT);
+        label.setBackground(Color.WHITE);
+        label.setFont(Constant.getTitleFont2(2).deriveFont((float)22));
+        label.setPreferredSize(new Dimension(100, 25));
 
-        label2 = new JLabel("Danh sách cư dân", JLabel.CENTER);
-        label2.setBackground(Color.WHITE);
-        label2.setFont(label1.getFont());
-        label2.setPreferredSize(new Dimension(100, 25));
+        label1 = new JLabel("Căn hộ", JLabel.CENTER);
+        label1.setPreferredSize(new Dimension(100, 30));
+        label2 = new JLabel("Cư dân", JLabel.CENTER);
+        label2.setPreferredSize(new Dimension(100, 30));
+        label3 = new JLabel("Phương tiện", JLabel.CENTER);
+        label3.setPreferredSize(new Dimension(100, 30));
 
-        label3 = new JLabel("Danh sách phương tiện", JLabel.CENTER);
-        label3.setBackground(Color.WHITE);
-        label3.setFont(label1.getFont());
-        label3.setPreferredSize(new Dimension(150, 25));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
+        gbc.fill = GridBagConstraints.HORIZONTAL; gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1; panel.add(label, gbc);
+        gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.EAST;
+        gbc.gridx = 1; gbc.gridy = 1; gbc.weightx = 1; panel.add(apartmentSearchBox, gbc);
 
-        residentTabbedPane.addTab("Danh sách căn hộ", new ApartmentDisplay(user));
-        residentTabbedPane.addTab("Danh sách cư dân", null);
-        residentTabbedPane.addTab("Danh sách phương tiện", null);
+        residentTabbedPane.addTab("Căn hộ", new ApartmentDisplay(user));
+        residentTabbedPane.addTab("Cư dân", null);
+        residentTabbedPane.addTab("Phương tiện", null);
         residentTabbedPane.setTabComponentAt(0, label1);
         residentTabbedPane.setTabComponentAt(1, label2);
         residentTabbedPane.setTabComponentAt(2, label3);
@@ -402,30 +417,36 @@ public class Home extends JFrame {
                     residentTabbedPane.setComponentAt(0, new ApartmentDisplay(user));
                     residentTabbedPane.setComponentAt(1, null);
                     residentTabbedPane.setComponentAt(2, null);
+
+                    label.setText("Danh sách căn hộ");
                 } else if (residentTabbedPane.getSelectedIndex() == 1) {
                     residentTabbedPane.setComponentAt(0, null);
                     residentTabbedPane.setComponentAt(1, new ResidentDisplay(user));
                     residentTabbedPane.setComponentAt(2, null);
+
+                    label.setText("Danh sách cư dân");
                 } else {
                     residentTabbedPane.setComponentAt(0, null);
                     residentTabbedPane.setComponentAt(1, null);
                     residentTabbedPane.setComponentAt(2, new VehicleDisplay(user));
+
+                    label.setText("Danh sách phương tiện");
                 }
             }
         });
 
         residentContentPanel.setBackground(Color.WHITE);
         residentContentPanel.setLayout(new GridBagLayout());
-        gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.LINE_END;
-        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0; residentContentPanel.add(apartmentSearchBox, gbc);
-        gbc.fill = GridBagConstraints.BOTH; gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gbc.fill = GridBagConstraints.BOTH; gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1.0; gbc.weighty = 1.0; residentContentPanel.add(panel, gbc);
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 1.0; gbc.weighty = 100.0; residentContentPanel.add(residentTabbedPane, gbc);
     }
 
     private void content() {
-        contentPanel = new JPanel(new GridBagLayout());
+        contentPanel = new RoundedPanel(30);
+        contentPanel.setLayout(new GridBagLayout());
         contentPanel.setBackground(Color.WHITE);
-        contentPanel.setBorder(new LineBorder(Color.BLACK, 1));
 
         accountContent();
         feeContent();
@@ -462,12 +483,15 @@ public class Home extends JFrame {
         label3.setFont(label1.getFont());
         label3.setPreferredSize(new Dimension(100, 25));   
 
-        functionPanel = new JPanel(new BorderLayout());
-        functionPanel.setBackground(new Color(237, 237, 237, 200));
+        functionPanel = new RoundedPanel(30);
+        functionPanel.setBackground(Color.WHITE);
+        functionPanel.setLayout(new BorderLayout());
 
         accountManage();
         feeManage();
         residentManage();
+
+        functionTabbedPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         functionTabbedPane.addTab("Tài khoản", accountManagePanel);
         functionTabbedPane.addTab("Quản lý cư dân", residentManagePanel);
@@ -498,7 +522,7 @@ public class Home extends JFrame {
                 } else {
                     contentPanel.removeAll();
 
-                    gbc.anchor = GridBagConstraints.NORTH; gbc.fill = GridBagConstraints.HORIZONTAL;
+                    gbc.anchor = GridBagConstraints.NORTH; gbc.fill = GridBagConstraints.BOTH;
                     contentPanel.add(feeContentPanel, gbc);
                     
                     revalidate();
@@ -508,7 +532,7 @@ public class Home extends JFrame {
         });
         functionPanel.add(functionTabbedPane, BorderLayout.CENTER);
 
-        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 100; add(functionPanel, gbc);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 1; gbc.weighty = 100; gbc.insets = new Insets(10, 10, 10, 10); add(functionPanel, gbc);
     }
 
     public JFrame getFrame() {return this;}
