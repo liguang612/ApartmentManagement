@@ -10,13 +10,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.ResidentCtrl;
 import Model.Resident;
 import Model.User;
-import Resources.Constant.Constant;
 import View.Component.Object.StatisticCard;
 
 public class ResidentDisplay extends JPanel {
@@ -28,10 +26,6 @@ public class ResidentDisplay extends JPanel {
     String[][] data;
 
     public ResidentDisplay(User user) {
-        UIManager.put("Table.font", Constant.getTitleFont2(0));
-        UIManager.put("TableHeader.font", Constant.getTitleFont2(3));
-        UIManager.put("TableHeader.foregroound", new Color(131, 133, 142));
-
         JPanel statistic = new JPanel();
 
         setBackground(Color.WHITE);
@@ -116,11 +110,21 @@ public class ResidentDisplay extends JPanel {
         totalCard.setContent("" + (absent + living + staying));
     }
 
-    public ArrayList<Long> getSelections() {
+    public ArrayList<Long> getSelectionsId() {
         ArrayList<Long> selections = new ArrayList<>();
 
         for (int i : table.getSelectedRows()) {
             selections.add(this.selections.get(i).getId());
+        }
+
+        return selections;
+    }
+    
+    public ArrayList<Resident> getSelections() {
+        ArrayList<Resident> selections = new ArrayList<>();
+
+        for (int i : table.getSelectedRows()) {
+            selections.add(this.selections.get(i));
         }
 
         return selections;

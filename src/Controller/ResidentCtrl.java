@@ -16,10 +16,10 @@ public class ResidentCtrl {
         return DBQuery.addResident(resident);
     }
 
-    public static boolean deleteResident(ArrayList<Long> selections) {
-        for (Long residentId : selections) {
+    public static boolean deleteResident(ArrayList<Resident> selections) {
+        for (Resident resident : selections) {
             if (!addActivity(new Activity(
-                residentId,
+                resident.getId(),
                 3,
                 null,
                 new Date(System.currentTimeMillis()),
@@ -50,6 +50,9 @@ public class ResidentCtrl {
     }
     public static ArrayList<Resident> getResidentList() {
         return DBQuery.getResidentList();
+    }
+    public static ArrayList<Resident> getResidentList(int status) {
+        return DBQuery.getResidentList(status);
     }
     public static ArrayList<Resident> getResidentList(int floor, int room) {
         return DBQuery.getResidentList(floor, room);

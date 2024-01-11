@@ -76,12 +76,13 @@ CREATE TABLE Payment (
     [number] INT,
     timeValidate DATE,
     [month] INT,
-    [year] INT
+    [year] INT,
+    paid BIGINT
     
 )
 ALTER TABLE Payment ADD CONSTRAINT pk_Payment PRIMARY KEY (paymentId)
 ALTER TABLE Payment ADD CONSTRAINT fk_Payment_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)
-ALTER TABLE Payment ADD CONSTRAINT fk_Payment_Fee FOREIGN KEY (feeId) REFERENCES Fee(id)    
+ALTER TABLE Payment ADD CONSTRAINT fk_Payment_Fee FOREIGN KEY (feeId) REFERENCES Fee(id)
 
 CREATE TABLE Vehicle (
     license_plates VARCHAR(9) NOT NULL,

@@ -33,7 +33,7 @@ import View.Home;
 import View.Component.Display.ApartmentDisplay;
 
 public class AddApartment {
-    ArrayList<Resident> residents = ResidentCtrl.getResidentList();
+    ArrayList<Resident> residents = ResidentCtrl.getResidentList(0);
     JButton cancelButton, verifyButton;
     JSpinner floorField, roomField;
     JComboBox ownerField;
@@ -56,10 +56,9 @@ public class AddApartment {
                 prevFrame.toFront();
             }
         });
-        addApartmentFrame.setBackground(Color.WHITE);
         addApartmentFrame.setLayout(new BorderLayout());
-        addApartmentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + (int)prevFrame.getHeight() / 2 - 125);
-        addApartmentFrame.setSize(800, 250);
+        addApartmentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 300, prevFrame.getY() + (int)prevFrame.getHeight() / 2 - 140);
+        addApartmentFrame.setSize(600, 280);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -74,6 +73,8 @@ public class AddApartment {
         frPanel.add(floorField);
         frPanel.add(new JLabel("     Phòng     "));
         frPanel.add(roomField);
+
+        label.setFont(Constant.getTitleFont2(2).deriveFont((float)16));
 
         // DefaultComboBoxModel model = new DefaultComboBoxModel(residentList.toArray());
         ownerField = new JComboBox<>(residents.toArray());

@@ -1,4 +1,4 @@
-package View.Page.Resident;
+package View.Page.Resident.ChangeStatus;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -125,8 +125,8 @@ public class GetOutTemp {
     }
 
     private void verify(Resident resident) {
-        ArrayList<Long> temp = new ArrayList<>();
-        temp.add(resident.getId());
+        ArrayList<Resident> temp = new ArrayList<>();
+        temp.add(resident);
         
         if (resident.getStatus() == 1) {
             if (ResidentCtrl.deleteResident(temp)) {

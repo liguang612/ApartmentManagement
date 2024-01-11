@@ -31,6 +31,7 @@ import Controller.ApartmentCtrl;
 import Controller.AuthCtrl;
 import Controller.FeeCtrl;
 import Controller.ResidentCtrl;
+import Model.Resident;
 import Model.User;
 import Resources.Constant.Constant;
 import View.Component.Display.AccountDisplay;
@@ -47,6 +48,9 @@ import View.Page.Fee.EditFee;
 import View.Page.Payment.AddPayment;
 import View.Page.Payment.ShowPaymentList;
 import View.Page.Resident.*;
+import View.Page.Resident.ChangeStatus.Exchange;
+import View.Page.Resident.ChangeStatus.GetInTemp;
+import View.Page.Resident.ChangeStatus.GetOutTemp;
 import View.Page.Vehicle.AddVehicle;
 import View.Page.Vehicle.EditVehicle;
 
@@ -79,6 +83,9 @@ public class Home extends JFrame {
         UIManager.put("Label.font", Constant.contentFont);
         UIManager.put("PopupMenu.Background", Color.WHITE);
         UIManager.put("TabbedPane.font", Constant.contentFont);
+        UIManager.put("Table.font", Constant.getTitleFont2(0));
+        UIManager.put("TableHeader.font", Constant.getTitleFont2(3));
+        UIManager.put("TableHeader.foreground", new Color(131, 133, 142));
         UIManager.put("TextArea.font", Constant.contentFont);
 
         changePassword = new JButton(Constant.verticalImageTitle("changePassword.png", "Đổi mật khẩu"));
@@ -158,7 +165,7 @@ public class Home extends JFrame {
                 editResident();
             }
         });
-        exchange = new JButton("Chuyển hộ khẩu");
+        exchange = new JButton("Chuyển hộ khẩu", new ImageIcon(Constant.image + "exchange.png"));
         exchange.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 exchange();
@@ -179,7 +186,7 @@ public class Home extends JFrame {
 
         changeStatusPopupMenu.setBackground(new Color(0, 0, 0, 0));
         changeStatusPopupMenu.setLayout(new GridLayout(1, 3));
-        // changeStatusPopupMenu.add(exchange);
+        changeStatusPopupMenu.add(exchange);
         changeStatusPopupMenu.add(getInTemp);
         changeStatusPopupMenu.add(getOutTemp);
         changeStatus = new JButton(Constant.verticalImageTitle("changeStatus.png", "Thay đổi nhân khẩu"));
@@ -615,7 +622,7 @@ public class Home extends JFrame {
         new AddResident(this, user);
     }
     private void deleteResident() {
-        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        ArrayList<Resident> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
         if (selections.size() > 0) {
             if (ResidentCtrl.deleteResident(selections)) {
                 residentTabbedPane.setComponentAt(0, new ApartmentDisplay(user));
@@ -629,7 +636,7 @@ public class Home extends JFrame {
         }
     }
     private void editResident() {
-        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelectionsId();
         if (selections.size() == 1) {
             setEnabled(false);
             new EditResident(this, user, selections.get(0));
@@ -637,13 +644,15 @@ public class Home extends JFrame {
             new Dialog(this, user, 0, "Phải chọn 1 cư dân!");
         }
     }
-    private void exchange() {}
+    private void exchange() {
+        new Exchange(this);
+    }
     private void getInTempStatus() {
         setEnabled(false);
         new GetInTemp(this, user);
     }
     private void getOutTempStatus() {
-        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelectionsId();
         if (selections.size() == 1) {
             setEnabled(false);
             new GetOutTemp(this, user, selections.get(0));
@@ -652,7 +661,7 @@ public class Home extends JFrame {
         }
     }
     private void historyStatus() {
-        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
+        ArrayList<Long> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelectionsId();
         if (selections.size() == 1) {
             setEnabled(false);
             new ShowHistory(this, selections.get(0));

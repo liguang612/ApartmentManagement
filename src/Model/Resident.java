@@ -99,4 +99,9 @@ public class Resident {
         };
         return data;
     }
+
+    public String[] toDataLite() {
+        String[] data = {name, String.valueOf(birthday), String.valueOf(id), "0" + phoneNumber};
+        return data;
+    }
 }

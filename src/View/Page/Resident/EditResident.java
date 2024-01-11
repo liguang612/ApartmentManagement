@@ -99,6 +99,7 @@ public class EditResident {
         genderField.setSelectedIndex(current.getGender() ? 1 : 0);
 
         idField = new JTextField();
+        idField.setEnabled(false);
         idField.setFont(Constant.digitFont);
         idField.setText(current.getId() + "");
         
@@ -127,7 +128,7 @@ public class EditResident {
         contentPanel.setLayout(new GridBagLayout());
         gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.insets = new Insets(0, 5, 0, 15);
         gbc.gridx = 0; gbc.weightx = 2; gbc.weighty = 1;
-        gbc.gridy = 0; contentPanel.add(new JLabel("Cắn cước công dân / Chứng minh thư", JLabel.RIGHT), gbc);
+        gbc.gridy = 0; contentPanel.add(new JLabel("Căn cước công dân / Chứng minh thư", JLabel.RIGHT), gbc);
         gbc.gridy = 1; contentPanel.add(new JLabel("Họ và tên", JLabel.RIGHT), gbc);
         gbc.gridy = 2; contentPanel.add(new JLabel("Số điện thoại", JLabel.RIGHT), gbc);
         gbc.gridy = 3; contentPanel.add(new JLabel("Giới tính", JLabel.RIGHT), gbc);

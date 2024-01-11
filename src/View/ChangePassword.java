@@ -44,8 +44,8 @@ public class ChangePassword {
         });
         changePasswordFrame.setBackground(Color.WHITE);
         changePasswordFrame.setLayout(new BorderLayout());
-        changePasswordFrame.setLocation((int)prevFrame.getLocation().getX() + (int)prevFrame.getSize().getWidth() / 2 - 400, (int)prevFrame.getLocation().getY() + (int)prevFrame.getSize().getHeight() / 2 - 150);
-        changePasswordFrame.setSize(800, 300);
+        changePasswordFrame.setLocation((int)prevFrame.getLocation().getX() + (int)prevFrame.getSize().getWidth() / 2 - 250, (int)prevFrame.getLocation().getY() + (int)prevFrame.getSize().getHeight() / 2 - 150);
+        changePasswordFrame.setSize(500, 300);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);

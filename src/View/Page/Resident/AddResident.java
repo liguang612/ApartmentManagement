@@ -58,8 +58,8 @@ public class AddResident {
         });
         addResidentFrame.setBackground(Color.WHITE);
         addResidentFrame.setLayout(new BorderLayout());
-        addResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        addResidentFrame.setSize(1000, 400);
+        addResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 300);
+        addResidentFrame.setSize(800, 600);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -116,7 +116,7 @@ public class AddResident {
         contentPanel.setLayout(new GridBagLayout());
         gbc.anchor = GridBagConstraints.CENTER; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.insets = new Insets(0, 5, 0, 15);
         gbc.gridx = 0; gbc.weightx = 2; gbc.weighty = 1;
-        gbc.gridy = 0; contentPanel.add(new JLabel("Cắn cước công dân / Chứng minh thư", JLabel.RIGHT), gbc);
+        gbc.gridy = 0; contentPanel.add(new JLabel("Căn cước công dân / Chứng minh thư", JLabel.RIGHT), gbc);
         gbc.gridy = 1; contentPanel.add(new JLabel("Họ và tên", JLabel.RIGHT), gbc);
         gbc.gridy = 2; contentPanel.add(new JLabel("Số điện thoại", JLabel.RIGHT), gbc);
         gbc.gridy = 3; contentPanel.add(new JLabel("Giới tính", JLabel.RIGHT), gbc);

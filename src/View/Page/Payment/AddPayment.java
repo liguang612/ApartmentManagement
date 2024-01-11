@@ -287,7 +287,14 @@ public class AddPayment {
 
         try {
             LocalDate now = LocalDate.now();
-            Payment payment = new Payment((int)floorField.getValue(), (int)roomField.getValue(), (int)((Fee)feeField.getSelectedItem()).getId(), ((Resident)ownerField.getSelectedItem()).getName(), (int)quantityField.getValue(), new Date(System.currentTimeMillis()));
+            Payment payment = new Payment(
+                (int)floorField.getValue(),
+                (int)roomField.getValue(),
+                (int)((Fee)feeField.getSelectedItem()).getId(),
+                ((Resident)ownerField.getSelectedItem()).getName(),
+                (int)quantityField.getValue(),
+                new Date(System.currentTimeMillis()),
+                (int)quantityField.getValue() * ((Fee)feeField.getSelectedItem()).getCost());
             if (oneTimeButton.isSelected()) {
                 payment.setMonth(0);
                 payment.setYear(0);

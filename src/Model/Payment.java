@@ -16,7 +16,7 @@ public class Payment {
     private long paid;
 
     public Payment() {}
-    public Payment(int floor, int room, int feeId, String payee, int quantity, Date timeValidate) {
+    public Payment(int floor, int room, int feeId, String payee, int quantity, Date timeValidate, long paid) {
         this.floor = floor;
         this.room = room;
         this.feeId = feeId;
@@ -25,8 +25,9 @@ public class Payment {
         this.timeValidate = timeValidate;
         this.month = 0;
         this.year = 0;
+        this.paid = paid;
     }
-    public Payment(int floor, int room, int feeId, String payee, int quantity, Date timeValidate, int month, int year) {
+    public Payment(int floor, int room, int feeId, String payee, int quantity, Date timeValidate, int month, int year, long paid) {
         this.floor = floor;
         this.room = room;
         this.feeId = feeId;
@@ -35,8 +36,9 @@ public class Payment {
         this.timeValidate = timeValidate;
         this.month = month;
         this.year = year;
+        this.paid = paid;
     }
-    public Payment(int id, int floor, int room, int feeId, String payee, int quantity, Date timeValidate, int month, int year) {
+    public Payment(int id, int floor, int room, int feeId, String payee, int quantity, Date timeValidate, int month, int year, long paid) {
         this.id = id;
         this.floor = floor;
         this.room = room;
@@ -46,6 +48,7 @@ public class Payment {
         this.timeValidate = timeValidate;
         this.month = month;
         this.year = year;
+        this.paid = paid;
     }
 
     public int getId() {return id;}
@@ -68,7 +71,6 @@ public class Payment {
     public void setTimeValidate(Date timeValidate) {this.timeValidate = timeValidate;}
     public void setMonth(int month) {this.month = month;}
     public void setYear(int year) {this.year = year;}
-    public Payment setPaid(long paid) {this.paid = paid; return this;}
 
     public String[] toData() {
         String[] data = {String.valueOf(floor), String.valueOf(room), payee, (new SimpleDateFormat("dd/MM/yyyy")).format(timeValidate), (year == 0 ? "Một lần" : month == 0 ? ("Năm " + year) : ("Tháng " + month + "/" + year)), String.valueOf(quantity), String.valueOf(paid)};

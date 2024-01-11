@@ -1,4 +1,4 @@
-package View.Page.Resident;
+package View.Page.Resident.ChangeStatus;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -46,11 +46,11 @@ public class ShowApartment extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
         panel.setLayout(new GridLayout(members.size() / 2 + 3, 2, 20, 10));
 
-        label1.setFont(Constant.titleFont.deriveFont((float)24.0));
+        label1.setFont(Constant.getTitleFont2(2).deriveFont((float)24.0));
         label2 = new JLabel("___________________Cư dân", JLabel.RIGHT);
         label3 = new JLabel("(" + members.size() + ")____________________");
-        label2.setFont(label1.getFont());
-        label3.setFont(label1.getFont());
+        label2.setFont(Constant.getHintFont(1).deriveFont((float)18));
+        label3.setFont(label2.getFont());
 
         panel.add(new ResidentCard(owner, true));
         panel.add(new JLabel());

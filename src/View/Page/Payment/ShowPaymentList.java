@@ -69,7 +69,7 @@ public class ShowPaymentList extends JFrame {
         }
 
         JCheckBox checkBox = new JCheckBox();
-        JLabel label1 = new JLabel("Loại phí: "), label2 = new JLabel("Bắt buộc: "), label3 = new JLabel("Phải nộp: ");
+        JLabel label1 = new JLabel("Loại phí: "), label2 = new JLabel("   Bắt buộc: "), label3 = new JLabel("Phải nộp: ");
         JPanel panel = new JPanel(new BorderLayout(15, 15)), panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT)),
                panel2 = new JPanel(new FlowLayout()), panel3 = new JPanel(new GridLayout(1, 1));
 
@@ -211,11 +211,13 @@ public class ShowPaymentList extends JFrame {
     }
     public void filter(String keyword, Date startDate, Date endDate) {
         ArrayList<String[]> filteredData = new ArrayList<>();
+        long sum = 0;
 
         if (keyword.isEmpty()) {
             for (Payment payment : payments) {
                 if (payment.getTimeValidate().compareTo(startDate) >= 0 && payment.getTimeValidate().compareTo(endDate) <= 0) {
                     filteredData.add(payment.toData());
+                    sum += payment.getPaid();
                 }
             }
         } else if (keyword.matches("\\d+")) {

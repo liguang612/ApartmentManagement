@@ -63,8 +63,8 @@ public class EditApartment {
         });
         addApartmentFrame.setBackground(Color.WHITE);
         addApartmentFrame.setLayout(new BorderLayout());
-        addApartmentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + (int)prevFrame.getHeight() / 2 - 125);
-        addApartmentFrame.setSize(800, 250);
+        addApartmentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 300, prevFrame.getY() + (int)prevFrame.getHeight() / 2 - 140);
+        addApartmentFrame.setSize(600, 280);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
