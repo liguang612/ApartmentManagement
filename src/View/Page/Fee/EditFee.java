@@ -15,6 +15,7 @@ import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -29,6 +30,7 @@ import Controller.FeeCtrl;
 import Model.Fee;
 import Model.User;
 import Resources.Constant.Constant;
+import Resources.Constant.Tool;
 import View.Home;
 import View.Component.Display.FeeDisplay;
 
@@ -36,7 +38,8 @@ public class EditFee {
     JButton cancelButton, verifyButton;
     JCheckBox mandatoryField = new JCheckBox();
     JComboBox<String> cycleField;
-    JFrame addFeeFrame, prevFrame;
+    JFrame editFeeFrame, prevFrame;
+    JLabel notifyLabel;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
     JSpinner dateField;
     JTextField costField, nameField;
@@ -51,17 +54,17 @@ public class EditFee {
         JLabel label = new JLabel("Thêm loại phí mới", JLabel.CENTER);
         JPanel datePanel = new JPanel(new GridLayout(1, 6));
 
-        addFeeFrame = new JFrame("Thêm loại phí mới");
-        addFeeFrame.addWindowListener(new WindowAdapter() {
+        editFeeFrame = new JFrame("Thêm loại phí mới");
+        editFeeFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 prevFrame.setEnabled(true);
                 prevFrame.toFront();
             }
         });
-        addFeeFrame.setBackground(Color.WHITE);
-        addFeeFrame.setLayout(new BorderLayout());
-        addFeeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        addFeeFrame.setSize(800, 400);
+        editFeeFrame.setBackground(Color.WHITE);
+        editFeeFrame.setLayout(new BorderLayout());
+        editFeeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
+        editFeeFrame.setSize(800, 400);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);
@@ -102,6 +105,17 @@ public class EditFee {
         nameField = new JTextField();
         nameField.setText(current.getName());
 
+        notifyLabel = new JLabel();
+
+        if (current.getId() < 6) {
+            cycleField.setEnabled(false);
+            mandatoryField.setEnabled(false);
+            nameField.setEnabled(false);
+
+            notifyLabel.setIcon(Tool.resize(new ImageIcon(Constant.image + "alert.png"), 25, 25));
+            notifyLabel.setText("Đây là loại phí đặc biệt, chỉ có thể sửa đơn giá và không thể xóa.");
+        }
+
         verifyButton = new JButton("Thêm");
         verifyButton.setFont(Constant.buttonFont);
         verifyButton.addActionListener(new ActionListener() {
@@ -123,6 +137,7 @@ public class EditFee {
         gbc.gridy = 1; contentPanel.add(costField, gbc);
         gbc.gridy = 2; contentPanel.add(mandatoryField, gbc);
         gbc.gridy = 4; contentPanel.add(datePanel, gbc);
+        gbc.gridy = 5; contentPanel.add(notifyLabel, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
         gbc.gridy = 3; contentPanel.add(cycleField, gbc);
 
@@ -139,31 +154,35 @@ public class EditFee {
 
         label.setFont(Constant.titleFont.deriveFont((float)18.0));
 
-        addFeeFrame.add(label, BorderLayout.NORTH);
-        addFeeFrame.add(contentPanel, BorderLayout.CENTER);
-        addFeeFrame.add(functionPanel, BorderLayout.SOUTH);
+        editFeeFrame.add(label, BorderLayout.NORTH);
+        editFeeFrame.add(contentPanel, BorderLayout.CENTER);
+        editFeeFrame.add(functionPanel, BorderLayout.SOUTH);
 
-        addFeeFrame.setVisible(true);
+        editFeeFrame.setVisible(true);
     }
 
     private void cancel() {
-        addFeeFrame.setVisible(false);
+        editFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
     }
 
     private void verify(Integer currentId) {
-        addFeeFrame.setVisible(false);
+        editFeeFrame.setVisible(false);
         prevFrame.setEnabled(true);
         prevFrame.toFront();
 
-        String feeName = nameField.getText();
-        int feeCost = Integer.parseInt(costField.getText());
-        boolean feeMandatory = mandatoryField.isSelected() ? true : false;
-        int feeCycle = java.util.Arrays.asList(Constant.cycleType).indexOf(cycleField.getSelectedItem().toString());
-        String expirationDate = (new SimpleDateFormat("yyyy-MM-dd")).format(dateField.getValue());
+        try {
+            String feeName = nameField.getText();
+            int feeCost = Integer.parseInt(costField.getText());
+            boolean feeMandatory = mandatoryField.isSelected() ? true : false;
+            int feeCycle = java.util.Arrays.asList(Constant.cycleType).indexOf(cycleField.getSelectedItem().toString());
+            String expirationDate = (new SimpleDateFormat("yyyy-MM-dd")).format(dateField.getValue());
 
-        FeeCtrl.editFee(new Fee(currentId, feeName, feeCost, feeMandatory, feeCycle, expirationDate.toString()));
+            FeeCtrl.editFee(new Fee(currentId, feeName, feeCost, feeMandatory, feeCycle, expirationDate.toString()));
+        } catch (NumberFormatException e) {
+            
+        }
 
         ((Home)prevFrame).getFeeTabbedPane().setComponentAt(0, new FeeDisplay(user, 0));
         ((Home)prevFrame).getFeeTabbedPane().setComponentAt(1, new FeeDisplay(user, 1));

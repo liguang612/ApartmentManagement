@@ -260,7 +260,7 @@ public class Home extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;
 
-        getContentPane().setBackground(new Color(211, 255, 231));
+        getContentPane().setBackground(new Color(161, 225, 255)); // OldColor: 211, 255, 231
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(gb);

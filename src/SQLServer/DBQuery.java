@@ -231,12 +231,16 @@ public class DBQuery {
         if (DBConnection.database != null) {
             try {
                 PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Apartment SET ownerId = null WHERE apartmentId = ?");
+                PreparedStatement preparedStatement2 = DBConnection.database.prepareStatement("DELETE FROM Vehicle WHERE apartmentId = ?");
 
                 for (Integer i : selections) {
                     preparedStatement.setInt(1, i);
                     preparedStatement.addBatch();
+                    preparedStatement2.setInt(1, i);
+                    preparedStatement2.addBatch();
                 }
                 preparedStatement.executeBatch();
+                preparedStatement2.executeBatch();
                 
                 return true;
             } catch (Exception e) {
@@ -267,7 +271,7 @@ public class DBQuery {
         if (DBConnection.database != null) {
             try {
                 PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET [status] = 3 WHERE id = ?");
-                PreparedStatement preparedStatement2 = DBConnection.database.prepareStatement("UPDATE Apartment SET ownerId = null WHERE ownerId = ?");
+                PreparedStatement preparedStatement2 = DBConnection.database.prepareStatement("UPDATE Apartment SET ownerId = ? WHERE ownerId = ?");
 
                 for (Long i : selections) {
                     preparedStatement.setLong(1, i);

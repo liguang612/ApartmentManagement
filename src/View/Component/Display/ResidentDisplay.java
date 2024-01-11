@@ -20,7 +20,7 @@ import Resources.Constant.Constant;
 import View.Component.Object.StatisticCard;
 
 public class ResidentDisplay extends JPanel {
-    ArrayList<Resident> residentList;
+    ArrayList<Resident> residentList, selections;
     DefaultTableModel model;
     JTable table;
     StatisticCard absentCard, livingCard, stayingCard, totalCard;
@@ -36,6 +36,8 @@ public class ResidentDisplay extends JPanel {
 
         setBackground(Color.WHITE);
         setLayout(new BorderLayout(15, 0));
+
+        residentList = ResidentCtrl.getResidentList();
         
         absentCard = new StatisticCard("ic_absent.png", "Tạm vắng", "");
         absentCard.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
@@ -52,8 +54,6 @@ public class ResidentDisplay extends JPanel {
         totalCard = new StatisticCard("ic_resident.png", "Tổng số cư dân", "");
         totalCard.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         totalCard.setGradient(new Color(128, 128, 128, 100), new Color(238, 237, 255, 100));
-
-        residentList = ResidentCtrl.getResidentList();
 
         model = new DefaultTableModel(data, header){
             @Override
@@ -86,9 +86,12 @@ public class ResidentDisplay extends JPanel {
         ArrayList<String[]> filteredData = new ArrayList<>();
         int absent = 0, living = 0, staying = 0;
 
+        selections = new ArrayList<>();
+
         for (Resident resident : residentList) {
             if (resident.getName().toLowerCase().contains(keyword.toLowerCase())) {
                 filteredData.add(resident.toData());
+                selections.add(resident);
 
                 switch (resident.getStatus()) {
                     case 0:
@@ -117,7 +120,7 @@ public class ResidentDisplay extends JPanel {
         ArrayList<Long> selections = new ArrayList<>();
 
         for (int i : table.getSelectedRows()) {
-            selections.add(Long.parseLong(table.getValueAt(i, 0).toString()));
+            selections.add(this.selections.get(i).getId());
         }
 
         return selections;

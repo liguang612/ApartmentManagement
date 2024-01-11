@@ -12,6 +12,20 @@ public class FeeCtrl {
     }
 
     public static boolean deleteFee(ArrayList<Integer> selections) {
+        int size = selections.size();
+
+        for (int i = 0; i < size; i++) {
+            if (selections.get(i) < 6) {
+                selections.remove(i);
+                --i;
+                --size;
+            }
+        }
+
+        if (selections.size() == 0) {
+            return false;
+        }
+
         return DBQuery.deleteFee(selections);
     }
 
