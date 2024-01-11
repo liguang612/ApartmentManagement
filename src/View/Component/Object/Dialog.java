@@ -12,18 +12,15 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import Model.User;
 import Resources.Constant.Constant;
 import Resources.Constant.Tool;
 
 public class Dialog {
     private JButton okButton;
     private JFrame dialogFrame, prevFrame;
-    User user;
 
-    public Dialog(JFrame prevFrame, User user, int type, String message) {
+    public Dialog(JFrame prevFrame, int type, String message) {
         this.prevFrame = prevFrame;
-        this.user = user;
 
         dialogFrame = new JFrame("Thông báo");
         dialogFrame.addWindowListener(new WindowAdapter() {

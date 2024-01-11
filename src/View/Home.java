@@ -475,20 +475,15 @@ public class Home extends JFrame {
     private void function() {
         JLabel label1, label2, label3;
 
-        label1 = new JLabel("Tài khoản", JLabel.CENTER);
+        label1 = new JLabel("Trang chủ", JLabel.CENTER);
         label1.setBackground(Color.WHITE);
-        label1.setFont(label1.getFont().deriveFont((float)12.0));
-        label1.setPreferredSize(new Dimension(75, 25));
+        label1.setPreferredSize(new Dimension(75, 30));
 
         label2 = new JLabel("Quản lý cư dân", JLabel.CENTER);
-        label2.setBackground(Color.WHITE);
-        label2.setFont(label1.getFont());
-        label2.setPreferredSize(new Dimension(100, 25));
+        label2.setPreferredSize(new Dimension(100, 30));
 
         label3 = new JLabel("Quản lý phí thu", JLabel.CENTER);
-        label3.setBackground(Color.WHITE);
-        label3.setFont(label1.getFont());
-        label3.setPreferredSize(new Dimension(100, 25));   
+        label3.setPreferredSize(new Dimension(100, 30));   
 
         functionPanel = new RoundedPanel(30);
         functionPanel.setBackground(Color.WHITE);
@@ -500,7 +495,7 @@ public class Home extends JFrame {
 
         functionTabbedPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        functionTabbedPane.addTab("Tài khoản", accountManagePanel);
+        functionTabbedPane.addTab("Trang chủ", accountManagePanel);
         functionTabbedPane.addTab("Quản lý cư dân", residentManagePanel);
         functionTabbedPane.addTab("Quản lý phí thu", feeManagePanel);
         functionTabbedPane.setTabComponentAt(0, label1);
@@ -555,10 +550,10 @@ public class Home extends JFrame {
     }
     private void deleteApartment() {
         if (ApartmentCtrl.deleteApartment(((ApartmentDisplay)residentTabbedPane.getSelectedComponent()).getSelections())) {
-            new Dialog(this, user, 2, "Thành công");
+            new Dialog(this, 2, "Thành công");
             residentTabbedPane.setComponentAt(0, new ApartmentDisplay(user));
         } else {
-            new Dialog(this, user, 0, "Thất bại");
+            new Dialog(this, 0, "Thất bại");
         }
     }
     private void editApartment() {
@@ -567,7 +562,7 @@ public class Home extends JFrame {
             setEnabled(false);
             new EditApartment(this, user, selections.get(0));
         } else {
-            new Dialog(this, user, 0, "Chỉ được chọn 1 mục!");
+            new Dialog(this, 0, "Chỉ được chọn 1 mục!");
         }
     }
     private void showApartment() {
@@ -576,7 +571,7 @@ public class Home extends JFrame {
             setEnabled(false);
             new ShowApartment(this, selections.get(0));
         } else {
-            new Dialog(this, user, 0, "Chỉ được chọn 1 mục!");
+            new Dialog(this, 0, "Chỉ được chọn 1 mục!");
         }
     }
 
@@ -587,10 +582,10 @@ public class Home extends JFrame {
     private void deleteFee() {
         int selected = feeTabbedPane.getSelectedIndex();
         if (FeeCtrl.deleteFee(((FeeDisplay)feeTabbedPane.getSelectedComponent()).getSelections())) {
-            new Dialog(this, user, 2, "Thành công");
+            new Dialog(this, 2, "Thành công");
             feeTabbedPane.setComponentAt(selected, new FeeDisplay(user, selected));
         } else {
-            new Dialog(this, user, 0, "Thất bại");
+            new Dialog(this, 0, "Thất bại");
         }
     }
     private void editFee() {
@@ -599,7 +594,7 @@ public class Home extends JFrame {
             setEnabled(false);
             new EditFee(this, user, selections.get(0));
         } else {
-            new Dialog(this, user, 0, "Chỉ được chọn 1 mục!");
+            new Dialog(this, 0, "Chỉ được chọn 1 mục!");
         }
     }
 
@@ -613,7 +608,7 @@ public class Home extends JFrame {
             setEnabled(false);
             new ShowPaymentList(this, selections.get(0));
         } else {
-            new Dialog(this, user, 0, "Chỉ được chọn 1 mục!");
+            new Dialog(this, 0, "Chỉ được chọn 1 mục!");
         }
     }
 
@@ -627,12 +622,12 @@ public class Home extends JFrame {
             if (ResidentCtrl.deleteResident(selections)) {
                 residentTabbedPane.setComponentAt(0, new ApartmentDisplay(user));
                 residentTabbedPane.setComponentAt(1, new ResidentDisplay(user));
-                new Dialog(this, user, 2, "Thành công");
+                new Dialog(this, 2, "Thành công");
             } else {
-                new Dialog(this, user, 0, "Thất bại");
+                new Dialog(this, 0, "Thất bại");
             }
         } else {
-            new Dialog(this, user, 0, "Phải chọn ít nhất 1 mục");
+            new Dialog(this, 0, "Phải chọn ít nhất 1 mục");
         }
     }
     private void editResident() {
@@ -641,7 +636,7 @@ public class Home extends JFrame {
             setEnabled(false);
             new EditResident(this, user, selections.get(0));
         } else {
-            new Dialog(this, user, 0, "Phải chọn 1 cư dân!");
+            new Dialog(this, 0, "Phải chọn 1 cư dân!");
         }
     }
     private void exchange() {
@@ -657,7 +652,7 @@ public class Home extends JFrame {
             setEnabled(false);
             new GetOutTemp(this, user, selections.get(0));
         } else {
-            new Dialog(this, user, 0, "Phải chọn 1 cư dân!");
+            new Dialog(this, 0, "Phải chọn 1 cư dân!");
         }
     }
     private void historyStatus() {
@@ -666,7 +661,7 @@ public class Home extends JFrame {
             setEnabled(false);
             new ShowHistory(this, selections.get(0));
         } else {
-            new Dialog(this, user, 0, "Phải chọn 1 cư dân!");
+            new Dialog(this, 0, "Phải chọn 1 cư dân!");
         }
     }
 
@@ -680,12 +675,12 @@ public class Home extends JFrame {
         if (selections.size() > 0) {
             if (ApartmentCtrl.deleteVehicle(selections)) {
                 residentTabbedPane.setComponentAt(2, new VehicleDisplay(user));
-                new Dialog(this, user, 2, "Thành công");
+                new Dialog(this, 2, "Thành công");
             } else {
-                new Dialog(this, user, 0, "Thất bại");
+                new Dialog(this, 0, "Thất bại");
             }
         } else {
-            new Dialog(this, user, 0, "Phải chọn ít nhất 1 mục");
+            new Dialog(this, 0, "Phải chọn ít nhất 1 mục");
         }
     }
     private void editVehicle() {
@@ -694,7 +689,7 @@ public class Home extends JFrame {
             setEnabled(false);
             new EditVehicle(this, user, selections.get(0));
         } else {
-            new Dialog(this, user, 0, "Chỉ được chọn 1 mục!");
+            new Dialog(this, 0, "Chỉ được chọn 1 mục!");
         }
     }
 

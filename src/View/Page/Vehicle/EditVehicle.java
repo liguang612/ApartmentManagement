@@ -142,7 +142,7 @@ public class EditVehicle {
         }
 
         if (!ApartmentCtrl.editVehicle(new Vehicle(licensePlateField.getText(), (Integer)floorField.getValue(), (Integer)roomField.getValue(), typeField.getSelectedIndex()), licensePlate)) {
-            new Dialog(editVehicleFrame, user, 0, "Lỗi");
+            new Dialog(editVehicleFrame, 0, "Lỗi");
         } else {
             System.out.println("thành côgn");
         }

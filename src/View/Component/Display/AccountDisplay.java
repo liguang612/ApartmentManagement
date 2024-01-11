@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -17,7 +18,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Controller.AuthCtrl;
@@ -28,18 +28,14 @@ import Resources.Constant.Tool;
 public class AccountDisplay extends JPanel {
     private ImageIcon updatedImg;
     private JButton cancelButton, verifyButton;
-    private JLabel avatarLabel, birthdayLabel, nameLabel, phoneLabel;
-    private JPanel panel = new JPanel(new GridLayout(6, 3, 0, 15));
-    private JTextField birthdayField, nameField, phoneField;
+    private JLabel avatarLabel, addressLabel, birthdayLabel, nameLabel, phoneLabel;
+    private JPanel panel = new JPanel(new GridLayout(7, 3, 0, 15));
+    private JTextField addressField, birthdayField, nameField, phoneField;
     private User user;
     private String imagePath = null;
     
     public AccountDisplay(User user) {
         this.user = user;
-
-        UIManager.put("Button.font", Constant.buttonFont);
-        UIManager.put("Label.font", Constant.contentFont);
-        UIManager.put("TextField.font", Constant.contentFont);
 
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
@@ -47,12 +43,14 @@ public class AccountDisplay extends JPanel {
         avatarLabel = new JLabel(Tool.resize(user.getImg(), 616, 616), JLabel.CENTER);
         avatarLabel.setLayout(new BorderLayout());
         
-        birthdayLabel = new JLabel(user.getName());
-        nameLabel = new JLabel(user.getBirthday());
+        addressLabel = new JLabel(user.getAddress());
+        birthdayLabel = new JLabel(user.getBirthday());
+        nameLabel = new JLabel(user.getName());
         phoneLabel = new JLabel(user.getPhoneNumber());
 
-        birthdayField = new JTextField(user.getName());
-        nameField = new JTextField(user.getBirthday());
+        addressField = new JTextField(user.getAddress());
+        birthdayField = new JTextField(user.getBirthday());
+        nameField = new JTextField(user.getName());
         phoneField = new JTextField(user.getPhoneNumber());
 
         this.add(avatarLabel, BorderLayout.WEST);
@@ -90,12 +88,13 @@ public class AccountDisplay extends JPanel {
         label.setForeground(Color.BLUE);
 
         panel.setBackground(Color.WHITE);        
-        panel.add(new JLabel());                                     panel.add(label);        panel.add(new JLabel());
-        panel.add(new JLabel());                                     panel.add(new JLabel()); panel.add(new JLabel());
-        panel.add(new JLabel("Tên: ", JLabel.RIGHT));           panel.add(new JLabel()); panel.add(nameLabel);
-        panel.add(new JLabel("Ngày sinh: ", JLabel.RIGHT));     panel.add(new JLabel()); panel.add(birthdayLabel);
-        panel.add(new JLabel("Số điện thoại: ", JLabel.RIGHT)); panel.add(new JLabel()); panel.add(phoneLabel);
-        panel.add(new JLabel());                                     panel.add(editPanel);    panel.add(new JLabel());
+        panel.add(new JLabel());                                            panel.add(label);        panel.add(new JLabel());
+        panel.add(new JLabel());                                            panel.add(new JLabel()); panel.add(new JLabel());
+        panel.add(new JLabel("Đại diện ban quản lý: ", JLabel.RIGHT)); panel.add(new JLabel()); panel.add(nameLabel);
+        panel.add(new JLabel("Ngày khánh thành: ", JLabel.RIGHT));     panel.add(new JLabel()); panel.add(birthdayLabel);
+        panel.add(new JLabel("Số điện thoại liên hệ: ", JLabel.RIGHT)); panel.add(new JLabel()); panel.add(phoneLabel);
+        panel.add(new JLabel("Địa chỉ: ", JLabel.RIGHT));              panel.add(new JLabel()); panel.add(addressLabel);
+        panel.add(new JLabel());                                            panel.add(editPanel);    panel.add(new JLabel());
 
         subPanel.setBackground(Color.WHITE);
         subPanel.add(panel, BorderLayout.NORTH);
@@ -132,6 +131,8 @@ public class AccountDisplay extends JPanel {
         panel.remove(8); panel.add(nameLabel, 8);
         panel.remove(11); panel.add(birthdayLabel, 11);
         panel.remove(14); panel.add(phoneLabel, 14);
+        panel.remove(17); panel.add(addressLabel, 17);
+
         panel.revalidate();
         panel.repaint();
 
@@ -152,6 +153,8 @@ public class AccountDisplay extends JPanel {
         panel.remove(8); panel.add(nameField, 8);
         panel.remove(11); panel.add(birthdayField, 11);
         panel.remove(14); panel.add(phoneField, 14);
+        panel.remove(17); panel.add(addressField, 17);
+
         panel.revalidate();
         panel.repaint();
 
@@ -164,7 +167,11 @@ public class AccountDisplay extends JPanel {
         nameLabel.setText(nameField.getText());
         birthdayLabel.setText(birthdayField.getText());
         phoneLabel.setText(phoneField.getText());
+        addressLabel.setText(addressField.getText());
+
         turnEditModeOff(true);
+
+        AuthCtrl.ChangeInfo(user.getId(), nameField.getText(), Date.valueOf(birthdayField.getText()), Integer.parseInt(phoneField.getText()), addressField.getText());
 
         // update image to database
 

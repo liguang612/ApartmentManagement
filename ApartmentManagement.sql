@@ -9,6 +9,7 @@ CREATE TABLE [User] (
     birthday DATE,
     phoneNumber INT,
     [image] VARBINARY(MAX),
+    [address] NVARCHAR(120)
 )
 ALTER TABLE [User] ADD CONSTRAINT pk_User PRIMARY KEY (userId)
 ALTER TABLE [User] ADD CONSTRAINT unique_User_phoneNumber UNIQUE (phoneNumber)
@@ -49,7 +50,7 @@ ALTER TABLE Resident ADD CONSTRAINT fk_Resident_Apartment FOREIGN KEY (apartment
 CREATE TABLE Activity (
     id NUMERIC IDENTITY(1, 1) NOT NULL,
     residentId BIGINT,
-    [status] INT, -- Thường trú: 0, tạm trú: 1, tạm vắng: 2, cút: 3
+    [status] INT, -- Thường trú: 0, tạm trú: 1, tạm vắng: 2, cút: 3, dời hộ: 4
     timeIn DATE,
     [timeOut] DATE,
     note NVARCHAR(4000),
@@ -91,6 +92,8 @@ CREATE TABLE Vehicle (
 )
 ALTER TABLE Vehicle ADD CONSTRAINT pk_Vehicle PRIMARY KEY (license_plates)
 ALTER TABLE Vehicle ADD CONSTRAINT fk_Vehicle_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)
+
+SELECT * FROM Resident WHERE apartmentId = 2901
 
 INSERT INTO [User]([name], birthday, phoneNumber, [image]) VALUES (N'Phạm Hoàng Thành', '2023-06-15', 966322513, null)
 

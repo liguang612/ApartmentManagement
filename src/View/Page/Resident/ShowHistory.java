@@ -41,13 +41,11 @@ public class ShowHistory extends JFrame {
     JSpinner startSpinner, endSpinner;
     JTable table;
     Resident resident;
-    String[] header = {"Mã", "Trạng thái", "Ngày vào", "Ngày ra", "Lý do"};
+    String[] header = {"Mã", "Trạng thái", "Ngày vào", "Ngày ra", "Chú thích"};
     String[][] data;
 
     public ShowHistory(JFrame prevFrame, Long residentId) {
         UIManager.put("Label.font", Constant.contentFont);
-        UIManager.put("Table.font", Constant.contentFont);
-        UIManager.put("TableHeader.font", Constant.titleFont);
 
         setLayout(new BorderLayout(15, 15));
         setLocation(prevFrame.getWidth() / 2 - 600, prevFrame.getHeight() / 2 - 400);

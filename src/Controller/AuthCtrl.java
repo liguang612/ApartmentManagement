@@ -1,6 +1,7 @@
 package Controller;
 
 import java.io.InputStream;
+import java.sql.Date;
 
 import javax.swing.ImageIcon;
 
@@ -15,6 +16,10 @@ public class AuthCtrl {
     }
     public static Boolean ChangeAvatar(int userId, ImageIcon image) {
         return DBQuery.changeAvatar(userId, image);
+    }
+
+    public static Boolean ChangeInfo(int userId, String name, Date birthday, int phoneNumber, String address) {
+        return DBQuery.changeInfo(userId, name, birthday, phoneNumber, address);
     }
 
     public static boolean changePassword(int userId, String newPassword) {

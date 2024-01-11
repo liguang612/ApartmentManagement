@@ -63,8 +63,8 @@ public class EditFee {
         });
         editFeeFrame.setBackground(Color.WHITE);
         editFeeFrame.setLayout(new BorderLayout());
-        editFeeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        editFeeFrame.setSize(800, 400);
+        editFeeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 350, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
+        editFeeFrame.setSize(700, 400);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);

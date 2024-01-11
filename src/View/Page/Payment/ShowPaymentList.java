@@ -231,12 +231,13 @@ public class ShowPaymentList extends JFrame {
                     payment.getTimeValidate().compareTo(startDate) >= 0 && payment.getTimeValidate().compareTo(endDate) <= 0
                 ) {
                     filteredData.add(payment.toData());
+                    sum += payment.getPaid();
                 }
             }
         }
 
         model.setDataVector(filteredData.toArray(new String[0][0]), header);
-        statistics.setText("Số lần dã đóng: " + filteredData.size());
+        statistics.setText("Số lần dã đóng: " + filteredData.size() + "\tTổng tiền: " + sum);
 
         this.revalidate();
         this.repaint();

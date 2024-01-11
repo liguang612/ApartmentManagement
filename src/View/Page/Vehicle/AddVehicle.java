@@ -145,9 +145,9 @@ public class AddVehicle {
             }
 
             if (ApartmentCtrl.addVehicle(new Vehicle(licensePlateField.getText(), (Integer)floorField.getValue(), (Integer)roomField.getValue(), typeField.getSelectedIndex()))) {
-                new Dialog(addVehicleFrame, user, 2, "Thành công");
+                new Dialog(addVehicleFrame, 2, "Thành công");
             } else {
-                new Dialog(addVehicleFrame, user, 0, "Lỗi");
+                new Dialog(addVehicleFrame, 0, "Lỗi");
             }
         } catch (Exception e) {
             e.printStackTrace();

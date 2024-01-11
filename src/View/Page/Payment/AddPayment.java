@@ -305,10 +305,10 @@ public class AddPayment {
             }
             
             if (FeeCtrl.addPayment(payment)) {
-                new Dialog(prevFrame, user, 2, "Nộp phí thành công");
+                new Dialog(prevFrame, 2, "Nộp phí thành công");
                 addPaymentFrame.setVisible(false);
             } else {
-                new Dialog(addPaymentFrame, user, 0, "Nộp phí thất bại");
+                new Dialog(addPaymentFrame, 0, "Nộp phí thất bại");
             }
         } catch (Exception e) {
             e.printStackTrace();

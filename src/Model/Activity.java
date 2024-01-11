@@ -41,6 +41,8 @@ public class Activity {
                 return "Tạm vắng";
             case 3:
                 return "Rời đi";
+            case 4:
+                return "Chuyển hộ";
             default:
                 return "";
         }

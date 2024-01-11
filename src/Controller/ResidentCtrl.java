@@ -42,6 +42,10 @@ public class ResidentCtrl {
         return DBQuery.existsResident(id);
     }
 
+    public static boolean exchange(ArrayList<Long> residentIds, int floor, int room) {
+        return DBQuery.exchange(residentIds, floor, room);
+    }
+
     public static ArrayList<Activity> getHistory(Long residentId) {
         return DBQuery.getHistory(residentId);
     }

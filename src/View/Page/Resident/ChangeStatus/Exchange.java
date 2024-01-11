@@ -1,14 +1,20 @@
 package View.Page.Resident.ChangeStatus;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,12 +29,15 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.ResidentCtrl;
+import Model.Activity;
 import Model.Resident;
 import Resources.Constant.Constant;
+import View.Component.Object.Dialog;
 
 public class Exchange {
+    private ArrayList<String[]> fromFilteredData, toFilteredData = new ArrayList<>();
     private DefaultTableModel fromModel, toModel;
-    private JButton cancelButton, verifyButton;
+    private JButton cancelButton, moveLeftButton, moveRightButton, resetButton, verifyButton;
     private JFrame exchangeFrame, prevFrame;
     private JSpinner fromFloorField, fromRoomField, toFloorField, toRoomField;
     private JTable fromTable, toTable;
@@ -38,16 +47,23 @@ public class Exchange {
     public Exchange(JFrame prev) {
         this.prevFrame = prev;
 
+        GridBagConstraints gbc = new GridBagConstraints();
         JLabel label;
         JPanel centerPanel, fromFrPanel = new JPanel(new GridLayout(1, 4)), fromPanel, functionPanel, movePanel,
                toFrPanel = new JPanel(new GridLayout(1, 4)), toPanel;
 
         exchangeFrame = new JFrame();
 
+        exchangeFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                prevFrame.setEnabled(true);
+                prevFrame.toFront();
+            }
+        });
         ((JPanel)exchangeFrame.getContentPane()).setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         exchangeFrame.setLayout(new BorderLayout(15, 15));
-        exchangeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 600, prevFrame.getY() + prevFrame.getHeight() / 2 - 400);
-        exchangeFrame.setSize(new Dimension(1200, 800));
+        exchangeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 600, prevFrame.getY() + prevFrame.getHeight() / 2 - 330);
+        exchangeFrame.setSize(new Dimension(1200, 660));
 
         cancelButton = new JButton("Hủy");
         cancelButton.addActionListener(new ActionListener() {
@@ -93,30 +109,44 @@ public class Exchange {
 
         functionPanel = new JPanel(new GridLayout(2, 5));
         
-        label = new JLabel("Chuyển căn hộ");
-        label.setFont(Constant.getTitleFont2(2));
+        label = new JLabel("Chuyển căn hộ", JLabel.CENTER);
+        label.setFont(Constant.getTitleFont2(2).deriveFont((float)22));
 
         movePanel = new JPanel();
+        movePanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
         movePanel.setLayout(new BoxLayout(movePanel, BoxLayout.Y_AXIS));
+        movePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        toFloorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
-        toFloorField.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent ce) {
-                updateTo();
+        moveLeftButton = new JButton("Xóa thay đổi");
+        moveLeftButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                moveLeft();
             }
         });
+        moveRightButton = new JButton("Sang phải >>");
+        moveRightButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                moveRight();
+            }
+        });
+        resetButton = new JButton("Reset");
+        resetButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {updateFrom();}
+        });
 
+        movePanel.add(resetButton);
+        movePanel.add(Box.createVerticalStrut(15));
+        movePanel.add(moveLeftButton);
+        movePanel.add(Box.createVerticalStrut(15));
+        movePanel.add(moveRightButton);
+
+        toFloorField = new JSpinner(new SpinnerNumberModel(6, 6, 29, 1));
         toModel = new DefaultTableModel(toData, header) {
             @Override
             public boolean isCellEditable(int row, int column) {return false;}
         };
 
         toRoomField = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
-        toRoomField.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent ce) {
-                updateTo();
-            }
-        });
 
         toFrPanel.add(new JLabel("Tầng", JLabel.CENTER));
         toFrPanel.add(toFloorField);
@@ -132,8 +162,11 @@ public class Exchange {
         toPanel.add(toFrPanel, BorderLayout.NORTH);
         toPanel.add(new JScrollPane(toTable), BorderLayout.CENTER);
 
-        centerPanel.add(fromPanel);
-        centerPanel.add(toPanel);
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 560; centerPanel.add(fromPanel, gbc);
+        gbc.gridx = 2;                                   centerPanel.add(toPanel, gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL; gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 1;                gbc.weightx = 50;  centerPanel.add(movePanel, gbc);
 
         verifyButton = new JButton("Xác nhận");
         verifyButton.addActionListener(new ActionListener() {
@@ -144,6 +177,7 @@ public class Exchange {
 
         exchangeFrame.add(label, BorderLayout.NORTH);
         exchangeFrame.add(centerPanel, BorderLayout.CENTER);
+        exchangeFrame.add(functionPanel, BorderLayout.SOUTH);
 
         functionPanel.setLayout(new GridLayout(2, 5));
         functionPanel.add(new JLabel());
@@ -157,7 +191,6 @@ public class Exchange {
         functionPanel.add(new JLabel());
 
         updateFrom();
-        updateTo();
 
         exchangeFrame.setVisible(true);
     }
@@ -168,31 +201,79 @@ public class Exchange {
         prevFrame.toFront();
     }
 
+    public ArrayList<Long> getToSelections() {
+        ArrayList<Long> toId = new ArrayList<>();
+
+        for (int i = 0; i < toFilteredData.size(); i++) {
+            toId.add(Long.parseLong(toTable.getValueAt(i, 2).toString()));
+        }
+
+        return toId;
+    }
+
+    private void moveLeft() {
+        toTable.setEnabled(false);
+
+        int[] selectedRows = toTable.getSelectedRows();
+        for (int i = selectedRows.length - 1; i >= 0; i--) {
+            toFilteredData.remove(selectedRows[i]);
+        }
+
+        toModel.setDataVector(toFilteredData.toArray(new String[0][0]), header);
+
+        toTable.setEnabled(true);
+    }
+    
+    private void moveRight() {
+        fromTable.setEnabled(false);
+
+        int[] selectedRows = fromTable.getSelectedRows();
+        for (int i = selectedRows.length - 1; i >= 0; i--) {
+            toFilteredData.add(fromFilteredData.get(selectedRows[i]));
+            fromFilteredData.remove(selectedRows[i]);
+        }
+
+        fromModel.setDataVector(fromFilteredData.toArray(new String[0][0]), header);
+        toModel.setDataVector(toFilteredData.toArray(new String[0][0]), header);
+
+        fromTable.setEnabled(true);
+    }
+
     private void updateFrom() {
         ArrayList<Resident> residents = ResidentCtrl.getResidentList((int)fromFloorField.getValue(), (int)fromRoomField.getValue());
-        ArrayList<String[]> filteredData = new ArrayList<>();
 
+        fromFilteredData = new ArrayList<>();
         for (Resident resident : residents) {
-            filteredData.add(resident.toData());
+            fromFilteredData.add(resident.toDataLite());
         }
 
-        fromModel.setDataVector(filteredData.toArray(new String[0][0]), header);
+        fromModel.setDataVector(fromFilteredData.toArray(new String[0][0]), header);
     }
-
-    private void updateTo() {
-        ArrayList<Resident> residents = ResidentCtrl.getResidentList((int)toFloorField.getValue(), (int)toRoomField.getValue());
-        ArrayList<String[]> filteredData = new ArrayList<>();
-
-        for (Resident resident : residents) {
-            filteredData.add(resident.toData());
-        }
-
-        toModel.setDataVector(filteredData.toArray(new String[0][0]), header);
-    }
-
+    
     private void verify() {
+        if ((int)fromFloorField.getValue() == (int)toFloorField.getValue() && (int)fromRoomField.getValue() == (int)toRoomField.getValue()) {
+            new Dialog(exchangeFrame, 0, "Số phòng cũ và mới không được giống nhau!");
+            return;
+        }
+        ArrayList<Long> selections = getToSelections();
+        if (!ResidentCtrl.exchange(selections, (int)toFloorField.getValue(), (int)toRoomField.getValue())) {
+            new Dialog(exchangeFrame, 0, "Lỗi!");
+            return;
+        } else {
+            Date now = new Date(System.currentTimeMillis());
+            int from = (int)fromFloorField.getValue() * 100 + (int)fromRoomField.getValue(), to = (int)toFloorField.getValue() * 100 + (int)toRoomField.getValue();
+            for (Long long1 : selections) {
+                ResidentCtrl.addActivity(new Activity(
+                    long1,
+                    4,
+                    now,
+                    now,
+                    "" + from + " -> " + to));
+            }
+        }
+        new Dialog(prevFrame, 2, "Thành công!");
+
         exchangeFrame.setVisible(false);
         prevFrame.setEnabled(true);
-        prevFrame.toFront();
     }
 }

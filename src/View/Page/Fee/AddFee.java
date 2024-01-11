@@ -57,8 +57,8 @@ public class AddFee {
         });
         addFeeFrame.setBackground(Color.WHITE);
         addFeeFrame.setLayout(new BorderLayout());
-        addFeeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 400, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        addFeeFrame.setSize(800, 400);
+        addFeeFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 350, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
+        addFeeFrame.setSize(700, 400);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);

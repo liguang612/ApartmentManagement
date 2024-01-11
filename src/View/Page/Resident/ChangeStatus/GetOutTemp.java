@@ -132,17 +132,17 @@ public class GetOutTemp {
             if (ResidentCtrl.deleteResident(temp)) {
                 getOutTempFrame.setVisible(false);
                 prevFrame.toFront();
-                new Dialog(prevFrame, user, 2, "Thành công");
+                new Dialog(prevFrame, 2, "Thành công");
             } else {
-                new Dialog(getOutTempFrame, user, 0, "Thất bại");
+                new Dialog(getOutTempFrame, 0, "Thất bại");
             }
         } else {
             if (ResidentCtrl.addActivity(new Activity(Long.valueOf(resident.getId()), 1, new Date(System.currentTimeMillis()), null, reason.getText()))) {
                 getOutTempFrame.setVisible(false);
                 prevFrame.toFront();
-                new Dialog(prevFrame, user, 2, "Thành công");
+                new Dialog(prevFrame, 2, "Thành công");
             } else {
-                new Dialog(prevFrame, user, 0, "Thất bại");
+                new Dialog(prevFrame, 0, "Thất bại");
             }
         }
 

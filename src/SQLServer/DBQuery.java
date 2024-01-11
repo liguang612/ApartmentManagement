@@ -1,6 +1,7 @@
 package SQLServer;
 
 import java.io.InputStream;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -189,11 +190,31 @@ public class DBQuery {
                 preparedStatement.executeUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
-                return false;
             }
         }
 
         return true;
+    }
+    public static boolean changeInfo(int userId, String name, Date birthday, int phoneNumber, String address) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE [User] SET [name] = ?, birthday = ?, phoneNumber = ?, address = ? WHERE userId = ?");
+
+                preparedStatement.setString(1, name);
+                preparedStatement.setDate(2, birthday);
+                preparedStatement.setInt(3, phoneNumber);
+                preparedStatement.setString(4, address);
+                preparedStatement.setInt(5, userId);
+
+                preparedStatement.executeUpdate();
+
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
     }
     public static boolean changePassword(int userId, String newPassword) {
         if (DBConnection.database != null) {
@@ -414,6 +435,26 @@ public class DBQuery {
         }
         return false;
     }
+
+    public static boolean exchange(ArrayList<Long> residentIds, int floor, int room) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("UPDATE Resident SET apartmentId = ? WHERE id = ?");
+
+                preparedStatement.setInt(1, floor * 100 + room);
+                for (Long long1 : residentIds) {
+                    preparedStatement.setLong(2, long1);
+                    preparedStatement.addBatch();
+                }
+
+                preparedStatement.executeBatch();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
     
     public static User findUser(String username, String password) {
         Integer userId = null;
@@ -447,7 +488,8 @@ public class DBQuery {
                         resultSet.getString(2),
                         resultSet.getDate(3).toString(),
                         (Integer.valueOf(resultSet.getInt(4))).toString(),
-                        resultSet.getBytes(5) == null ? Tool.resize(new ImageIcon(Constant.image + "/avatar.png"), 512, 512) : Tool.BytesToImage(resultSet.getBytes(5))
+                        resultSet.getBytes(5) == null ? Tool.resize(new ImageIcon(Constant.image + "/avatar.png"), 512, 512) : Tool.BytesToImage(resultSet.getBytes(5)),
+                        resultSet.getString(6)
                     );
                 }
             } catch (Exception e) {
