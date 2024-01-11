@@ -30,8 +30,6 @@ CREATE TABLE Apartment (
 )
 ALTER TABLE Apartment ADD CONSTRAINT pk_Apartment PRIMARY KEY (apartmentId)
 
-SELECT * FROM Apartment
-
 CREATE TABLE Resident (
     id BIGINT NOT NULL,
     [name] NVARCHAR(50),
@@ -93,44 +91,39 @@ CREATE TABLE Vehicle (
 ALTER TABLE Vehicle ADD CONSTRAINT pk_Vehicle PRIMARY KEY (license_plates)
 ALTER TABLE Vehicle ADD CONSTRAINT fk_Vehicle_Apartment FOREIGN KEY (apartmentId) REFERENCES Apartment(apartmentId)
 
-SELECT * FROM Resident WHERE apartmentId = 2901
-
-INSERT INTO [User]([name], birthday, phoneNumber, [image]) VALUES (N'Phạm Hoàng Thành', '2023-06-15', 966322513, null)
+INSERT INTO [User]([name], birthday, phoneNumber, [image], [address]) VALUES (N'Phạm Hoàng Thành', '2023-06-15', 966322513, null, N'Số 1, Đại Cồ Việt, Hai Bà Trưng, Hà Nội')
 
 INSERT INTO [Login](userId, username, [password]) VALUES (01, 'admin', 'admin')
 
 INSERT INTO Fee([name], cost, mandatory, cycle, expiration, [status]) VALUES
-(N'Tiền thuê nhà', 6000000, 1, 1, '10-31-2023', 1),
-(N'Phí gửi xe', 100000, 0, 1, '10-31-2023', 1),
-(N'Tiền điện', 4000, 1, 1, '10-31-2023', 1),
-(N'Tiền nước', 28000, 1, 1, '10-31-2023', 1),
-(N'Phí bảo trì nhà chung cư', 40000000, 1, 0, '10-31-2023', 1),
-(N'Phí dịch vụ (thu gom rác thải, vệ sinh, ...)', 100000, 1, 1, '10-31-2023', 1),
-(N'Phí quản lý', 300000, 1, 1, '10-31-2023', 1),
-(N'Phí Internet', 200000, 0, 1, '10-31-2023', 1)
+(N'Phí gửi xe máy', 70000, 1, 1, null, 1),
+(N'Phí gửi ô tô', 1200000, 1, 1, null, 1),
+(N'Tiền điện', 3500, 1, 1, null, 1),
+(N'Tiền nước', 40000, 1, 1, null, 1),
+(N'Phí Internet', 180000, 1, 1, null, 1)
 
 INSERT INTO Apartment(apartmentId, ownerId, area) VALUES
-(601, 2312000114, 80),
+(601, NULL, 80),
 (602, NULL, 80),
 (603, NULL, 80),
 (604, NULL, 80),
 (605, NULL, 80),
-(701, 2312000100, 80),
+(701, NULL, 80),
 (702, NULL, 80),
 (703, NULL, 80),
 (704, NULL, 80),
 (705, NULL, 80),
-(801, 2312000115, 80),
+(801, NULL, 80),
 (802, NULL, 80),
 (803, NULL, 80),
 (804, NULL, 80),
 (805, NULL, 80),
-(901, 2312000114, 80),
+(901, NULL, 80),
 (902, NULL, 80),
 (903, NULL, 80),
 (904, NULL, 80),
 (905, NULL, 80),
-(1001, 2312000101, 80),
+(1001, NULL, 80),
 (1002, NULL, 80),
 (1003, NULL, 80),
 (1004, NULL, 80),
@@ -160,7 +153,7 @@ INSERT INTO Apartment(apartmentId, ownerId, area) VALUES
 (1503, NULL, 80),
 (1504, NULL, 80),
 (1505, NULL, 80),
-(1601, 2312000100, 80),
+(1601, NULL, 80),
 (1602, NULL, 80),
 (1603, NULL, 80),
 (1604, NULL, 80),
@@ -231,110 +224,103 @@ INSERT INTO Apartment(apartmentId, ownerId, area) VALUES
 (2904, NULL, 80),
 (2905, NULL, 80)
 
-INSERT INTO Resident(id, [name], birthday, gender, phoneNumber, nationality, ethnic, apartmentId, relationship) VALUES
-(2312000100, N'Nguyễn Văn An', '03-01-2003', 0, 0100000001, N'Việt Nam', N'Kinh', 601, N'Chủ hộ'),
-(2312000101, N'Lộc Thị Vân Anh', '04-02-2003', 1, 0100000002, N'Việt Nam', N'Kinh', 601, N'Vợ'),
-(2312000102, N'Nguyễn Tuấn Anh', '10-04-2003', 0, 0100000003, N'Việt Nam', N'Kinh', 601, N'Con'),
-(2312000103, N'Trần Xuân Bách', '10-12-2003', 0, 0100000004, N'Việt Nam', N'Kinh', 601, N'Con'),
-(2312000104, N'Vũ Trí Bình', '9-09-2003', 0, 0100000005, N'Việt Nam', N'Kinh', 701, N'Chủ hộ'),
-(2312000105, N'Kim Ngọc Chung', '01-01-2003', 0, 0100000006, N'Việt Nam', N'Kinh', 701, N'Bố'),
-(2312000106, N'Bùi Quang Dũng', '05-01-2003', 0, 0100000007, N'Việt Nam', N'Kinh', 701, N'Con'),
-(2312000107, N'Nguyễn Tiến Dũng', '04-11-2003', 0, 0100000008, N'Việt Nam', N'Kinh', 701, N'Con'),
-(2312000108, N'Trần Đức Duy', '11-01-2003' , 0, 0100000009, N'Việt Nam', N'Kinh', 801, N'Chủ hộ'),
-(2312000109, N'Đào Nam Dương', '05-12-2003' , 0, 0100000010, N'Việt Nam', N'Kinh', 801, N'bạn'),
-(2312000110, N'Nguyễn Bình Dương', '04-03-2003', 0, 0100000011, N'Việt Nam', N'Kinh', 801, N'bạn'),
-(2312000111, N'Phạm Đăng Đạt', '07-06-2002', 0, 0100000012, N'Việt Nam', N'Kinh', 801, N'bạn'),
-(2312000112, N'Ngô Ngọc Đăng', '02-18-2003', 0, 0100000013, N'Việt Nam', N'Kinh', 901, N'Chủ hộ'),
-(2312000113, N'Hoàng Minh Đức', '04-12-2003', 0, 0100000014, N'Việt Nam', N'Kinh', 901, N'Con'),
-(2312000114, N'Lê Hữu Hải', '06-05-2003', 0, 0100000015, N'Việt Nam', N'Kinh', 901, N'Con'),
-(2312000115, N'Hà Thế Hiển', '12-11-2003', 0, 0100000016, N'Việt Nam', N'Kinh', 901, N'Vợ'),
-(2312000116, N'Vũ Đức Hiếu', '05-12-2003', 0, 0100000017, N'Việt Nam', N'Kinh', 1001, N'Chủ hộ'),
-(2312000117, N'Nguyễn Đức Hoàng', '06-03-2003', 0, 0100000018, N'Việt Nam', N'Kinh', 1001, N'Bố'),
-(2312000118, N'Vũ Trần Hoàng', '02-01-2003', 0, 0100000019, N'Việt Nam', N'Kinh', 1001, N'Mẹ'),
-(2312000119, N'Trịnh Công Hùng', '07-04-2003', 0, 0100000020, N'Việt Nam', N'Kinh', 1001, N'Em')
+-- INSERT INTO Resident(id, [name], birthday, gender, phoneNumber, nationality, ethnic, apartmentId, relationship) VALUES
+-- (2312000100, N'Nguyễn Văn An', '03-01-2003', 0, 0100000001, N'Việt Nam', N'Kinh', 601, N'Chủ hộ'),
+-- (2312000101, N'Lộc Thị Vân Anh', '04-02-2003', 1, 0100000002, N'Việt Nam', N'Kinh', 601, N'Vợ'),
+-- (2312000102, N'Nguyễn Tuấn Anh', '10-04-2003', 0, 0100000003, N'Việt Nam', N'Kinh', 601, N'Con'),
+-- (2312000103, N'Trần Xuân Bách', '10-12-2003', 0, 0100000004, N'Việt Nam', N'Kinh', 601, N'Con'),
+-- (2312000104, N'Vũ Trí Bình', '9-09-2003', 0, 0100000005, N'Việt Nam', N'Kinh', 701, N'Chủ hộ'),
+-- (2312000105, N'Kim Ngọc Chung', '01-01-2003', 0, 0100000006, N'Việt Nam', N'Kinh', 701, N'Bố'),
+-- (2312000106, N'Bùi Quang Dũng', '05-01-2003', 0, 0100000007, N'Việt Nam', N'Kinh', 701, N'Con'),
+-- (2312000107, N'Nguyễn Tiến Dũng', '04-11-2003', 0, 0100000008, N'Việt Nam', N'Kinh', 701, N'Con'),
+-- (2312000108, N'Trần Đức Duy', '11-01-2003' , 0, 0100000009, N'Việt Nam', N'Kinh', 801, N'Chủ hộ'),
+-- (2312000109, N'Đào Nam Dương', '05-12-2003' , 0, 0100000010, N'Việt Nam', N'Kinh', 801, N'bạn'),
+-- (2312000110, N'Nguyễn Bình Dương', '04-03-2003', 0, 0100000011, N'Việt Nam', N'Kinh', 801, N'bạn'),
+-- (2312000111, N'Phạm Đăng Đạt', '07-06-2002', 0, 0100000012, N'Việt Nam', N'Kinh', 801, N'bạn'),
+-- (2312000112, N'Ngô Ngọc Đăng', '02-18-2003', 0, 0100000013, N'Việt Nam', N'Kinh', 901, N'Chủ hộ'),
+-- (2312000113, N'Hoàng Minh Đức', '04-12-2003', 0, 0100000014, N'Việt Nam', N'Kinh', 901, N'Con'),
+-- (2312000114, N'Lê Hữu Hải', '06-05-2003', 0, 0100000015, N'Việt Nam', N'Kinh', 901, N'Con'),
+-- (2312000115, N'Hà Thế Hiển', '12-11-2003', 0, 0100000016, N'Việt Nam', N'Kinh', 901, N'Vợ'),
+-- (2312000116, N'Vũ Đức Hiếu', '05-12-2003', 0, 0100000017, N'Việt Nam', N'Kinh', 1001, N'Chủ hộ'),
+-- (2312000117, N'Nguyễn Đức Hoàng', '06-03-2003', 0, 0100000018, N'Việt Nam', N'Kinh', 1001, N'Bố'),
+-- (2312000118, N'Vũ Trần Hoàng', '02-01-2003', 0, 0100000019, N'Việt Nam', N'Kinh', 1001, N'Mẹ'),
+-- (2312000119, N'Trịnh Công Hùng', '07-04-2003', 0, 0100000020, N'Việt Nam', N'Kinh', 1001, N'Em')
 
-INSERT INTO Activity(residentId, [status], timeIn, [timeOut], note) VALUES
-(2312000100, 1, '10-01-2023', NULL, NULL),
-(2312000101, 1, '10-01-2023', NULL, NULL),
-(2312000102, 1, '10-01-2023', NULL, NULL),
-(2312000103, 1, '10-01-2023', NULL, NULL),
-(2312000104, 1, '10-01-2023', NULL, NULL),
-(2312000105, 1, '10-01-2023', NULL, NULL),
-(2312000106, 1, '10-01-2023', NULL, NULL),
-(2312000107, 1, '10-01-2023', NULL, NULL),
-(2312000108, 2, '10-01-2023', NULL, NULL),
-(2312000109, 2, '10-01-2023', NULL, NULL),
-(2312000110, 2, '10-01-2023', NULL, NULL),
-(2312000111, 1, '10-01-2023', NULL, NULL),
-(2312000112, 1, '10-01-2023', NULL, NULL),
-(2312000113, 1, '10-01-2023', NULL, NULL),
-(2312000114, 1, '10-01-2023', NULL, NULL),
-(2312000115, 1, '10-01-2023', NULL, NULL),
-(2312000116, 1, '10-01-2023', NULL, NULL),
-(2312000117, 1, '10-01-2023', NULL, NULL),
-(2312000118, 1, '10-01-2023', NULL, NULL),
-(2312000119, 1, '10-01-2023', NULL, NULL)
+-- INSERT INTO Activity(residentId, [status], timeIn, [timeOut], note) VALUES
+-- (2312000100, 1, '10-01-2023', NULL, NULL),
+-- (2312000101, 1, '10-01-2023', NULL, NULL),
+-- (2312000102, 1, '10-01-2023', NULL, NULL),
+-- (2312000103, 1, '10-01-2023', NULL, NULL),
+-- (2312000104, 1, '10-01-2023', NULL, NULL),
+-- (2312000105, 1, '10-01-2023', NULL, NULL),
+-- (2312000106, 1, '10-01-2023', NULL, NULL),
+-- (2312000107, 1, '10-01-2023', NULL, NULL),
+-- (2312000108, 2, '10-01-2023', NULL, NULL),
+-- (2312000109, 2, '10-01-2023', NULL, NULL),
+-- (2312000110, 2, '10-01-2023', NULL, NULL),
+-- (2312000111, 1, '10-01-2023', NULL, NULL),
+-- (2312000112, 1, '10-01-2023', NULL, NULL),
+-- (2312000113, 1, '10-01-2023', NULL, NULL),
+-- (2312000114, 1, '10-01-2023', NULL, NULL),
+-- (2312000115, 1, '10-01-2023', NULL, NULL),
+-- (2312000116, 1, '10-01-2023', NULL, NULL),
+-- (2312000117, 1, '10-01-2023', NULL, NULL),
+-- (2312000118, 1, '10-01-2023', NULL, NULL),
+-- (2312000119, 1, '10-01-2023', NULL, NULL)
 
-INSERT INTO Payment(apartmentId, feeId, [number], timeValidate) VALUES
-(601, 01, 1, '10-30-2023'),
-(601, 02, 1, '10-30-2023'),
-(601, 03, 200, '10-30-2023'),
-(601, 04, 15, '10-30-2023'),
-(601, 05, 1, '10-30-2023'),
-(601, 06, 1, '10-30-2023'),
-(601, 07, 1, '10-30-2023'),
-(601, 08, 1, '10-30-2023'),
-(702, 01, 1, '10-30-2023'),
-(702, 02, 1, '10-30-2023'),
-(702, 03, 180, '10-30-2023'),
-(702, 04, 14, '10-30-2023'),
-(702, 05, 1, '10-30-2023'),
-(702, 06, 1, '10-30-2023'),
-(702, 07, 1, '10-30-2023'),
-(702, 08, 1, '10-30-2023'),
-(803, 01, 1, '10-30-2023'),
-(803, 02, 1, '10-30-2023'),
-(803, 03, 250, '10-30-2023'),
-(803, 04, 20, '10-30-2023'),
-(803, 05, 1, '10-30-2023'),
-(803, 06, 1, '10-30-2023'),
-(803, 07, 1, '10-30-2023'),
-(803, 08, 1, '10-30-2023'),
-(904, 01, 1, '10-30-2023'),
-(904, 02, 1, '10-30-2023'),
-(904, 03, 215, '10-30-2023'),
-(904, 04, 16, '10-30-2023'),
-(904, 05, 1, '10-30-2023'),
-(904, 06, 1, '10-30-2023'),
-(904, 07, 1, '10-30-2023'),
-(904, 08, 1, '10-30-2023'),
-(1005, 01, 1, '10-30-2023'),
-(1005, 02, 1, '10-30-2023'),
-(1005, 03, 150, '10-30-2023'),
-(1005, 04, 10, '10-30-2023'),
-(1005, 05, 1, '10-30-2023'),
-(1005, 06, 1, '10-30-2023'),
-(1005, 07, 1, '10-30-2023'),
-(1005, 08, 1, '10-30-2023')
+-- INSERT INTO Payment(apartmentId, feeId, [number], timeValidate) VALUES
+-- (601, 01, 1, '10-30-2023'),
+-- (601, 02, 1, '10-30-2023'),
+-- (601, 03, 200, '10-30-2023'),
+-- (601, 04, 15, '10-30-2023'),
+-- (601, 05, 1, '10-30-2023'),
+-- (601, 06, 1, '10-30-2023'),
+-- (601, 07, 1, '10-30-2023'),
+-- (601, 08, 1, '10-30-2023'),
+-- (702, 01, 1, '10-30-2023'),
+-- (702, 02, 1, '10-30-2023'),
+-- (702, 03, 180, '10-30-2023'),
+-- (702, 04, 14, '10-30-2023'),
+-- (702, 05, 1, '10-30-2023'),
+-- (702, 06, 1, '10-30-2023'),
+-- (702, 07, 1, '10-30-2023'),
+-- (702, 08, 1, '10-30-2023'),
+-- (803, 01, 1, '10-30-2023'),
+-- (803, 02, 1, '10-30-2023'),
+-- (803, 03, 250, '10-30-2023'),
+-- (803, 04, 20, '10-30-2023'),
+-- (803, 05, 1, '10-30-2023'),
+-- (803, 06, 1, '10-30-2023'),
+-- (803, 07, 1, '10-30-2023'),
+-- (803, 08, 1, '10-30-2023'),
+-- (904, 01, 1, '10-30-2023'),
+-- (904, 02, 1, '10-30-2023'),
+-- (904, 03, 215, '10-30-2023'),
+-- (904, 04, 16, '10-30-2023'),
+-- (904, 05, 1, '10-30-2023'),
+-- (904, 06, 1, '10-30-2023'),
+-- (904, 07, 1, '10-30-2023'),
+-- (904, 08, 1, '10-30-2023'),
+-- (1005, 01, 1, '10-30-2023'),
+-- (1005, 02, 1, '10-30-2023'),
+-- (1005, 03, 150, '10-30-2023'),
+-- (1005, 04, 10, '10-30-2023'),
+-- (1005, 05, 1, '10-30-2023'),
+-- (1005, 06, 1, '10-30-2023'),
+-- (1005, 07, 1, '10-30-2023'),
+-- (1005, 08, 1, '10-30-2023')
 
-INSERT INTO Vehicle VALUES
-('89H704953', 601, 1),
-('29K112345', 601, 2),
-('30U111111', 701, 1),
-('29K188888', 801, 2),
-('29H155555', 901, 1),
-('15H144444', 1001, 2)
+-- INSERT INTO Vehicle VALUES
+-- ('89H704953', 601, 1),
+-- ('29K112345', 601, 2),
+-- ('30U111111', 701, 1),
+-- ('29K188888', 801, 2),
+-- ('29H155555', 901, 1),
+-- ('15H144444', 1001, 2)
 
-DELETE FROM Payment
+-- USE master
+-- GO
+-- DROP DATABASE ApartmentManagement
+-- GO
 
-SELECT paymentId, Payment.apartmentId, [name], payee, timeValidate, [month], [year], [number] * cost FROM
-    Payment
-    INNER JOIN Fee ON Payment.feeId = Fee.id
-    INNER JOIN (SELECT Apartment.apartmentId, [name] FROM Apartment INNER JOIN Resident ON Apartment.ownerId = Resident.id) AS TABLE1 ON Payment.apartmentId = TABLE1.apartmentId
-
-USE master
-GO
-DROP DATABASE ApartmentManagement
-GO
-
-BACKUP DATABASE ApartmentManagement TO DISK = 'C:\sqlbackup\ApartmentManagement.bak'
+-- BACKUP DATABASE ApartmentManagement TO DISK = 'C:\sqlbackup\ApartmentManagement.bak'
