@@ -640,6 +640,7 @@ public class Home extends JFrame {
         }
     }
     private void exchange() {
+        setEnabled(false);
         new Exchange(this);
     }
     private void getInTempStatus() {

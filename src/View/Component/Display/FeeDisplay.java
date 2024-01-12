@@ -16,7 +16,6 @@ import javax.swing.table.DefaultTableModel;
 
 import Controller.FeeCtrl;
 import Model.Fee;
-import Model.User;
 import Resources.Constant.Constant;
 import View.Component.Object.StatisticCard;
 public class FeeDisplay extends JPanel {
@@ -28,7 +27,7 @@ public class FeeDisplay extends JPanel {
     String[] header = {"Mã phí", "Tên", "VND", "Hạn nộp", "Bắt buộc"};
     Object[][] data;
 
-    public FeeDisplay(User user, int cycle) {
+    public FeeDisplay(int cycle) {
         this.cycle = cycle;
         
         UIManager.put("Table.font", Constant.getTitleFont2(0));

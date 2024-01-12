@@ -14,7 +14,6 @@ import javax.swing.table.DefaultTableModel;
 
 import Controller.ResidentCtrl;
 import Model.Resident;
-import Model.User;
 import View.Component.Object.StatisticCard;
 
 public class ResidentDisplay extends JPanel {
@@ -25,7 +24,7 @@ public class ResidentDisplay extends JPanel {
     String[] header = {"Họ tên", "Giới tính", "Ngày sinh", "Số điện thoại", "Dân tộc", "Quốc tịch", "Tầng", "Phòng", "Mối quan hệ với chủ hộ", "Trạng thái"};
     String[][] data;
 
-    public ResidentDisplay(User user) {
+    public ResidentDisplay() {
         JPanel statistic = new JPanel();
 
         setBackground(Color.WHITE);

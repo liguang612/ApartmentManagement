@@ -14,7 +14,6 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.ApartmentCtrl;
-import Model.User;
 import Model.Vehicle;
 import Resources.Constant.Constant;
 import View.Component.Object.StatisticCard;
@@ -26,7 +25,7 @@ public class VehicleDisplay extends JPanel {
     String[] header = {"Tầng", "Phòng", "Biển số xe", "Loại phương tiện"};
     Object[][] data;
 
-    public VehicleDisplay(User user) {
+    public VehicleDisplay() {
         UIManager.put("Table.font", Constant.getTitleFont2(0));
         UIManager.put("TableHeader.font", Constant.getTitleFont2(2));
 

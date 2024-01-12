@@ -179,9 +179,11 @@ public class AddResident {
         }
 
         try {
-            if (ResidentCtrl.existsPhoneNumber(Integer.parseInt(phoneField.getText()))) {
-                notifyLabel.setText("Số điện thoại đã tồn tại");
-                return;
+            if (phoneField.getText().length() != 0) {
+                if (ResidentCtrl.existsPhoneNumber(Integer.parseInt(phoneField.getText()))) {
+                    notifyLabel.setText("Số điện thoại đã tồn tại");
+                    return;   
+                }
             }
             if (ResidentCtrl.existsResident(Long.parseLong(idField.getText()))) {
                 notifyLabel.setText("Số căn cước công dân này đã tồn tại");
@@ -193,7 +195,7 @@ public class AddResident {
                 nameField.getText(),
                 new Date(((java.util.Date)dateField.getValue()).getTime()),
                 genderField.getSelectedIndex() == 1,
-                Integer.parseInt(phoneField.getText()),
+                Integer.parseInt(phoneField.getText().isEmpty() ? "0" : phoneField.getText()),
                 countryField.getSelectedItem().toString(),
                 ethnicField.getSelectedItem().toString(),
                 (Integer)floorField.getValue(), 
@@ -204,11 +206,12 @@ public class AddResident {
                         Long.parseLong(idField.getText()), 0, new Date(System.currentTimeMillis()), null, ""));
                 }
         } catch (NumberFormatException e) {
+            e.printStackTrace();
             notifyLabel.setText("Số căn cước công dân / chứng minh nhân dân, số điện thoại phải là các số");
             return;
         }
 
-        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay(user));
+        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay());
 
         addResidentFrame.setVisible(false);
         prevFrame.setEnabled(true);

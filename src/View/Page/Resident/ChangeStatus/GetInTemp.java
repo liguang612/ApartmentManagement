@@ -219,7 +219,7 @@ public class GetInTemp {
             return;
         }
 
-        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay(user));
+        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay());
 
         addResidentFrame.setVisible(false);
         prevFrame.setEnabled(true);

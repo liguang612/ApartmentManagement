@@ -146,6 +146,6 @@ public class GetOutTemp {
             }
         }
 
-        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay(user));
+        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay());
     }
 }

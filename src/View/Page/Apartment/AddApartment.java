@@ -1,7 +1,6 @@
 package View.Page.Apartment;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -169,6 +168,6 @@ public class AddApartment {
 
         DBQuery.addNewApartment((int)floorField.getValue() * 100 + (int)roomField.getValue(), ((Resident)ownerField.getSelectedItem()).getId());
 
-        ((Home)prevFrame).setApartmentDisplay(new ApartmentDisplay(user));
+        ((Home)prevFrame).setApartmentDisplay(new ApartmentDisplay());
     }
 }

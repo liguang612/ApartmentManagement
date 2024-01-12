@@ -32,6 +32,8 @@ import Controller.ResidentCtrl;
 import Model.Activity;
 import Model.Resident;
 import Resources.Constant.Constant;
+import View.Home;
+import View.Component.Display.ResidentDisplay;
 import View.Component.Object.Dialog;
 
 public class Exchange {
@@ -272,6 +274,8 @@ public class Exchange {
             }
         }
         new Dialog(prevFrame, 2, "Thành công!");
+
+        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay());
 
         exchangeFrame.setVisible(false);
         prevFrame.setEnabled(true);

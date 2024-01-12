@@ -147,7 +147,7 @@ public class EditVehicle {
             System.out.println("thành côgn");
         }
 
-        ((Home)prevFrame).setVehicleDisplay(new VehicleDisplay(user));
+        ((Home)prevFrame).setVehicleDisplay(new VehicleDisplay());
 
         editVehicleFrame.setVisible(false);
         prevFrame.setEnabled(true);

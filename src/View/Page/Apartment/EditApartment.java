@@ -175,6 +175,6 @@ public class EditApartment {
 
         DBQuery.addNewApartment((int)floorField.getValue() * 100 + (int) roomField.getValue(), ((Resident)ownerField.getSelectedItem()).getId());
 
-        ((Home)prevFrame).setApartmentDisplay(new ApartmentDisplay(user));
+        ((Home)prevFrame).setApartmentDisplay(new ApartmentDisplay());
     }
 }

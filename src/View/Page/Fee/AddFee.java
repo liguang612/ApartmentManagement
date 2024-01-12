@@ -157,8 +157,8 @@ public class AddFee {
 
         FeeCtrl.addNewFee(feeName, feeCost, feeMandatory, feeCycle, expirationDate);
 
-        ((Home)prevFrame).getFeeTabbedPane().setComponentAt(0, new FeeDisplay(user, 0));
-        ((Home)prevFrame).getFeeTabbedPane().setComponentAt(1, new FeeDisplay(user, 1));
-        ((Home)prevFrame).getFeeTabbedPane().setComponentAt(2, new FeeDisplay(user, 2));
+        ((Home)prevFrame).getFeeTabbedPane().setComponentAt(0, new FeeDisplay(0));
+        ((Home)prevFrame).getFeeTabbedPane().setComponentAt(1, new FeeDisplay(1));
+        ((Home)prevFrame).getFeeTabbedPane().setComponentAt(2, new FeeDisplay(2));
     }
 }

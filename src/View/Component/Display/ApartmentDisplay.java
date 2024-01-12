@@ -14,7 +14,6 @@ import javax.swing.table.DefaultTableModel;
 
 import Controller.ApartmentCtrl;
 import Model.Apartment;
-import Model.User;
 import Resources.Constant.Constant;
 import View.Component.Object.StatisticCard;
 
@@ -26,7 +25,7 @@ public class ApartmentDisplay extends JPanel {
     String[] header = {"Tầng", "Phòng", "Tên chủ sở hữu", "Số điện thoại", "Diện tích (m^2)"};
     String[][] data;
 
-    public ApartmentDisplay(User user) {
+    public ApartmentDisplay() {
         UIManager.put("Table.font", Constant.getTitleFont2(0));
         UIManager.put("TableHeader.font", Constant.getTitleFont2(3));
         UIManager.put("TableHeader.foreground", new Color(131, 133, 142));

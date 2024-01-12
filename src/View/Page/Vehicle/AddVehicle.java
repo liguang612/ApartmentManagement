@@ -153,7 +153,7 @@ public class AddVehicle {
             e.printStackTrace();
         }
 
-        ((Home)prevFrame).setVehicleDisplay(new VehicleDisplay(user));
+        ((Home)prevFrame).setVehicleDisplay(new VehicleDisplay());
 
         addVehicleFrame.setVisible(false);
         prevFrame.setEnabled(true);

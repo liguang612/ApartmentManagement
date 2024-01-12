@@ -219,7 +219,7 @@ public class EditResident {
             return;
         }
 
-        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay(user));
+        ((Home)prevFrame).setResidentDisplay(new ResidentDisplay());
 
         editResidentFrame.setVisible(false);
         prevFrame.setEnabled(true);
