@@ -9,7 +9,7 @@ public class DBConnection {
     private static String host = "jdbc:sqlserver://localhost:1433";
     private static String databaseName = "ApartmentManagement";
     private static String username = "sa";
-    private static String password = "Alfie_2110";
+    private static String password = "admin";
 
     public static void connect() {
         try {
