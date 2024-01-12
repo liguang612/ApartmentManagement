@@ -353,7 +353,7 @@ public class Home extends JFrame {
         gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.EAST;
         gbc.gridx = 1; gbc.gridy = 1; gbc.weightx = 1; panel.add(feeSearchBox, gbc);
 
-        feeTabbedPane.addTab("Một lần", new FeeDisplay(user, 0));
+        feeTabbedPane.addTab("Một lần", new FeeDisplay(0));
         feeTabbedPane.addTab("Hàng tháng", null);
         feeTabbedPane.addTab("Thường niên", null);
         feeTabbedPane.setTabComponentAt(0, label1);
@@ -363,17 +363,17 @@ public class Home extends JFrame {
         feeTabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 if (feeTabbedPane.getSelectedIndex() == 0) {
-                    feeTabbedPane.setComponentAt(0, new FeeDisplay(user, 0));
+                    feeTabbedPane.setComponentAt(0, new FeeDisplay(0));
                     feeTabbedPane.setComponentAt(1, null);
                     feeTabbedPane.setComponentAt(2, null);
                 } else if (feeTabbedPane.getSelectedIndex() == 1) {
                     feeTabbedPane.setComponentAt(0, null);
-                    feeTabbedPane.setComponentAt(1, new FeeDisplay(user, 1));
+                    feeTabbedPane.setComponentAt(1, new FeeDisplay(1));
                     feeTabbedPane.setComponentAt(2, null);
                 } else {
                     feeTabbedPane.setComponentAt(0, null);
                     feeTabbedPane.setComponentAt(1, null);
-                    feeTabbedPane.setComponentAt(2, new FeeDisplay(user, 2));
+                    feeTabbedPane.setComponentAt(2, new FeeDisplay(2));
                 }
 
                 revalidate();
@@ -411,7 +411,7 @@ public class Home extends JFrame {
         gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.EAST;
         gbc.gridx = 1; gbc.gridy = 1; gbc.weightx = 1; panel.add(apartmentSearchBox, gbc);
 
-        residentTabbedPane.addTab("Căn hộ", new ApartmentDisplay(user));
+        residentTabbedPane.addTab("Căn hộ", new ApartmentDisplay());
         residentTabbedPane.addTab("Cư dân", null);
         residentTabbedPane.addTab("Phương tiện", null);
         residentTabbedPane.setTabComponentAt(0, label1);
@@ -421,21 +421,21 @@ public class Home extends JFrame {
         residentTabbedPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 if (residentTabbedPane.getSelectedIndex() == 0) {
-                    residentTabbedPane.setComponentAt(0, new ApartmentDisplay(user));
+                    residentTabbedPane.setComponentAt(0, new ApartmentDisplay());
                     residentTabbedPane.setComponentAt(1, null);
                     residentTabbedPane.setComponentAt(2, null);
 
                     label.setText("Danh sách căn hộ");
                 } else if (residentTabbedPane.getSelectedIndex() == 1) {
                     residentTabbedPane.setComponentAt(0, null);
-                    residentTabbedPane.setComponentAt(1, new ResidentDisplay(user));
+                    residentTabbedPane.setComponentAt(1, new ResidentDisplay());
                     residentTabbedPane.setComponentAt(2, null);
 
                     label.setText("Danh sách cư dân");
                 } else {
                     residentTabbedPane.setComponentAt(0, null);
                     residentTabbedPane.setComponentAt(1, null);
-                    residentTabbedPane.setComponentAt(2, new VehicleDisplay(user));
+                    residentTabbedPane.setComponentAt(2, new VehicleDisplay());
 
                     label.setText("Danh sách phương tiện");
                 }
@@ -551,7 +551,7 @@ public class Home extends JFrame {
     private void deleteApartment() {
         if (ApartmentCtrl.deleteApartment(((ApartmentDisplay)residentTabbedPane.getSelectedComponent()).getSelections())) {
             new Dialog(this, 2, "Thành công");
-            residentTabbedPane.setComponentAt(0, new ApartmentDisplay(user));
+            residentTabbedPane.setComponentAt(0, new ApartmentDisplay());
         } else {
             new Dialog(this, 0, "Thất bại");
         }
@@ -583,7 +583,7 @@ public class Home extends JFrame {
         int selected = feeTabbedPane.getSelectedIndex();
         if (FeeCtrl.deleteFee(((FeeDisplay)feeTabbedPane.getSelectedComponent()).getSelections())) {
             new Dialog(this, 2, "Thành công");
-            feeTabbedPane.setComponentAt(selected, new FeeDisplay(user, selected));
+            feeTabbedPane.setComponentAt(selected, new FeeDisplay(selected));
         } else {
             new Dialog(this, 0, "Thất bại");
         }
@@ -620,8 +620,8 @@ public class Home extends JFrame {
         ArrayList<Resident> selections = ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).getSelections();
         if (selections.size() > 0) {
             if (ResidentCtrl.deleteResident(selections)) {
-                residentTabbedPane.setComponentAt(0, new ApartmentDisplay(user));
-                residentTabbedPane.setComponentAt(1, new ResidentDisplay(user));
+                residentTabbedPane.setComponentAt(0, new ApartmentDisplay());
+                residentTabbedPane.setComponentAt(1, new ResidentDisplay());
                 new Dialog(this, 2, "Thành công");
             } else {
                 new Dialog(this, 0, "Thất bại");
@@ -675,7 +675,7 @@ public class Home extends JFrame {
 
         if (selections.size() > 0) {
             if (ApartmentCtrl.deleteVehicle(selections)) {
-                residentTabbedPane.setComponentAt(2, new VehicleDisplay(user));
+                residentTabbedPane.setComponentAt(2, new VehicleDisplay());
                 new Dialog(this, 2, "Thành công");
             } else {
                 new Dialog(this, 0, "Thất bại");

@@ -554,7 +554,7 @@ public class DBQuery {
                         resultSet.getInt(3),
                         resultSet.getBoolean(4),
                         resultSet.getInt(5),
-                        resultSet.getDate(6).toString()
+                        resultSet.getDate(6) == null ? "" : resultSet.getDate(6).toString()
                     );
                 }
             } catch (Exception e) {

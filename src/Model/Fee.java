@@ -43,7 +43,13 @@ public class Fee {
     }
 
     public Object[] toData() {
-        Object[] data = {String.valueOf(id), name, String.valueOf(cost), String.valueOf(expiration), mandatory};
+        Object[] data = {
+            String.valueOf(id),
+            name,
+            String.valueOf(cost),
+            (cycle == 0 ? expiration : cycle == 1 ? ("31/" + LocalDate.now().getMonthValue() + "/" + LocalDate.now().getYear()) : ("hạn 31/12/" + LocalDate.now().getYear())),
+            mandatory
+        };
         return data;
     }
 }
