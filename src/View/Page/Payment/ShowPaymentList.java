@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -19,9 +21,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
@@ -38,18 +42,21 @@ import Resources.Constant.Constant;
 import View.Component.Object.TextField;
 
 public class ShowPaymentList extends JFrame {
+    ArrayList<Fee> feeList;
     ArrayList<Payment> payments;
     DefaultTableModel model;
     Fee fee;
     JCheckBox dateCheckBox;
+    JComboBox<Fee> feeField;
     JLabel statistics;
+    JRadioButton oneTimeButton, monthlyButton, annualButton;
     JSpinner endSpinner, startSpinner;
     JTable table;
-    TextField paymentSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Số phòng", 14);
+    TextField paymentSearchBox = new TextField(new ImageIcon(getClass().getResource(Constant.image + "search.png")), "Số phòng", 14);
     String[] header = {"Tầng", "Phòng", "Người nộp", "Ngày nộp", "Định kỳ", "Số lượng\n(m2, người, ...)", "Đã nộp"};
     String[][] data;
 
-    public ShowPaymentList(JFrame prevFrame, Integer feeId) {
+    public ShowPaymentList(JFrame prevFrame) {
         UIManager.put("Label.font", Constant.contentFont);
         UIManager.put("Table.font", Constant.contentFont);
         UIManager.put("TableHeader.font", Constant.titleFont);
@@ -59,17 +66,10 @@ public class ShowPaymentList extends JFrame {
         setSize(new Dimension(1200, 800));
         setTitle("Danh sách nộp phí");
 
-        fee = FeeCtrl.getFee(feeId);
-        payments = FeeCtrl.getPaymentList(fee.getId());
-
-        int temp = payments.size();
-        data = new String[temp][];
-        for (int i = 0; i < temp; i++) {
-            data[i] = payments.get(i).toData();
-        }
+        payments = new ArrayList<>();
 
         JCheckBox checkBox = new JCheckBox();
-        JLabel label1 = new JLabel("Loại phí: "), label2 = new JLabel("   Bắt buộc: "), label3 = new JLabel("Phải nộp: ");
+        JLabel label1 = new JLabel("Loại phí: ");
         JPanel panel = new JPanel(new BorderLayout(15, 15)), panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT)),
                panel2 = new JPanel(new FlowLayout()), panel3 = new JPanel(new GridLayout(1, 1));
 
@@ -110,9 +110,28 @@ public class ShowPaymentList extends JFrame {
             }
         });
 
+        feeField = new JComboBox<>();
+        feeField.setPreferredSize(new Dimension(500, 25));
+        feeField.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent ie) {
+                fee = FeeCtrl.getFee(((Fee)ie.getItem()).getId());
+                payments = FeeCtrl.getPaymentList(fee.getId());
+
+                int temp = payments.size();
+                long sum = 0;
+
+                data = new String[temp][];
+                for (int i = 0; i < temp; i++) {
+                    data[i] = payments.get(i).toData();
+                }
+
+                model.setDataVector(data, header);
+                statistics.setText("Số lần dã đóng: " + temp + "     Tổng tiền: " + sum);
+
+            }
+        });
+
         label1.setFont(Constant.contentFont.deriveFont(Font.BOLD));
-        label2.setFont(Constant.contentFont.deriveFont(Font.BOLD));
-        label3.setFont(Constant.contentFont.deriveFont(Font.BOLD));
 
         model = new DefaultTableModel(data, header) {
             @Override
@@ -144,11 +163,32 @@ public class ShowPaymentList extends JFrame {
         filter("");
 
         panel1.add(label1);
-        panel1.add(new JLabel(fee.getName()));
-        panel1.add(label2);
-        panel1.add(checkBox);
-        panel1.add(label3);
-        panel1.add(new JLabel("" + fee.getCost()));
+        panel1.add(feeField);
+        panel1.add(oneTimeButton = new JRadioButton("Một lần"));
+        panel1.add(monthlyButton =  new JRadioButton("Hàng tháng"));
+        panel1.add(annualButton =  new JRadioButton("Hàng năm"));
+
+        oneTimeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                feeList = FeeCtrl.getFeeListIncludeHidden(0);
+                feeField.removeAllItems();
+                for (Fee f : feeList) {feeField.addItem(f);}
+            }
+        });
+        monthlyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                feeList = FeeCtrl.getFeeListIncludeHidden(1);
+                feeField.removeAllItems();
+                for (Fee f : feeList) {feeField.addItem(f);}
+            }
+        });
+        annualButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                feeList = FeeCtrl.getFeeListIncludeHidden(2);
+                feeField.removeAllItems();
+                for (Fee f : feeList) {feeField.addItem(f);}
+            }
+        });
 
         panel2.add(paymentSearchBox);
         panel2.add(Box.createHorizontalStrut(20));
@@ -204,7 +244,7 @@ public class ShowPaymentList extends JFrame {
         }
 
         model.setDataVector(filteredData.toArray(new String[0][0]), header);
-        statistics.setText("Số lần dã đóng: " + filteredData.size());
+        statistics.setText("Số lần đã đóng: " + filteredData.size() + "     Tổng tiền: " + 0);
 
         this.revalidate();
         this.repaint();

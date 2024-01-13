@@ -70,8 +70,8 @@ public class Home extends JFrame {
     JPopupMenu changeStatusPopupMenu = new JPopupMenu();
     JScrollPane residentScroll = new JScrollPane();
     JTabbedPane functionTabbedPane = new JTabbedPane(), feeTabbedPane = new JTabbedPane(), residentTabbedPane = new JTabbedPane();
-    TextField apartmentSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm", 14),
-              feeSearchBox = new TextField(new ImageIcon(Constant.image + "search.png"), "Nhập từ khóa để tìm kiếm", 14);
+    TextField apartmentSearchBox = new TextField(new ImageIcon(getClass().getResource(Constant.image + "search.png")), "Nhập từ khóa để tìm kiếm", 14),
+              feeSearchBox = new TextField(new ImageIcon(getClass().getResource(Constant.image + "search.png")), "Nhập từ khóa để tìm kiếm", 14);
     User user;
 
     public Home(User user) {
@@ -88,26 +88,26 @@ public class Home extends JFrame {
         UIManager.put("TableHeader.foreground", new Color(131, 133, 142));
         UIManager.put("TextArea.font", Constant.contentFont);
 
-        changePassword = new JButton(Constant.verticalImageTitle("changePassword.png", "Đổi mật khẩu"));
+        changePassword = new JButton(Constant.verticalImageTitle(toImagePath("changePassword.png"), "Đổi mật khẩu"));
         changePassword.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 changePassword();
             }
         });
-        editAccount = new JButton(Constant.verticalImageTitle("editAccount.png", "Sửa thông tin tài khoản"));
+        editAccount = new JButton(Constant.verticalImageTitle(toImagePath("editAccount.png"), "Sửa thông tin tài khoản"));
         editAccount.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 editAccount();
             }
         });
-        signOut = new JButton(Constant.verticalImageTitle("signOut.png", "Đăng xuất"));
+        signOut = new JButton(Constant.verticalImageTitle(toImagePath("signOut.png"), "Đăng xuất"));
         signOut.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 signOut();
             }
         });
 
-        addApartment = new JButton(Constant.verticalImageTitle("addOwner.png", "Thêm chủ căn hộ"));
+        addApartment = new JButton(Constant.verticalImageTitle(toImagePath("addOwner.png"), "Thêm chủ căn hộ"));
         addApartment.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 addApartment();
@@ -128,56 +128,56 @@ public class Home extends JFrame {
         apartmentSearchBox.setForeground(Color.BLACK);
         apartmentSearchBox.setPreferredSize(new Dimension(300, 30));
         apartmentSearchBox.setRadius(10);
-        deleteApartment = new JButton(Constant.verticalImageTitle("deleteOwner.png", "Xóa chủ căn hộ"));
+        deleteApartment = new JButton(Constant.verticalImageTitle(toImagePath("deleteOwner.png"), "Xóa chủ căn hộ"));
         deleteApartment.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 deleteApartment();
             }
         });
-        editApartment = new JButton(Constant.verticalImageTitle("editOwner.png", "Sửa chủ căn hộ"));
+        editApartment = new JButton(Constant.verticalImageTitle(toImagePath("editOwner.png"), "Sửa chủ căn hộ"));
         editApartment.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 editApartment();
             }
         });
-        showApartment = new JButton(Constant.verticalImageTitle("showApartment.png", "Thống kê nhân khẩu"));
+        showApartment = new JButton(Constant.verticalImageTitle(toImagePath("showApartment.png"), "Thống kê nhân khẩu"));
         showApartment.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 showApartment();
             }
         });
 
-        addResident = new JButton(Constant.verticalImageTitle("addResident.png", "Thêm cư dân"));
+        addResident = new JButton(Constant.verticalImageTitle(toImagePath("addResident.png"), "Thêm cư dân"));
         addResident.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 addResident();
             }
         });
-        deleteResident = new JButton(Constant.verticalImageTitle("deleteResident.png", "Xóa cư dân"));
+        deleteResident = new JButton(Constant.verticalImageTitle(toImagePath("deleteResident.png"), "Xóa cư dân"));
         deleteResident.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 deleteResident();
             }
         });
-        editResident = new JButton(Constant.verticalImageTitle("editResident.png", "Sửa thông tin cư dân"));
+        editResident = new JButton(Constant.verticalImageTitle(toImagePath("editResident.png"), "Sửa thông tin cư dân"));
         editResident.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 editResident();
             }
         });
-        exchange = new JButton("Chuyển hộ khẩu", new ImageIcon(Constant.image + "exchange.png"));
+        exchange = new JButton("Chuyển hộ khẩu", new ImageIcon(getClass().getResource(Constant.image + "exchange.png")));
         exchange.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 exchange();
             }
         });
-        getInTemp = new JButton("  Đăng ký tạm trú", new ImageIcon(Constant.image + "getInTemp.png"));
+        getInTemp = new JButton("  Đăng ký tạm trú", new ImageIcon(getClass().getResource(Constant.image + "getInTemp.png")));
         getInTemp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 getInTempStatus();
             }
         });
-        getOutTemp = new JButton("  Đăng ký tạm vắng", new ImageIcon(Constant.image + "getOutTemp.png"));
+        getOutTemp = new JButton("  Đăng ký tạm vắng", new ImageIcon(getClass().getResource(Constant.image + "getOutTemp.png")));
         getOutTemp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 getOutTempStatus();
@@ -189,51 +189,51 @@ public class Home extends JFrame {
         changeStatusPopupMenu.add(exchange);
         changeStatusPopupMenu.add(getInTemp);
         changeStatusPopupMenu.add(getOutTemp);
-        changeStatus = new JButton(Constant.verticalImageTitle("changeStatus.png", "Thay đổi nhân khẩu"));
+        changeStatus = new JButton(Constant.verticalImageTitle(toImagePath("changeStatus.png"), "Thay đổi nhân khẩu"));
         changeStatus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 changeStatusPopupMenu.show(changeStatus, 0, changeStatus.getHeight());
             }
         });
-        historyStatus = new JButton(Constant.verticalImageTitle("historyStatus.png", "Lịch sử cư trú"));
+        historyStatus = new JButton(Constant.verticalImageTitle(toImagePath("historyStatus.png"), "Lịch sử cư trú"));
         historyStatus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 historyStatus();
             }
         });
 
-        addVehicle = new JButton(Constant.verticalImageTitle("addVehicle.png", "Thêm phương tiện"));
+        addVehicle = new JButton(Constant.verticalImageTitle(toImagePath("addVehicle.png"), "Thêm phương tiện"));
         addVehicle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 addVehicle();
             }
         });
-        deleteVehicle = new JButton(Constant.verticalImageTitle("deleteVehicle.png", "Xóa phương tiện"));
+        deleteVehicle = new JButton(Constant.verticalImageTitle(toImagePath("deleteVehicle.png"), "Xóa phương tiện"));
         deleteVehicle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 deleteVehicle();
             }
         });
-        editVehicle = new JButton(Constant.verticalImageTitle("editVehicle.png", "Sửa phương tiện"));
+        editVehicle = new JButton(Constant.verticalImageTitle(toImagePath("editVehicle.png"), "Sửa phương tiện"));
         editVehicle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 editVehicle();
             }
         });
 
-        addFee = new JButton(Constant.verticalImageTitle("addFee.png", "Thêm loại phí"));
+        addFee = new JButton(Constant.verticalImageTitle(toImagePath("addFee.png"), "Thêm loại phí"));
         addFee.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 addFee();
             }
         });
-        deleteFee = new JButton(Constant.verticalImageTitle("deleteFee.png", "Xóa loại phí"));
+        deleteFee = new JButton(Constant.verticalImageTitle(toImagePath("deleteFee.png"), "Xóa loại phí"));
         deleteFee.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 deleteFee();
             }
         });
-        editFee = new JButton(Constant.verticalImageTitle("editFee.png", "Sửa loại phí"));
+        editFee = new JButton(Constant.verticalImageTitle(toImagePath("editFee.png"), "Sửa loại phí"));
         editFee.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 editFee();
@@ -251,13 +251,13 @@ public class Home extends JFrame {
         feeSearchBox.setPreferredSize(new Dimension(300, 30));
         feeSearchBox.setRadius(10);
 
-        pay = new JButton(Constant.verticalImageTitle("pay.png", "Nộp phí"));
+        pay = new JButton(Constant.verticalImageTitle(toImagePath("pay.png"), "Nộp phí"));
         pay.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 addPayment();
             }
         });
-        payList = new JButton(Constant.verticalImageTitle("payList.png", "Danh sách đã nộp phí"));
+        payList = new JButton(Constant.verticalImageTitle(toImagePath("payList.png"), "Danh sách đã nộp phí"));
         payList.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 showPaymentList();
@@ -603,13 +603,8 @@ public class Home extends JFrame {
         new AddPayment(this, user);
     }
     private void showPaymentList() {
-        ArrayList<Integer> selections = ((FeeDisplay)feeTabbedPane.getSelectedComponent()).getSelections();
-        if (selections.size() == 1) {
-            setEnabled(false);
-            new ShowPaymentList(this, selections.get(0));
-        } else {
-            new Dialog(this, 0, "Chỉ được chọn 1 mục!");
-        }
+        setEnabled(false);
+        new ShowPaymentList(this);
     }
 
     private void addResident() {
@@ -702,4 +697,8 @@ public class Home extends JFrame {
         accountDisplay.turnEditModeOn();
     }
     private void signOut() {AuthCtrl.signOut(this);}
+
+    public String toImagePath(String img) {
+        return getClass().getResource(Constant.image + img).toString();
+    }
 }

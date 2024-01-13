@@ -588,6 +588,31 @@ public class DBQuery {
         }
         return feeList;
     }
+    public static ArrayList<Fee> getFeeListWithIncludeHidden(int cycle) {
+        ArrayList<Fee> feeList = new ArrayList<Fee>();
+
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM Fee WHERE cycle = ?");
+                preparedStatement.setInt(1, cycle);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    feeList.add(new Fee(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getInt(3),
+                        resultSet.getBoolean(4),
+                        resultSet.getInt(5),
+                        resultSet.getString(6)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return feeList;
+    }
     public static ArrayList<Activity> getHistory(Long residentId) {
         ArrayList<Activity> activities = new ArrayList<Activity>();
 

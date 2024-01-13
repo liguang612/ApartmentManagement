@@ -97,7 +97,6 @@ public class AddPayment {
         });
 
         feeField = new JComboBox<>();
-        feeField.setEditable(true);
         feeField.setPreferredSize(new Dimension(760 / 7, 25));
         feeField.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent ie) {

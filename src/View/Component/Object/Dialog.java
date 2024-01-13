@@ -44,7 +44,7 @@ public class Dialog {
         dialogFrame.add(new JLabel()); // first line
         dialogFrame.add(new JLabel());
         dialogFrame.add(new JLabel());
-        dialogFrame.add(new JLabel(Tool.resize(new ImageIcon(Constant.dialogIconPath[type]), 30, 30))); // second line
+        dialogFrame.add(new JLabel(Tool.resize(new ImageIcon(getClass().getResource(Constant.dialogIconPath[type])), 30, 30))); // second line
         dialogFrame.add(new JLabel(message));
         dialogFrame.add(new JLabel());
         dialogFrame.add(new JLabel()); // third line

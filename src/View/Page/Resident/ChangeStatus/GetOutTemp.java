@@ -71,7 +71,7 @@ public class GetOutTemp {
         notifyLabel = new JLabel("", JLabel.LEFT);
         notifyLabel.setFont(Constant.notifyFont);
         if (resident.getStatus() == 1) {
-            notifyLabel.setIcon(Tool.resize(new ImageIcon(Constant.image + "alert.png"), 15, 15));
+            notifyLabel.setIcon(Tool.resize(new ImageIcon(getClass().getResource(Constant.image + "alert.png")), 15, 15));
             notifyLabel.setText("<html>Cư dân này hiện đang tạm trú ở chung cư.<br>Việc thực hiện đăng ký tạm vắng cho cư dân này sẽ tương ứng với rời khỏi chung cư.</html>");
         }
 

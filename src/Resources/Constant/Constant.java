@@ -9,10 +9,9 @@ import java.util.Date;
 import javax.swing.SpinnerDateModel;
 
 public class Constant {
-    public static final String font = System.getProperty("user.dir") + "/src/Resources/Font/";
-    public static final String image = System.getProperty("user.dir") + "/src/Resources/Image/";
+    public static final String font = "/Resources/Font/";
+    public static final String image = "/Resources/Image/";
     
-    public static final String customFont = System.getProperty("user.dir") + "/src/Resources/Font";
     public static final Font buttonFont = new Font("Segoe UI", Font.PLAIN, 13);
     public static final Font contentFont = new Font("Segoe UI", Font.PLAIN, 14);
     public static final Font digitFont = new Font("Consolas", Font.PLAIN, 14);
@@ -28,7 +27,7 @@ public class Constant {
     public static final String[] vehicleType = {"Xe máy", "Ô tô"};
 
     public static String verticalImageTitle(String img, String title) {
-        return "<html><center><img src='file:" + Constant.image + img + "'/><br/>" + title + "</center></html>";
+        return "<html><center><img src='" + img + "'/><br/>" + title + "</center></html>";
     }
 
     public SpinnerDateModel getSpinnerDateModel() {
@@ -70,7 +69,7 @@ public class Constant {
                     break;
             }
 
-            final Font titleFont2 = Font.createFont(Font.TRUETYPE_FONT, new File(font + path)).deriveFont((float)14);
+            final Font titleFont2 = Font.createFont(Font.TRUETYPE_FONT, Constant.class.getResourceAsStream(font + path)).deriveFont((float)14);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(titleFont2);
 
             return titleFont2;

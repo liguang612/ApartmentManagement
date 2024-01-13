@@ -40,6 +40,9 @@ public class FeeCtrl {
     public static ArrayList<Fee> getFeeList(int cycle) {
         return DBQuery.getFeeList(cycle);
     }
+    public static ArrayList<Fee> getFeeListIncludeHidden(int cycle) {
+        return DBQuery.getFeeListWithIncludeHidden(cycle);
+    }
 
     public static ArrayList<Payment> getPaymentList(int feeId) {
         return DBQuery.getPaymentList(feeId);

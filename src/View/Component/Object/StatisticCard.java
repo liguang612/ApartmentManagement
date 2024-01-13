@@ -29,7 +29,7 @@ public class StatisticCard extends RoundedPanel {
         this.content.setFont(Constant.getTitleFont2(2).deriveFont((float)32));
         this.content.setForeground(new Color(51, 51, 51));
 
-        icon = new RoundedLabel(new ImageIcon(Constant.image + iconPath));
+        icon = new RoundedLabel(new ImageIcon(getClass().getResource(Constant.image + iconPath)));
         // icon.setBackground(new Color(211, 255, 231));
         icon.setBackground(Color.WHITE);
 

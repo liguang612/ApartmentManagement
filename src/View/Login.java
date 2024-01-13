@@ -124,7 +124,7 @@ public class Login {
 
         backgroundPanel = new JPanel(new GridLayout(1, 1, loginFrame.getHeight() / 4, loginFrame.getHeight() / 4));
         
-        backgroundPanel.add(new JLabel(Tool.resize(new ImageIcon(Constant.image + "loginBackground.png"), loginFrame.getHeight() * 3 / 5, loginFrame.getHeight() * 3 / 5)));
+        backgroundPanel.add(new JLabel(Tool.resize(new ImageIcon(getClass().getResource(Constant.image + "loginBackground.png")), loginFrame.getHeight() * 3 / 5, loginFrame.getHeight() * 3 / 5)));
 
         loginFrame.add(backgroundPanel);
         loginFrame.add(rightPanel);
