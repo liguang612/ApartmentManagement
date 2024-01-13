@@ -1,6 +1,7 @@
 package View.Page.Payment;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -19,12 +20,15 @@ import java.util.Calendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -44,11 +48,14 @@ import View.Component.Object.TextField;
 public class ShowPaymentList extends JFrame {
     ArrayList<Fee> feeList;
     ArrayList<Payment> payments;
+    ButtonGroup feeType;
     DefaultTableModel model;
     Fee fee;
+    JButton unPaid;
     JCheckBox dateCheckBox;
     JComboBox<Fee> feeField;
     JLabel statistics;
+    JPopupMenu unpaidPopup;
     JRadioButton oneTimeButton, monthlyButton, annualButton;
     JSpinner endSpinner, startSpinner;
     JTable table;
@@ -85,13 +92,14 @@ public class ShowPaymentList extends JFrame {
         checkBox.setSelected(true);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, -1); java.util.Date initialDate = calendar.getTime(); calendar.add(Calendar.MONTH, 1);
+        calendar.add(Calendar.MONTH, -1); java.util.Date initialDate = calendar.getTime();
+        calendar.add(Calendar.MONTH, 1); java.util.Date initialDate2 = calendar.getTime();
         calendar.add(Calendar.YEAR, -100); java.util.Date startDate = calendar.getTime();
         calendar.add(Calendar.YEAR, 100); java.util.Date endDate = calendar.getTime();
         startSpinner = new JSpinner(new SpinnerDateModel(initialDate, startDate, endDate, Calendar.DAY_OF_MONTH));
         startSpinner.setEditor(new JSpinner.DateEditor(startSpinner, "dd/MM/yyyy"));
         startSpinner.setEnabled(false);
-        endSpinner = new JSpinner(new SpinnerDateModel(initialDate, startDate, endDate, Calendar.DAY_OF_MONTH));
+        endSpinner = new JSpinner(new SpinnerDateModel(initialDate2, startDate, endDate, Calendar.DAY_OF_MONTH));
         endSpinner.setEditor(new JSpinner.DateEditor(endSpinner, "dd/MM/yyyy"));
         endSpinner.setEnabled(false);
 
@@ -114,7 +122,7 @@ public class ShowPaymentList extends JFrame {
         feeField.setPreferredSize(new Dimension(500, 25));
         feeField.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent ie) {
-                fee = FeeCtrl.getFee(((Fee)ie.getItem()).getId());
+                fee = (Fee)ie.getItem();
                 payments = FeeCtrl.getPaymentList(fee.getId());
 
                 int temp = payments.size();
@@ -123,10 +131,11 @@ public class ShowPaymentList extends JFrame {
                 data = new String[temp][];
                 for (int i = 0; i < temp; i++) {
                     data[i] = payments.get(i).toData();
+                    sum += payments.get(i).getPaid();
                 }
 
                 model.setDataVector(data, header);
-                statistics.setText("Số lần dã đóng: " + temp + "     Tổng tiền: " + sum);
+                statistics.setText("Số hộ dã đóng: " + temp + "     Số hộ chưa đóng: " + (fee == null ? 0 : FeeCtrl.countUnpaid(fee.getId())) + "     Tổng tiền: " + sum);
 
             }
         });
@@ -162,11 +171,20 @@ public class ShowPaymentList extends JFrame {
 
         filter("");
 
+        feeType = new ButtonGroup();
+        feeType.add(oneTimeButton = new JRadioButton("Một lần"));
+        feeType.add(monthlyButton =  new JRadioButton("Hàng tháng"));
+        feeType.add(annualButton =  new JRadioButton("Hàng năm"));
+
+        unPaid = new JButton("Xem hộ chưa nộp");
+
         panel1.add(label1);
         panel1.add(feeField);
-        panel1.add(oneTimeButton = new JRadioButton("Một lần"));
-        panel1.add(monthlyButton =  new JRadioButton("Hàng tháng"));
-        panel1.add(annualButton =  new JRadioButton("Hàng năm"));
+        panel1.add(oneTimeButton);
+        panel1.add(monthlyButton);
+        panel1.add(annualButton);
+        panel1.add(Box.createHorizontalStrut(25));
+        panel1.add(unPaid);
 
         oneTimeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -187,6 +205,12 @@ public class ShowPaymentList extends JFrame {
                 feeList = FeeCtrl.getFeeListIncludeHidden(2);
                 feeField.removeAllItems();
                 for (Fee f : feeList) {feeField.addItem(f);}
+            }
+        });
+
+        unPaid.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                unPaid();
             }
         });
 
@@ -228,10 +252,12 @@ public class ShowPaymentList extends JFrame {
 
     public void filter(String keyword) {
         ArrayList<String[]> filteredData = new ArrayList<>();
+        long sum = 0;
 
         if (keyword.isEmpty()) {
             for (Payment payment : payments) {
                 filteredData.add(payment.toData());
+                sum += payment.getPaid();
             }
         } else if (keyword.matches("\\d+")) {
             int keyNum = Integer.valueOf(keyword);
@@ -239,12 +265,13 @@ public class ShowPaymentList extends JFrame {
             for (Payment payment : payments) {
                 if (payment.getFloor() * 100 + payment.getRoom() == keyNum || payment.getFloor() == keyNum || payment.getRoom() == keyNum) {
                     filteredData.add(payment.toData());
+                    sum += payment.getPaid();
                 }
             }
         }
 
         model.setDataVector(filteredData.toArray(new String[0][0]), header);
-        statistics.setText("Số lần đã đóng: " + filteredData.size() + "     Tổng tiền: " + 0);
+        statistics.setText("Số hộ đã đóng: " + filteredData.size() + "     Số hộ chưa đóng: " + (fee == null ? 0 : FeeCtrl.countUnpaid(fee.getId())) + "     Tổng tiền: " + sum);
 
         this.revalidate();
         this.repaint();
@@ -277,9 +304,50 @@ public class ShowPaymentList extends JFrame {
         }
 
         model.setDataVector(filteredData.toArray(new String[0][0]), header);
-        statistics.setText("Số lần dã đóng: " + filteredData.size() + "\tTổng tiền: " + sum);
+        statistics.setText("Số hộ dã đóng: " + filteredData.size() + "     Số hộ chưa đóng: " + (fee == null ? 0 : FeeCtrl.countUnpaid(fee.getId(), startDate, endDate)) + "     Tổng tiền: " + sum);
 
         this.revalidate();
         this.repaint();
     }
-}
+
+    private void unPaid() {
+        ArrayList<Integer> unpaidList;
+        DefaultTableModel _model;
+        JScrollPane _scrollPane;
+        JTable _table;
+        String[] _header = {"Căn hộ"};
+        String[][] _data;
+
+        unpaidPopup = new JPopupMenu();
+
+        if (dateCheckBox.isSelected()) {
+            unpaidList = FeeCtrl.getUnpaidList(fee.getId(), new Date(((java.util.Date)startSpinner.getValue()).getTime()), new Date(((java.util.Date)endSpinner.getValue()).getTime()));
+        } else {
+            unpaidList = FeeCtrl.getUnpaidList(fee.getId());
+        }
+
+        _data = new String[unpaidList.size()][];
+        for (int i = 0; i < _data.length; i++) {
+            String[] temp = {unpaidList.get(i).toString()};
+            _data[i] = temp;
+        }
+
+        _model = new DefaultTableModel(_data, _header) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        _table = new JTable(_model);
+        _table.setRowHeight(25);
+
+        _scrollPane = new JScrollPane(_table);
+        _scrollPane.setBackground(Color.WHITE);
+
+        unpaidPopup.setBackground(Color.WHITE);
+        unpaidPopup.setLayout(new GridLayout(1, 1));
+        unpaidPopup.add(_scrollPane);
+
+        unpaidPopup.show(unPaid, 0, unPaid.getHeight());
+    }
+};

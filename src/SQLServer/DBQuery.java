@@ -253,6 +253,60 @@ public class DBQuery {
         return false;
     }
 
+    public static int countApartment() {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT COUNT(apartmentId) FROM Apartment WHERE ownerId IS NOT NULL");
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                resultSet.next();
+                return resultSet.getInt(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public static int countUnpaid(int feeId) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT COUNT(DISTINCT apartmentId) FROM Payment WHERE feeId = ?");
+
+                preparedStatement.setInt(1, feeId);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                resultSet.next();
+
+                return countApartment() - resultSet.getInt(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+    public static int countUnpaid(int feeId, Date start, Date end) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT COUNT(DISTINCT apartmentId) FROM Payment WHERE feeId = ? AND timeValidate <= ? AND timeValidate >= ? GROUP BY feeId");
+
+                preparedStatement.setInt(1, feeId);
+                preparedStatement.setDate(2, end);
+                preparedStatement.setDate(3, start);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    return countApartment() - resultSet.getInt(1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
     public static boolean deleteApartment(ArrayList<Integer> selections) {
         if (DBConnection.database != null) {
             try {
@@ -825,6 +879,51 @@ public class DBQuery {
         }
 
         return residentList;
+    }
+
+    public static ArrayList<Integer> getUnpaidList(int feeId) {
+        ArrayList<Integer> unpaid = new ArrayList<>();
+
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT apartmentId FROM Apartment WHERE ownerId IS NOT NULL AND apartmentId NOT IN (SELECT apartmentId FROM Payment WHERE feeId = ?)");
+
+                preparedStatement.setInt(1, feeId);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    unpaid.add(resultSet.getInt(1));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return unpaid;
+    }
+    public static ArrayList<Integer> getUnpaidList(int feeId, Date start, Date end) {
+        ArrayList<Integer> unpaid = new ArrayList<>();
+
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT apartmentId FROM Apartment WHERE ownerId IS NOT NULL AND apartmentId NOT IN (SELECT apartmentId FROM Payment WHERE feeId = ? AND timeValidate <= ? AND timeValidate >= ?)");
+
+                preparedStatement.setInt(1, feeId);
+                preparedStatement.setDate(2, end);
+                preparedStatement.setDate(3, start);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    unpaid.add(resultSet.getInt(1));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return unpaid;
     }
 
     public static ArrayList<Vehicle> getVehicle() {

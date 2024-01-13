@@ -59,6 +59,7 @@ public class AddPayment {
     JSpinner floorField, monthField, roomField, quantityField, yearField;
     JTextField birthdayField;
     JRadioButton oneTimeButton, monthlyButton, annualButton;
+    
     User user;
 
     public AddPayment(JFrame prev, User user) {

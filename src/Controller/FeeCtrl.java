@@ -1,5 +1,6 @@
 package Controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import Model.Fee;
@@ -9,6 +10,13 @@ import SQLServer.DBQuery;
 public class FeeCtrl {
     public static Boolean addNewFee(String name, int cost, boolean mandatory, int cycle, String expirationDate) {
         return DBQuery.addNewFee(name, cost, mandatory, cycle, expirationDate);
+    }
+
+    public static int countUnpaid(int feeId) {
+        return DBQuery.countUnpaid(feeId);
+    }
+    public static int countUnpaid(int feeId, Date start, Date end) {
+        return DBQuery.countUnpaid(feeId, start, end);
     }
 
     public static boolean deleteFee(ArrayList<Integer> selections) {
@@ -47,6 +55,13 @@ public class FeeCtrl {
     public static ArrayList<Payment> getPaymentList(int feeId) {
         return DBQuery.getPaymentList(feeId);
     }
+    public static ArrayList<Integer> getUnpaidList(int feeId) {
+        return DBQuery.getUnpaidList(feeId);
+    }
+    public static ArrayList<Integer> getUnpaidList(int feeId, Date start, Date end) {
+        return DBQuery.getUnpaidList(feeId, start, end);
+    }
+
 
     public static boolean addPayment(Payment payment) {
         return DBQuery.addPayment(payment);

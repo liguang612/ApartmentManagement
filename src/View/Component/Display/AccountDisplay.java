@@ -139,7 +139,7 @@ public class AccountDisplay extends JPanel {
         verifyButton.setVisible(false);
     }
     public void turnEditModeOn() {
-        if (avatarLabel.getComponentCount() == 0) avatarLabel.add(new JLabel(new ImageIcon(getClass().getResource(Constant.image + "/pickImage.png"))), BorderLayout.CENTER);
+        if (avatarLabel.getComponentCount() == 0) avatarLabel.add(new JLabel(new ImageIcon(getClass().getResource(Constant.image + "pickImage.png"))), BorderLayout.CENTER);
 
         if (avatarLabel.getMouseListeners().length == 0)
             avatarLabel.addMouseListener(new MouseAdapter() {
