@@ -24,7 +24,7 @@ public class FeeDisplay extends JPanel {
     int cycle;
     JTable table;
     StatisticCard forceCard, optionCard, warningCard;
-    String[] header = {"Mã phí", "Tên", "VND", "Hạn nộp", "Bắt buộc"};
+    String[] header = {"Mã phí", "Tên", "Đơn giá", "Hạn nộp", "Bắt buộc"};
     Object[][] data;
 
     public FeeDisplay(int cycle) {

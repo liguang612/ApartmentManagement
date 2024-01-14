@@ -30,14 +30,15 @@ import Model.User;
 import Resources.Constant.Constant;
 import View.Home;
 import View.Component.Display.FeeDisplay;
+import View.Component.Object.Dialog;
 
 public class AddFee {
     JButton cancelButton, verifyButton;
     JCheckBox mandatoryField = new JCheckBox();
-    JSpinner dateField;
     JComboBox<String> cycleField;
     JFrame addFeeFrame, prevFrame;
     JPanel contentPanel = new JPanel(), functionPanel = new JPanel();
+    JSpinner dateField;
     JTextField costField, nameField;
     User user;
 
@@ -149,9 +150,16 @@ public class AddFee {
         prevFrame.toFront();
 
         String feeName = nameField.getText();
+        if (feeName.isEmpty()) {
+            addFeeFrame.setEnabled(false);
+            new Dialog(addFeeFrame, 0, "Không được để trống tên phí");
+        }
         int feeCost = Integer.parseInt(costField.getText());
+        if (feeCost <= 0) {
+            addFeeFrame.setEnabled(false);
+            new Dialog(addFeeFrame, 0, "Phí thu không thể là số âm");
+        }
         boolean feeMandatory = mandatoryField.isSelected() ? true : false;
-        // int feeCycle = java.util.Arrays.asList(Constant.cycleType).indexOf(cycleField.getSelectedItem().toString());
         int feeCycle = cycleField.getSelectedIndex();
         String expirationDate = (new SimpleDateFormat("yyyy-MM-dd")).format(dateField.getValue());
 

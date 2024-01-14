@@ -51,7 +51,7 @@ public class EditFee {
 
         Fee current = FeeCtrl.getFee(currentId);
         GridBagConstraints gbc = new GridBagConstraints();
-        JLabel label = new JLabel("Thêm loại phí mới", JLabel.CENTER);
+        JLabel label = new JLabel("Sửa thông tin phí", JLabel.CENTER);
         JPanel datePanel = new JPanel(new GridLayout(1, 6));
 
         editFeeFrame = new JFrame("Thêm loại phí mới");
@@ -136,7 +136,7 @@ public class EditFee {
         gbc.gridy = 0; contentPanel.add(nameField, gbc);
         gbc.gridy = 1; contentPanel.add(costField, gbc);
         gbc.gridy = 2; contentPanel.add(mandatoryField, gbc);
-        gbc.gridy = 4; contentPanel.add(datePanel, gbc);
+        gbc.gridy = 4; contentPanel.add(dateField, gbc);
         gbc.gridy = 5; contentPanel.add(notifyLabel, gbc);
         gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
         gbc.gridy = 3; contentPanel.add(cycleField, gbc);

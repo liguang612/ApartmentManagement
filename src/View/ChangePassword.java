@@ -20,6 +20,7 @@ import javax.swing.JPasswordField;
 import Controller.AuthCtrl;
 import Model.User;
 import Resources.Constant.Constant;
+import View.Component.Object.Dialog;
 
 public class ChangePassword {
     JButton cancelButton, verifyButton;
@@ -122,12 +123,16 @@ public class ChangePassword {
             return ;
         }
 
+        if (oldPassword.equals(newPassword)) {
+            notifyLabel.setText("Mật khẩu cũ trùng mật khẩu mới!");
+            return;
+        }
+
         if (!AuthCtrl.changePassword(user.getId(), confirmPassword)) {
             notifyLabel.setText("Thay đổi mật khẩu không thành công!");
         }
 
         changePasswordFrame.setVisible(false);
-        prevFrame.setEnabled(true);
-        prevFrame.toFront();
+        new Dialog(prevFrame, 2, "Đổi mật khẩu thành công!");
     }
 }

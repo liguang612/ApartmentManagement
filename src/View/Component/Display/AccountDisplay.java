@@ -91,7 +91,7 @@ public class AccountDisplay extends JPanel {
         panel.add(new JLabel());                                            panel.add(label);        panel.add(new JLabel());
         panel.add(new JLabel());                                            panel.add(new JLabel()); panel.add(new JLabel());
         panel.add(new JLabel("Đại diện ban quản lý: ", JLabel.RIGHT)); panel.add(new JLabel()); panel.add(nameLabel);
-        panel.add(new JLabel("Ngày khánh thành: ", JLabel.RIGHT));     panel.add(new JLabel()); panel.add(birthdayLabel);
+        panel.add(new JLabel("Ngày sinh: ", JLabel.RIGHT));     panel.add(new JLabel()); panel.add(birthdayLabel);
         panel.add(new JLabel("Số điện thoại liên hệ: ", JLabel.RIGHT)); panel.add(new JLabel()); panel.add(phoneLabel);
         panel.add(new JLabel("Địa chỉ: ", JLabel.RIGHT));              panel.add(new JLabel()); panel.add(addressLabel);
         panel.add(new JLabel());                                            panel.add(editPanel);    panel.add(new JLabel());
