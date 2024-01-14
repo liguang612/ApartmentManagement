@@ -60,7 +60,7 @@ public class EditResident {
         editResidentFrame.setBackground(Color.WHITE);
         editResidentFrame.setLayout(new BorderLayout());
         editResidentFrame.setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 500, prevFrame.getY() + prevFrame.getHeight() / 2 - 200);
-        editResidentFrame.setSize(1000, 400);
+        editResidentFrame.setSize(800, 600);
 
         cancelButton = new JButton("Hủy");
         cancelButton.setFont(Constant.buttonFont);

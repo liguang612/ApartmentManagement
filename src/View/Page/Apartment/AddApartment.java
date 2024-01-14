@@ -30,6 +30,7 @@ import Resources.Constant.Constant;
 import SQLServer.DBQuery;
 import View.Home;
 import View.Component.Display.ApartmentDisplay;
+import View.Component.Object.Dialog;
 
 public class AddApartment {
     ArrayList<Resident> residents = ResidentCtrl.getResidentList(0);
@@ -166,7 +167,11 @@ public class AddApartment {
         prevFrame.setEnabled(true);
         prevFrame.toFront();
 
-        DBQuery.addNewApartment((int)floorField.getValue() * 100 + (int)roomField.getValue(), ((Resident)ownerField.getSelectedItem()).getId());
+        if (DBQuery.addNewApartment((int)floorField.getValue() * 100 + (int)roomField.getValue(), ((Resident)ownerField.getSelectedItem()).getId())) {
+            new Dialog(prevFrame, 2, "Thành công");
+        } else {
+            new Dialog(prevFrame, 0, "Thất bại");
+        }
 
         ((Home)prevFrame).setApartmentDisplay(new ApartmentDisplay());
     }

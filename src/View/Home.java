@@ -94,7 +94,7 @@ public class Home extends JFrame {
                 changePassword();
             }
         });
-        editAccount = new JButton(Constant.verticalImageTitle(toImagePath("editAccount.png"), "Sửa thông tin tài khoản"));
+        editAccount = new JButton(Constant.verticalImageTitle(toImagePath("editAccount.png"), "Chỉnh sửa hồ sơ"));
         editAccount.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 editAccount();
