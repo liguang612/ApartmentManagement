@@ -137,7 +137,7 @@ public class GetOutTemp {
                 new Dialog(getOutTempFrame, 0, "Thất bại");
             }
         } else {
-            if (ResidentCtrl.addActivity(new Activity(Long.valueOf(resident.getId()), 1, new Date(System.currentTimeMillis()), null, reason.getText()))) {
+            if (ResidentCtrl.addActivity(new Activity(Long.valueOf(resident.getId()), 2, new Date(System.currentTimeMillis()), null, reason.getText()))) {
                 getOutTempFrame.setVisible(false);
                 prevFrame.toFront();
                 new Dialog(prevFrame, 2, "Thành công");
