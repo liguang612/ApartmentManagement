@@ -52,7 +52,6 @@ public class AddPayment {
     JCheckBox lateCheckBox;
     JComboBox ownerField;
     JComboBox<Fee> feeField;
-    JComboBox<String> nationalityField;
     JFrame addPaymentFrame, prevFrame;
     JLabel moneyLabel, notifyLabel, MoneyLabel;
     JPanel contentPanel = new JPanel(), feeTypePanel = new JPanel(new GridLayout(1, 3)), functionPanel = new JPanel(), moneyPanel = new JPanel(new GridLayout(1, 5, 15, 0));
@@ -197,9 +196,6 @@ public class AddPayment {
         monthField.setEnabled(false);
         yearField.setEnabled(false);
 
-        nationalityField = new JComboBox<String>(Constant.country);
-        nationalityField.setBackground(Color.WHITE);
-
         notifyLabel = new JLabel();
         notifyLabel.setFont(Constant.notifyFont);
         notifyLabel.setForeground(Color.RED);
@@ -237,21 +233,17 @@ public class AddPayment {
         gbc.gridy = 0; contentPanel.add(new JLabel("Tầng", JLabel.RIGHT), gbc);
         gbc.gridy = 1; contentPanel.add(new JLabel("Người nộp", JLabel.RIGHT), gbc);
         gbc.gridy = 2; contentPanel.add(new JLabel("Số tiền/đơn vị", JLabel.RIGHT), gbc);
-        gbc.gridy = 3; contentPanel.add(new JLabel("Quốc tịch", JLabel.RIGHT), gbc);
-        gbc.gridy = 4; contentPanel.add(new JLabel("Loại phí", JLabel.RIGHT), gbc);
-        gbc.gridy = 6; contentPanel.add(new JLabel("Nộp muộn", JLabel.RIGHT), gbc);
+        gbc.gridy = 3; contentPanel.add(new JLabel("Loại phí", JLabel.RIGHT), gbc);
+        gbc.gridy = 5; contentPanel.add(new JLabel("Nộp muộn", JLabel.RIGHT), gbc);
 
         gbc.gridx = 1; gbc.weightx = 5; gbc.weighty = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy = 0; contentPanel.add(frPanel, gbc);
         gbc.gridy = 1; contentPanel.add(ownerField, gbc);
         gbc.gridy = 2; contentPanel.add(moneyPanel, gbc);
-        gbc.anchor = GridBagConstraints.LINE_START; gbc.fill = GridBagConstraints.NONE;
-        gbc.gridy = 3; contentPanel.add(nationalityField, gbc);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridy = 4; contentPanel.add(feeField, gbc);
-        gbc.gridy = 5; contentPanel.add(feeTypePanel, gbc);
-        gbc.gridy = 6; contentPanel.add(latePanel, gbc);
-        gbc.gridy = 7; contentPanel.add(notifyLabel, gbc);
+        gbc.gridy = 3; contentPanel.add(feeField, gbc);
+        gbc.gridy = 4; contentPanel.add(feeTypePanel, gbc);
+        gbc.gridy = 5; contentPanel.add(latePanel, gbc);
+        gbc.gridy = 6; contentPanel.add(notifyLabel, gbc);
 
         functionPanel.setLayout(new GridLayout(2, 5));
         functionPanel.add(new JLabel());
@@ -316,7 +308,6 @@ public class AddPayment {
 
         addPaymentFrame.setVisible(false);
         prevFrame.setEnabled(true);
-        prevFrame.toFront();
     }
 
     private void suggestion() {
