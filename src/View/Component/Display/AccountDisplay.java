@@ -176,14 +176,6 @@ public class AccountDisplay extends JPanel {
         // update image to database
 
         if(imagePath == null) return;
-
-        // try(final InputStream inputStream = Files.newInputStream(Paths.get(imagePath))) {
-        //     AuthCtrl.ChangeAvatar(user.getId(), inputStream);
-        //     imagePath = null;
-        //     updatedImg = null;
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
         try {
             AuthCtrl.ChangeAvatar(user.getId(), updatedImg);
         } catch (Exception e) {
