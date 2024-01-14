@@ -74,9 +74,11 @@ public class VehicleDisplay extends JPanel {
         int car = 0, motorbike = 0;
 
         for (Vehicle vehicle : vehicles) {
-            filteredData.add(vehicle.toData());
-            if (vehicle.getType() == 0) {++motorbike;}
-            else {++car;}
+            if (vehicle.getLicensePlates().contains(keyword)) {
+                filteredData.add(vehicle.toData());
+                if (vehicle.getType() == 0) {++motorbike;}
+                else {++car;}
+            }
         }
 
         model.setDataVector(filteredData.toArray(new Object[0][0]), header);

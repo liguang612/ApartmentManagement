@@ -113,6 +113,11 @@ public class ChangePassword {
     private void verify() {
         String confirmPassword = new String(confirmPasswordField.getPassword()), newPassword = new String(newPasswordField.getPassword()), oldPassword = new String(oldPasswordField.getPassword());
 
+        if (newPassword.isEmpty()) {
+            notifyLabel.setText("Mật khẩu mới không được bỏ trống!");
+            return;
+        }
+
         if (!newPassword.equals(confirmPassword)) {
             notifyLabel.setText("Mật khẩu xác nhận không khớp!");
             return ;

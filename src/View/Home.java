@@ -120,6 +120,8 @@ public class Home extends JFrame {
                         ((ApartmentDisplay)residentTabbedPane.getSelectedComponent()).filter(apartmentSearchBox.getText());
                     else if (residentTabbedPane.getSelectedComponent() instanceof ResidentDisplay)
                         ((ResidentDisplay)residentTabbedPane.getSelectedComponent()).filter(apartmentSearchBox.getText());
+                    else
+                        ((VehicleDisplay)residentTabbedPane.getSelectedComponent()).filter(apartmentSearchBox.getText());
                 }
             }
         });
