@@ -14,3 +14,4 @@ v2.0:
 * Quản lý phương tiện
     - Thêm, sửa, xóa phương tiện.
 * Cải thiện giao diện.
+* Quản lý nộp phí mà danh sách hộ đã nộp phí.
