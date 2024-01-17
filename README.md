@@ -13,3 +13,4 @@ v1.0:
 v2.0:
 * Quản lý phương tiện
     - Thêm, sửa, xóa phương tiện.
+* Cải thiện giao diện.
