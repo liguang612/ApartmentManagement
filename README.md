@@ -9,3 +9,7 @@ v1.0:
 * Quản lý phí, khoản thu:
     - Thêm, sửa, xóa loại phí các cư dân cần đóng.
     - Thêm lượt đóng.
+ 
+v2.0:
+* Quản lý phương tiện
+    - Thêm, sửa, xóa phương tiện.
